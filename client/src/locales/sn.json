@@ -1,0 +1,130 @@
+{
+  "nav": {
+    "home": "Kumba",
+    "about": "Nezvedu",
+    "services": "Masevhisi",
+    "team": "Timu",
+    "contact": "Kubata",
+    "getConsultation": "Wana Kubvunzurudza"
+  },
+  "hero": {
+    "title": "Famba neBhizinesi reZimbabwe pamwe neIPEACE",
+    "subtitle": "Nyanzvi mukubvunzurudza nezve mitemo yebhizinesi, kutonga kwemakambani, uye zvirongwa zvebhizinesi zvinoshandiswa neAI.",
+    "startJourney": "Tanga Rwendo Rwako",
+    "watchDemo": "Ona Demo",
+    "stats": {
+      "clients": "500+",
+      "clientsLabel": "Vatengi Vakabatsirwa",
+      "compliance": "99.8%",
+      "complianceLabel": "Chiyero chekutevera Mitemo",
+      "experience": "15+",
+      "experienceLabel": "Makore eRuzivo"
+    }
+  },
+  "about": {
+    "title": "Zvinoreva IPEACE",
+    "subtitle": "IPEACE haisi zita chete—ichiratidzo nechinzvimbo. Bhii rimwe nerimwe rinoratidza hunhu hwakakoshea hunofambisa zvirongwa zvese, kupindirana, uye mhinduro dzatinoita.",
+    "values": {
+      "innovation": {
+        "title": "Kusika",
+        "description": "Tinoshandisa tekinoroji yemazuva ano uye nzira dzekufunga dzemberi kuti vatengeji vedu vave pamberi."
+      },
+      "precision": {
+        "title": "Kududzira",
+        "description": "Tinotenda mukududzira kwakafanana nekuvhiya: kurudziro imwe neimwe, chiriko chimwe nechimwe, maitiro ese akatungamirwa nedata uye akanyatsoongorora."
+      },
+      "empowerment": {
+        "title": "Kusimbisa",
+        "description": "Hatiingoti 'kubvunzurudza'—tinodzidza, tichiraira, uye tinoshongedza vatungamiri vebhizinesi nezvishandiso nemafungiro ekutonga kukura kwavo."
+      },
+      "agility": {
+        "title": "Kukurumidza",
+        "description": "Mumusika uri kushanduka nekukurumidza, kumhanya kunokunda. Matanho edu akapfava uye kutevedzana-kwekukurumidza kunokubvumira kuti ushanduke pasina kurwadziwa."
+      },
+      "compliance": {
+        "title": "Kutevera Mitemo",
+        "description": "Mitemo haisi zvipingaidzo—ndiyo zvigadziko zvekuvimba uye kutsiga. Tinoshandura 'zvinofanira kuitwa' kuita mukana wekukwikwidza."
+      },
+      "excellence": {
+        "title": "Kunaka",
+        "description": "Kubva kune UI yekutonga yevatengi kusvika kurutsigiro rwedu rwemasikati nemanheru, tinogadza—uye tichipfuura—zviyero zveindasitiri."
+      }
+    }
+  },
+  "services": {
+    "title": "Masevhisi Edu",
+    "subtitle": "Mhinduro dzakakwana dzekubvunzurudza bhizinesi dzakagadzirisirwa nharaunda yemitemo yeZimbabwe uye dzinoshandiswa neAI yemazuva ano.",
+    "learnMore": "Dzidza Zvimwe",
+    "cta": {
+      "title": "Wakagadzirira Kushandura Bhizinesi Rako?",
+      "subtitle": "Tanga nekubvunzurudza kwemahara uye uwane kuti IPEACE ingakubatsira sei kuwana budiriro.",
+      "button": "Ronga Kubvunzurudza Kwemahara"
+    }
+  },
+  "team": {
+    "title": "Sangana neTimu Yedu Yenyanzvi",
+    "subtitle": "Timu yedu yakasiyana yenyanzvi dzemitemo, nyanzvi dzezvirongwa zvebhizinesi, uye nyanzvi dzetekinoroji inouya nemakore mazhinji akabatanidzwa mukuita imwe neimwe kubasa nevatengi."
+  },
+  "testimonials": {
+    "title": "Zvinotaura Vatengi Vedu",
+    "subtitle": "Usangoona mashoko edu chete. Aya ndiwo mashoko anotaura vatungamiri vebhizinesi muZimbabwe nezveruzivo rwavo rweIPEACE."
+  },
+  "contact": {
+    "title": "Bata Nesu",
+    "subtitle": "Wakagadzirira kushandura bhizinesi rako? Tibate nhasi kuti uwane kubvunzurudza kwemahara uye uone kuti IPEACE ingakubatsire sei kuwana zvinangwa zvako.",
+    "form": {
+      "title": "Titumire Meseji",
+      "firstName": "Zita Rekutanga",
+      "lastName": "Zita Rekupedzisira",
+      "email": "Email Address",
+      "company": "Kambani/Sangano",
+      "service": "Sevhisi Yaunofarira",
+      "message": "Meseji",
+      "newsletter": "Ndinoda kugamuchira newsletters uye zvitsva nezvemasevhisi eIPEACE uye ruzivo rweindasitiri.",
+      "send": "Tumira Meseji",
+      "placeholders": {
+        "firstName": "Isa zita rako rekutanga",
+        "lastName": "Isa zita rako rekupedzisira",
+        "email": "Isa email address yako",
+        "company": "Isa zita rekambani yako",
+        "message": "Tiudze nezve zvinodiwa zvebhizinesi rako uye kuti tingakubatsira sei..."
+      },
+      "services": {
+        "select": "Sarudza sevhisi",
+        "regulatory": "Kutevera Mitemo",
+        "ai": "Kubvunzurudza kwakaongororwa neAI",
+        "strategy": "Zvirongwa zveBhizinesi",
+        "training": "Kudzidzisa & Kukudziridza",
+        "documents": "Masevhisi eZvinyorwa",
+        "support": "Rutsigiro rwe24/7"
+      }
+    },
+    "office": {
+      "title": "Shanyira Hofisi Yedu",
+      "address": "Kero",
+      "phone": "Runhare",
+      "email": "Email",
+      "hours": "Nguva dzeBasa",
+      "directions": "Wana Nzira"
+    },
+    "social": {
+      "title": "Titevere"
+    }
+  },
+  "footer": {
+    "description": "Masevhisi ekubvunzurudza bhizinesi ehunyanzvi anoshandiswa nekusika kweAI, anoita hunyanzvi munharaunda yemitemo yeZimbabwe uye zvirongwa zvekukura kwebhizinesi.",
+    "quickLinks": "Mabatanidzwi Ekukurumidza",
+    "services": "Masevhisi",
+    "copyright": "© 2024 IPEACE Professional Consulting. Kodzero dzese dzakachengetedzwa.",
+    "privacy": "Mutemo weKuvanzika",
+    "terms": "Mamiriro eService",
+    "cookies": "Mutemo weCookie"
+  },
+  "chatbot": {
+    "title": "IPEACE AI Mubatsiri",
+    "subtitle": "Bvunza nezve mitemo yebhizinesi yeZimbabwe",
+    "welcome": "Mhoro! Ndini mubatsiri wako weAI akadzidziswa nezve Companies Act neSecurities regulations dzeZimbabwe. Ndingakubatsira sei nhasi?",
+    "placeholder": "Bvunza nezve mitemo yebhizinesi...",
+    "powered": "Inoshandiswa neAI • Yakadzidziswa pane mitemo yeZimbabwe"
+  }
+}

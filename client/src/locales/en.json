@@ -1,0 +1,130 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "team": "Team",
+    "contact": "Contact",
+    "getConsultation": "Get Consultation"
+  },
+  "hero": {
+    "title": "Navigate Zimbabwe's Business Landscape with IPEACE",
+    "subtitle": "Expert consulting in regulatory compliance, corporate governance, and business strategy powered by AI-driven insights.",
+    "startJourney": "Start Your Journey",
+    "watchDemo": "Watch Demo",
+    "stats": {
+      "clients": "500+",
+      "clientsLabel": "Clients Served",
+      "compliance": "99.8%",
+      "complianceLabel": "Compliance Rate",
+      "experience": "15+",
+      "experienceLabel": "Years Experience"
+    }
+  },
+  "about": {
+    "title": "What IPEACE Stands For",
+    "subtitle": "IPEACE is more than a name—it's an acronym and a promise. Each letter embodies a core value that guides every strategy, interaction, and solution we deliver.",
+    "values": {
+      "innovation": {
+        "title": "Innovation",
+        "description": "We harness cutting-edge technologies and forward-thinking methodologies to keep our clients ahead of the curve."
+      },
+      "precision": {
+        "title": "Precision",
+        "description": "We believe in surgical accuracy: every recommendation, every report, every process is data-driven and meticulously vetted."
+      },
+      "empowerment": {
+        "title": "Empowerment",
+        "description": "We don't just \"consult\"—we upskill, mentor, and equip business leaders with the tools and mindset to own their growth."
+      },
+      "agility": {
+        "title": "Agility",
+        "description": "In a rapidly shifting market, speed wins. Our lean frameworks and rapid-iteration cycles let you pivot without pain."
+      },
+      "compliance": {
+        "title": "Compliance",
+        "description": "Regulations aren't roadblocks—they're springboards for trust and stability. We turn \"must-dos\" into competitive advantages."
+      },
+      "excellence": {
+        "title": "Excellence",
+        "description": "From our client portal's intuitive UI to our round-the-clock support, we set—and exceed—industry benchmarks."
+      }
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Comprehensive business consulting solutions tailored for Zimbabwe's regulatory environment and powered by cutting-edge AI insights.",
+    "learnMore": "Learn More",
+    "cta": {
+      "title": "Ready to Transform Your Business?",
+      "subtitle": "Get started with a free consultation and discover how IPEACE can accelerate your success.",
+      "button": "Schedule Free Consultation"
+    }
+  },
+  "team": {
+    "title": "Meet Our Expert Team",
+    "subtitle": "Our diverse team of legal experts, business strategists, and technology specialists brings decades of combined experience to every client engagement."
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "subtitle": "Don't just take our word for it. Here's what business leaders across Zimbabwe say about their IPEACE experience."
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Ready to transform your business? Contact us today for a free consultation and discover how IPEACE can help you achieve your goals.",
+    "form": {
+      "title": "Send Us a Message",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "company": "Company/Organization",
+      "service": "Service Interest",
+      "message": "Message",
+      "newsletter": "I would like to receive newsletters and updates about IPEACE services and industry insights.",
+      "send": "Send Message",
+      "placeholders": {
+        "firstName": "Enter your first name",
+        "lastName": "Enter your last name",
+        "email": "Enter your email address",
+        "company": "Enter your company name",
+        "message": "Tell us about your business needs and how we can help..."
+      },
+      "services": {
+        "select": "Select a service",
+        "regulatory": "Regulatory Compliance",
+        "ai": "AI-Powered Advisory",
+        "strategy": "Business Strategy",
+        "training": "Training & Development",
+        "documents": "Document Services",
+        "support": "24/7 Support"
+      }
+    },
+    "office": {
+      "title": "Visit Our Office",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Business Hours",
+      "directions": "Get Directions"
+    },
+    "social": {
+      "title": "Follow Us"
+    }
+  },
+  "footer": {
+    "description": "Professional business consulting services powered by AI innovation, specializing in Zimbabwe's regulatory landscape and business growth strategies.",
+    "quickLinks": "Quick Links",
+    "services": "Services",
+    "copyright": "© 2024 IPEACE Professional Consulting. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy"
+  },
+  "chatbot": {
+    "title": "IPEACE AI Assistant",
+    "subtitle": "Ask about Zimbabwe business law",
+    "welcome": "Hello! I'm your AI assistant trained on Zimbabwe's Companies Act and Securities regulations. How can I help you today?",
+    "placeholder": "Ask about business regulations...",
+    "powered": "Powered by AI • Trained on Zimbabwe legal frameworks"
+  }
+}

@@ -1,0 +1,81 @@
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import { storage } from "./storage";
+import { insertContactSchema, chatRequestSchema } from "@shared/schema";
+import { getChatbotResponse } from "./services/openai";
+import { sendContactNotification, sendAutoReply } from "./services/email";
+import { nanoid } from "nanoid";
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Contact form submission
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const validatedData = insertContactSchema.parse(req.body);
+      
+      // Store the contact submission
+      const contact = await storage.createContactSubmission(validatedData);
+      
+      // Send notifications
+      await sendContactNotification({
+        ...validatedData,
+        company: validatedData.company || undefined,
+        service: validatedData.service || undefined,
+        newsletter: validatedData.newsletter || false,
+      });
+      await sendAutoReply(validatedData.email, validatedData.firstName);
+      
+      res.json({ 
+        success: true, 
+        message: "Thank you for your message! We will get back to you soon.",
+        id: contact.id 
+      });
+    } catch (error) {
+      console.error("Contact form error:", error);
+      res.status(400).json({ 
+        success: false, 
+        message: error instanceof Error ? error.message : "Failed to process contact form" 
+      });
+    }
+  });
+
+  // AI chatbot endpoint
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message, sessionId } = chatRequestSchema.parse(req.body);
+      const currentSessionId = sessionId || nanoid();
+      
+      // Get AI response
+      const aiResponse = await getChatbotResponse(message);
+      
+      // Store the chat message
+      await storage.createChatMessage(currentSessionId, message, aiResponse.response);
+      
+      res.json({
+        response: aiResponse.response,
+        confidence: aiResponse.confidence,
+        sessionId: currentSessionId,
+      });
+    } catch (error) {
+      console.error("Chat error:", error);
+      res.status(500).json({ 
+        error: "Failed to process chat message",
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Get chat history
+  app.get("/api/chat/:sessionId", async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      const history = await storage.getChatHistory(sessionId);
+      res.json({ history });
+    } catch (error) {
+      console.error("Chat history error:", error);
+      res.status(500).json({ error: "Failed to get chat history" });
+    }
+  });
+
+  const httpServer = createServer(app);
+  return httpServer;
+}
