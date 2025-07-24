@@ -1,0 +1,95 @@
+# 1. Core Website Functions
+
+- Display static content for Home, About Us, Services and Contact pages, driven by React components.  
+
+- Handle AI-chatbot requests via a REST endpoint (`/api/chat`) that forwards user messages to an external AI service or in-house ML model.  
+
+- Process contact form submissions through a POST route (`/api/contact`) and send notifications (email/webhook) to the consultancy team.  
+
+- Serve static assets (images, icons, CSS) and client-side routing fallbacks for smooth in-app navigation.  
+
+- Manage localization by loading language files (Shona/English) and swapping UI text dynamically.  
+
+
+---
+
+
+# 2. MVC Pattern Mapping
+
+| Layer       | Role                                         | Examples                          |
+|-------------|----------------------------------------------|-----------------------------------|
+| Model       | Source of truth (static or JSON-based)       | Services list, Team members, Testimonials |
+| View        | React pages/components rendered in browser   | Home.jsx, About.jsx, Services.jsx, Contact.jsx, Chatbot.jsx |
+| Controller  | Express route handlers mediating UI ↔ AI/API | `/api/chat` controller, `/api/contact` controller |
+
+
+Each React view fetches its data model (JSON files or API) via `axios`/`fetch` and renders dynamic sections. Express controllers parse payloads, call AI or send emails, then return JSON responses.
+
+
+---
+
+
+# 3. Utilities and Packages
+
+| Category           | Package                     | Purpose                                           |
+|--------------------|-----------------------------|---------------------------------------------------|
+| Front-end          | react, react-router-dom     | UI framework and client-side routing              |
+| Localization       | i18next, react-i18next      | Load and switch translation dictionaries          |
+| Styling            | Tailwind CSS                | Mobile-first utility-first styling                |
+| HTTP Client        | axios                       | Simplify API calls from React                     |
+| Back-end Framework | express, cors, body-parser  | Server framework and request parsing              |
+| AI Integration     | openai (or azure-cognitives)| Connect to OpenAI/Azure AI for chatbot            |
+| In-House ML (opt.) | @tensorflow/tfjs            | Run lightweight models in Node.js or browser      |
+| Dev Tools          | nodemon, eslint, prettier   | Hot reload, linting and formatting                |
+
+
+---
+
+
+# 4. Key Website Features
+
+- Modern, mobile-first layout with deep blue, yellow and white branding.  
+
+- Dynamic CTAs that change contextually (e.g., “Speak with a Consultant” moves to chat).  
+
+- AI-powered chat widget embedded site-wide, trained on IPEACE documentation.  
+
+- Bilingual support toggle (Shona/English) affecting all static text and form labels.  
+
+- Contact form with instant acknowledgement and email/webhook alert.  
+
+- Interactive map showing office location with real-time directions link.  
+
+- Social media links (Twitter, LinkedIn, Instagram) in header/footer.  
+
+- Testimonials carousel and Services overview cards for quick scanning.  
+
+
+---
+
+
+# 5. Development Workflow
+
+1. Initialize two Git repos (or monorepo):  
+   - **api/** for Express  
+   - **web/** for React  
+
+2. Scaffold Express API: install dependencies, set up `/api/chat` and `/api/contact` routes, integrate OpenAI or in-house ML, configure CORS and JSON parsing.  
+
+3. Scaffold React app (CRA or Vite): install React Router, i18next, Tailwind CSS; define page components and layout.  
+
+4. Create JSON data files for Services, Team, Testimonials. Fetch them in respective views and render reusable card/list components.  
+
+5. Build Chatbot component: UI for message input, message list, API calls to `/api/chat`.  
+
+6. Implement localization: wrap app in `I18nextProvider`, load translation files, add language switcher in header.  
+
+7. Style mobile-first with Tailwind utility classes, test on breakpoints.  
+
+8. Wire up Contact page: form validation, POST to `/api/contact`, success/error states.  
+
+9. Deploy:  
+   - Push API to Render (as Node service) or Vercel Serverless Function  
+   - Deploy web to Vercel/Render static hosting, configure environment variables for API URL and AI keys.  
+
+10. Test end-to-end, iterate on UX, optimize performance (lazy-load chat, minimize bundles).
