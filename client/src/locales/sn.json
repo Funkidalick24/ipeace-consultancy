@@ -126,5 +126,67 @@
     "welcome": "Mhoro! Ndini mubatsiri wako weAI akadzidziswa nezve Companies Act neSecurities regulations dzeZimbabwe. Ndingakubatsira sei nhasi?",
     "placeholder": "Bvunza nezve mitemo yebhizinesi...",
     "powered": "Inoshandiswa neAI • Yakadzidziswa pane mitemo yeZimbabwe"
+  },
+  "consultation": {
+    "title": "Ronga Kubvunzurudza",
+    "subtitle": "Ronga kubvunzurudza kwakasarudzika netimu yedu yenyanzvi. Sarudza zuva rako, nguva, uye nzira yekusangana.",
+    "form": {
+      "title": "Ronga Kubvunzurudza Kwako",
+      "firstName": "Zita Rekutanga",
+      "lastName": "Zita Rekupedzisira",
+      "email": "Email Address",
+      "phone": "Nhamba Yerunhare",
+      "company": "Kambani/Sangano",
+      "serviceType": "Rudzi rweSevhisi",
+      "preferredDate": "Zuva Rinodiwa",
+      "preferredTime": "Nguva Inodiwa",
+      "consultationType": "Rudzi rweKubvunzurudza",
+      "description": "Tingakubatsira sei?",
+      "book": "Ronga Kubvunzurudza",
+      "placeholders": {
+        "firstName": "Isa zita rako rekutanga",
+        "lastName": "Isa zita rako rekupedzisira",
+        "email": "Isa email address yako",
+        "phone": "Isa nhamba yerunhare rwako",
+        "company": "Isa zita rekambani yako",
+        "description": "Tsanangura zvinodiwa zvebhizinesi rako uye zvaunoda kutaura panguva yekubvunzurudza..."
+      },
+      "serviceTypes": {
+        "select": "Sarudza sevhisi",
+        "regulatory": "Kutevera Mitemo",
+        "ai": "Kubvunzurudza kwakaongororwa neAI",
+        "strategy": "Zvirongwa zveBhizinesi",
+        "training": "Kudzidzisa & Kukudziridza",
+        "documents": "Masevhisi eZvinyorwa",
+        "support": "Rutsigiro rwe24/7"
+      },
+      "consultationTypes": {
+        "select": "Sarudza rudzi rwekubvunzurudza",
+        "in-person": "Kusangana Chaiiko",
+        "video-call": "Video Call",
+        "phone-call": "Runhare Call"
+      },
+      "timeSlots": {
+        "select": "Sarudza nguva inodiwa",
+        "morning-9": "9:00 AM - 10:00 AM",
+        "morning-10": "10:00 AM - 11:00 AM",
+        "morning-11": "11:00 AM - 12:00 PM",
+        "afternoon-2": "2:00 PM - 3:00 PM",
+        "afternoon-3": "3:00 PM - 4:00 PM",
+        "afternoon-4": "4:00 PM - 5:00 PM"
+      }
+    },
+    "success": {
+      "title": "Kubvunzurudza Kwarongwa Zvakanaka!",
+      "message": "Tinotenda kuda kuronga kubvunzurudza neIPEACE. Tichakubata munguva pfupi kuti tisimbise musangano wako.",
+      "bookingId": "ID yeKuronga",
+      "nextSteps": "Chii chinotevera?",
+      "steps": [
+        "Tichaongorora chikumbiro chako tikakubata mukati memaawa makumi maviri nemana",
+        "Tichasimbisa zuva nenguva yaunoda kana kukupa dzimwe sarudzo",
+        "Uchagamuchira calendar invitation ine ruzivo rwekusangana",
+        "Gadzirira zvinyorwa kana mibvunzo yaunoda kutaura"
+      ]
+    }
   }
 }

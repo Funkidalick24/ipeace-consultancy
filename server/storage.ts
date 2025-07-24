@@ -1,4 +1,4 @@
-import { users, contactSubmissions, chatMessages, type User, type InsertUser, type InsertContact, type ContactSubmission, type ChatMessage } from "@shared/schema";
+import { users, contactSubmissions, chatMessages, consultationBookings, type User, type InsertUser, type InsertContact, type ContactSubmission, type ChatMessage, type InsertConsultation, type ConsultationBooking } from "@shared/schema";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -7,23 +7,31 @@ export interface IStorage {
   createContactSubmission(contact: InsertContact): Promise<ContactSubmission>;
   createChatMessage(sessionId: string, userMessage: string, aiResponse: string): Promise<ChatMessage>;
   getChatHistory(sessionId: string): Promise<ChatMessage[]>;
+  createConsultationBooking(booking: InsertConsultation): Promise<ConsultationBooking>;
+  getAllConsultationBookings(): Promise<ConsultationBooking[]>;
+  getConsultationBooking(id: number): Promise<ConsultationBooking | undefined>;
+  updateConsultationBookingStatus(id: number, status: string): Promise<ConsultationBooking | undefined>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private contacts: Map<number, ContactSubmission>;
   private chats: Map<number, ChatMessage>;
+  private consultations: Map<number, ConsultationBooking>;
   private currentUserId: number;
   private currentContactId: number;
   private currentChatId: number;
+  private currentConsultationId: number;
 
   constructor() {
     this.users = new Map();
     this.contacts = new Map();
     this.chats = new Map();
+    this.consultations = new Map();
     this.currentUserId = 1;
     this.currentContactId = 1;
     this.currentChatId = 1;
+    this.currentConsultationId = 1;
   }
 
   async getUser(id: number): Promise<User | undefined> {
@@ -74,6 +82,39 @@ export class MemStorage implements IStorage {
     return Array.from(this.chats.values())
       .filter(chat => chat.sessionId === sessionId)
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  }
+
+  async createConsultationBooking(booking: InsertConsultation): Promise<ConsultationBooking> {
+    const id = this.currentConsultationId++;
+    const consultation: ConsultationBooking = {
+      ...booking,
+      id,
+      company: booking.company || null,
+      status: "pending",
+      preferredDate: new Date(booking.preferredDate),
+      createdAt: new Date(),
+    };
+    this.consultations.set(id, consultation);
+    return consultation;
+  }
+
+  async getAllConsultationBookings(): Promise<ConsultationBooking[]> {
+    return Array.from(this.consultations.values())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async getConsultationBooking(id: number): Promise<ConsultationBooking | undefined> {
+    return this.consultations.get(id);
+  }
+
+  async updateConsultationBookingStatus(id: number, status: string): Promise<ConsultationBooking | undefined> {
+    const consultation = this.consultations.get(id);
+    if (consultation) {
+      consultation.status = status;
+      this.consultations.set(id, consultation);
+      return consultation;
+    }
+    return undefined;
   }
 }
 

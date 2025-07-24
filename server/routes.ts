@@ -1,9 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, chatRequestSchema } from "@shared/schema";
+import { insertContactSchema, chatRequestSchema, consultationBookingSchema } from "@shared/schema";
 import { getChatbotResponse } from "./services/openai";
 import { sendContactNotification, sendAutoReply } from "./services/email";
+import { sendConsultationBookingNotification, sendConsultationConfirmation, getServiceTypeName, getConsultationTypeName } from "./services/consultation";
 import { nanoid } from "nanoid";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -73,6 +74,107 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Chat history error:", error);
       res.status(500).json({ error: "Failed to get chat history" });
+    }
+  });
+
+  // Book consultation
+  app.post("/api/consultations", async (req, res) => {
+    try {
+      const validatedData = consultationBookingSchema.parse(req.body);
+      
+      // Store the consultation booking
+      const booking = await storage.createConsultationBooking(validatedData);
+      
+      // Send notifications
+      await sendConsultationBookingNotification({
+        ...validatedData,
+        company: validatedData.company || undefined,
+      });
+      await sendConsultationConfirmation(validatedData.email, validatedData.firstName, booking.id);
+      
+      res.json({ 
+        success: true, 
+        message: "Consultation booked successfully! We will contact you soon to confirm your appointment.",
+        bookingId: booking.id,
+        booking: {
+          ...booking,
+          serviceTypeName: getServiceTypeName(booking.serviceType),
+          consultationTypeName: getConsultationTypeName(booking.consultationType),
+        }
+      });
+    } catch (error) {
+      console.error("Consultation booking error:", error);
+      res.status(400).json({ 
+        success: false, 
+        message: error instanceof Error ? error.message : "Failed to book consultation" 
+      });
+    }
+  });
+
+  // Get all consultation bookings (for admin purposes)
+  app.get("/api/consultations", async (req, res) => {
+    try {
+      const bookings = await storage.getAllConsultationBookings();
+      const bookingsWithNames = bookings.map(booking => ({
+        ...booking,
+        serviceTypeName: getServiceTypeName(booking.serviceType),
+        consultationTypeName: getConsultationTypeName(booking.consultationType),
+      }));
+      res.json({ bookings: bookingsWithNames });
+    } catch (error) {
+      console.error("Get consultations error:", error);
+      res.status(500).json({ error: "Failed to get consultation bookings" });
+    }
+  });
+
+  // Get specific consultation booking
+  app.get("/api/consultations/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const booking = await storage.getConsultationBooking(id);
+      if (!booking) {
+        return res.status(404).json({ error: "Consultation booking not found" });
+      }
+      res.json({ 
+        booking: {
+          ...booking,
+          serviceTypeName: getServiceTypeName(booking.serviceType),
+          consultationTypeName: getConsultationTypeName(booking.consultationType),
+        }
+      });
+    } catch (error) {
+      console.error("Get consultation error:", error);
+      res.status(500).json({ error: "Failed to get consultation booking" });
+    }
+  });
+
+  // Update consultation booking status
+  app.patch("/api/consultations/:id/status", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      if (!["pending", "confirmed", "cancelled", "completed"].includes(status)) {
+        return res.status(400).json({ error: "Invalid status" });
+      }
+      
+      const booking = await storage.updateConsultationBookingStatus(id, status);
+      if (!booking) {
+        return res.status(404).json({ error: "Consultation booking not found" });
+      }
+      
+      res.json({ 
+        success: true, 
+        message: `Consultation booking status updated to ${status}`,
+        booking: {
+          ...booking,
+          serviceTypeName: getServiceTypeName(booking.serviceType),
+          consultationTypeName: getConsultationTypeName(booking.consultationType),
+        }
+      });
+    } catch (error) {
+      console.error("Update consultation status error:", error);
+      res.status(500).json({ error: "Failed to update consultation booking status" });
     }
   });
 

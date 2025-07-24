@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 import { 
   Gavel, 
   Bot, 
@@ -120,9 +121,13 @@ export function ServicesSection() {
           <div className="bg-gradient-to-r from-primary-blue to-secondary-blue rounded-2xl p-12 text-white">
             <h3 className="text-3xl font-bold mb-4">{t('services.cta.title')}</h3>
             <p className="text-xl mb-8 text-blue-100">{t('services.cta.subtitle')}</p>
-            <Button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">
-              {t('services.cta.button')}
-            </Button>
+            <ConsultationBooking 
+              trigger={
+                <Button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">
+                  {t('services.cta.button')}
+                </Button>
+              }
+            />
           </div>
         </div>
       </div>

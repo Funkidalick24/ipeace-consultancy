@@ -126,5 +126,67 @@
     "welcome": "Hello! I'm your AI assistant trained on Zimbabwe's Companies Act and Securities regulations. How can I help you today?",
     "placeholder": "Ask about business regulations...",
     "powered": "Powered by AI • Trained on Zimbabwe legal frameworks"
+  },
+  "consultation": {
+    "title": "Book a Consultation",
+    "subtitle": "Schedule a personalized consultation with our expert team. Choose your preferred date, time, and meeting format.",
+    "form": {
+      "title": "Schedule Your Consultation",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "company": "Company/Organization",
+      "serviceType": "Service Type",
+      "preferredDate": "Preferred Date",
+      "preferredTime": "Preferred Time",
+      "consultationType": "Consultation Type",
+      "description": "How can we help you?",
+      "book": "Book Consultation",
+      "placeholders": {
+        "firstName": "Enter your first name",
+        "lastName": "Enter your last name",
+        "email": "Enter your email address",
+        "phone": "Enter your phone number",
+        "company": "Enter your company name",
+        "description": "Describe your business needs and what you'd like to discuss during the consultation..."
+      },
+      "serviceTypes": {
+        "select": "Select a service",
+        "regulatory": "Regulatory Compliance",
+        "ai": "AI-Powered Advisory",
+        "strategy": "Business Strategy",
+        "training": "Training & Development",
+        "documents": "Document Services",
+        "support": "24/7 Support"
+      },
+      "consultationTypes": {
+        "select": "Select consultation type",
+        "in-person": "In-Person Meeting",
+        "video-call": "Video Call",
+        "phone-call": "Phone Call"
+      },
+      "timeSlots": {
+        "select": "Select preferred time",
+        "morning-9": "9:00 AM - 10:00 AM",
+        "morning-10": "10:00 AM - 11:00 AM",
+        "morning-11": "11:00 AM - 12:00 PM",
+        "afternoon-2": "2:00 PM - 3:00 PM",
+        "afternoon-3": "3:00 PM - 4:00 PM",
+        "afternoon-4": "4:00 PM - 5:00 PM"
+      }
+    },
+    "success": {
+      "title": "Consultation Booked Successfully!",
+      "message": "Thank you for booking a consultation with IPEACE. We will contact you soon to confirm your appointment.",
+      "bookingId": "Booking ID",
+      "nextSteps": "What happens next?",
+      "steps": [
+        "We'll review your request and contact you within 24 hours",
+        "We'll confirm your preferred date and time or suggest alternatives",
+        "You'll receive a calendar invitation with meeting details",
+        "Prepare any documents or questions you'd like to discuss"
+      ]
+    }
   }
 }
