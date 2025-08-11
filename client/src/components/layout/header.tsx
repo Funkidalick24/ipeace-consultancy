@@ -31,7 +31,13 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="text-2xl font-bold text-primary-blue">IPEACE</div>
+            <a href="/" className="flex items-center">
+              <img
+                src="/logo.png"
+                alt="IPEACE Logo"
+                className="h-10 w-auto"
+              />
+            </a>
             <div className="hidden sm:block ml-2 text-sm text-gray-600">
               Professional Consulting
             </div>
@@ -53,7 +59,17 @@ export function Header() {
           {/* Language Toggle & CTA */}
           <div className="flex items-center space-x-4">
             <LanguageToggle />
-            <Button className="hidden lg:block btn-accent px-4 py-2 rounded-md font-medium">
+            <Button
+              className="hidden lg:block btn-accent px-4 py-2 rounded-md font-medium"
+              onClick={() => {
+                // Scroll to contact section and open consultation modal
+                const contactSection = document.querySelector('#contact');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  // We could also trigger the consultation modal here if needed
+                }
+              }}
+            >
               {t('nav.getConsultation')}
             </Button>
 
@@ -75,7 +91,17 @@ export function Header() {
                       {t(`nav.${item.key}`)}
                     </button>
                   ))}
-                  <Button className="btn-accent mt-4 w-full">
+                  <Button
+                    className="btn-accent mt-4 w-full"
+                    onClick={() => {
+                      // Scroll to contact section
+                      const contactSection = document.querySelector('#contact');
+                      if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        setIsOpen(false); // Close mobile menu
+                      }
+                    }}
+                  >
                     {t('nav.getConsultation')}
                   </Button>
                 </div>

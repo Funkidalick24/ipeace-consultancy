@@ -107,7 +107,17 @@ export function ServicesSection() {
                       </li>
                     ))}
                   </ul>
-                  <Button variant="ghost" className="text-primary-blue font-semibold hover:text-secondary-blue transition-colors duration-200 p-0">
+                  <Button
+                    variant="ghost"
+                    className="text-primary-blue font-semibold hover:text-secondary-blue transition-colors duration-200 p-0"
+                    onClick={() => {
+                      // Scroll to contact section when clicking Learn More
+                      const contactSection = document.querySelector('#contact');
+                      if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
+                  >
                     {t('services.learnMore')} <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>
                 </CardContent>

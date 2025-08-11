@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
+import { VideoModal } from '@/components/layout/video-modal';
 
 export function HeroSection() {
   const { t } = useTranslation();
@@ -26,12 +27,18 @@ export function HeroSection() {
                   </Button>
                 }
               />
-              <Button 
-                variant="outline" 
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-blue transition-all duration-200"
-              >
-                {t('hero.watchDemo')}
-              </Button>
+              <VideoModal
+                videoUrl="https://www.youtube.com/watch?v=example"
+                title={t('hero.watchDemo')}
+                trigger={
+                  <Button
+                    variant="outline"
+                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-blue transition-all duration-200"
+                  >
+                    {t('hero.watchDemo')}
+                  </Button>
+                }
+              />
             </div>
             
             {/* Key Stats */}

@@ -332,15 +332,24 @@ export function ContactSection() {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">Find Us</h3>
                 
-                <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center mb-4">
-                  <div className="text-center text-gray-500">
-                    <MapPin className="text-3xl mb-2 mx-auto h-12 w-12" />
-                    <p>Interactive Map</p>
-                    <p className="text-sm">Eastgate Shopping Centre, Harare</p>
-                  </div>
+                <div className="bg-gray-100 h-64 rounded-lg mb-4 overflow-hidden">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3798.418307777772!2d31.05320531540447!3d-17.82654097564207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a0e4a205515f%3A0x5b7e4a0a4e4b4a0!2sEastgate%20Shopping%20Centre!5e0!3m2!1sen!2szw!4v1650000000000!5m2!1sen!2szw"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
                 
-                <Button className="w-full btn-accent py-3">
+                <Button
+                  className="w-full btn-accent py-3"
+                  onClick={() => {
+                    window.open('https://www.google.com/maps/dir/?api=1&destination=Eastgate+Shopping+Centre,+Harare,+Zimbabwe', '_blank');
+                  }}
+                >
                   <Navigation className="mr-2 h-4 w-4" />
                   {t('contact.office.directions')}
                 </Button>
@@ -358,6 +367,7 @@ export function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
+                    onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
                   >
                     <Linkedin className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">LinkedIn</span>
@@ -365,6 +375,7 @@ export function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
+                    onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
                   >
                     <Twitter className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">Twitter</span>
@@ -372,6 +383,7 @@ export function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
+                    onClick={() => window.open('https://instagram.com/ipeace', '_blank')}
                   >
                     <Instagram className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">Instagram</span>

@@ -27,6 +27,7 @@ export function Footer() {
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
+                onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
               >
                 <Linkedin className="h-5 w-5" />
               </Button>
@@ -34,6 +35,7 @@ export function Footer() {
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
+                onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
               >
                 <Twitter className="h-5 w-5" />
               </Button>
@@ -41,6 +43,7 @@ export function Footer() {
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
+                onClick={() => window.open('https://instagram.com/ipeace', '_blank')}
               >
                 <Instagram className="h-5 w-5" />
               </Button>
@@ -69,29 +72,44 @@ export function Footer() {
             <h4 className="text-lg font-semibold mb-4">{t('footer.services')}</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-blue-200 hover:text-white transition-colors duration-200">
+                <button
+                  onClick={() => scrollToSection('#services')}
+                  className="text-blue-200 hover:text-white transition-colors duration-200"
+                >
                   {t('contact.form.services.regulatory')}
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-blue-200 hover:text-white transition-colors duration-200">
+                <button
+                  onClick={() => scrollToSection('#services')}
+                  className="text-blue-200 hover:text-white transition-colors duration-200"
+                >
                   {t('contact.form.services.ai')}
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-blue-200 hover:text-white transition-colors duration-200">
+                <button
+                  onClick={() => scrollToSection('#services')}
+                  className="text-blue-200 hover:text-white transition-colors duration-200"
+                >
                   {t('contact.form.services.strategy')}
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-blue-200 hover:text-white transition-colors duration-200">
+                <button
+                  onClick={() => scrollToSection('#services')}
+                  className="text-blue-200 hover:text-white transition-colors duration-200"
+                >
                   {t('contact.form.services.training')}
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-blue-200 hover:text-white transition-colors duration-200">
+                <button
+                  onClick={() => scrollToSection('#services')}
+                  className="text-blue-200 hover:text-white transition-colors duration-200"
+                >
                   {t('contact.form.services.support')}
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -101,15 +119,24 @@ export function Footer() {
         <div className="border-t border-blue-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-blue-200 text-sm">{t('footer.copyright')}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-blue-200 hover:text-white text-sm transition-colors duration-200">
+            <button
+              onClick={() => alert('Privacy Policy page coming soon')}
+              className="text-blue-200 hover:text-white text-sm transition-colors duration-200"
+            >
               {t('footer.privacy')}
-            </a>
-            <a href="#" className="text-blue-200 hover:text-white text-sm transition-colors duration-200">
+            </button>
+            <button
+              onClick={() => alert('Terms of Service page coming soon')}
+              className="text-blue-200 hover:text-white text-sm transition-colors duration-200"
+            >
               {t('footer.terms')}
-            </a>
-            <a href="#" className="text-blue-200 hover:text-white text-sm transition-colors duration-200">
+            </button>
+            <button
+              onClick={() => alert('Cookie Policy page coming soon')}
+              className="text-blue-200 hover:text-white text-sm transition-colors duration-200"
+            >
               {t('footer.cookies')}
-            </a>
+            </button>
           </div>
         </div>
       </div>

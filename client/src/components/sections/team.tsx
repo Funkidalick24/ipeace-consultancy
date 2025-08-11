@@ -80,6 +80,7 @@ export function TeamSection() {
                     variant="ghost"
                     size="icon"
                     className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                    onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
                   >
                     <Linkedin className="h-4 w-4" />
                   </Button>
@@ -87,6 +88,7 @@ export function TeamSection() {
                     variant="ghost"
                     size="icon"
                     className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                    onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
                   >
                     <Twitter className="h-4 w-4" />
                   </Button>
