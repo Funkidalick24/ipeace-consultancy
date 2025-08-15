@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Linkedin, Twitter, Instagram } from 'lucide-react';
+import { LegalPopup } from '@/components/legal/legal-popup';
 
 export function Footer() {
   const { t } = useTranslation();
@@ -119,18 +120,16 @@ export function Footer() {
         <div className="border-t border-blue-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-blue-200 text-sm">{t('footer.copyright')}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <button
-              onClick={() => alert('Privacy Policy page coming soon')}
-              className="text-blue-200 hover:text-white text-sm transition-colors duration-200"
-            >
-              {t('footer.privacy')}
-            </button>
-            <button
-              onClick={() => alert('Terms of Service page coming soon')}
-              className="text-blue-200 hover:text-white text-sm transition-colors duration-200"
-            >
-              {t('footer.terms')}
-            </button>
+            <LegalPopup type="privacy">
+              <button className="text-blue-200 hover:text-white text-sm transition-colors duration-200">
+                {t('footer.privacy')}
+              </button>
+            </LegalPopup>
+            <LegalPopup type="terms">
+              <button className="text-blue-200 hover:text-white text-sm transition-colors duration-200">
+                {t('footer.terms')}
+              </button>
+            </LegalPopup>
             <button
               onClick={() => alert('Cookie Policy page coming soon')}
               className="text-blue-200 hover:text-white text-sm transition-colors duration-200"

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { MessageCircle, X, Send, Bot } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, RotateCcw } from 'lucide-react';
 import { nanoid } from 'nanoid';
 
 interface ChatMessage {
@@ -15,11 +15,13 @@ interface ChatMessage {
   content: string;
   isUser: boolean;
   timestamp: Date;
+  followUpSuggestions?: string[];
 }
 
 interface ChatResponse {
   response: string;
   confidence: number;
+  followUpSuggestions?: string[];
   sessionId: string;
 }
 
@@ -47,6 +49,7 @@ export function ChatbotWidget() {
         content: t('chatbot.welcome'),
         isUser: false,
         timestamp: new Date(),
+        followUpSuggestions: t('chatbot.suggestions', { returnObjects: true }) as string[],
       }]);
     }
   }, [isOpen, t, messages.length]);
@@ -65,6 +68,7 @@ export function ChatbotWidget() {
         content: data.response,
         isUser: false,
         timestamp: new Date(),
+        followUpSuggestions: data.followUpSuggestions,
       }]);
     },
     onError: (error) => {
@@ -82,27 +86,36 @@ export function ChatbotWidget() {
     },
   });
 
-  const sendMessage = () => {
-    const message = input.trim();
-    if (!message) return;
+  const sendMessage = (message: string) => {
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage) return;
 
     // Add user message
     setMessages(prev => [...prev, {
       id: nanoid(),
-      content: message,
+      content: trimmedMessage,
       isUser: true,
       timestamp: new Date(),
     }]);
 
     setInput('');
-    chatMutation.mutate(message);
+    chatMutation.mutate(trimmedMessage);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      sendMessage(input);
     }
+  };
+
+  const handleSuggestedQuestion = (question: string) => {
+    setInput(question);
+    sendMessage(question);
+  };
+
+  const clearChat = () => {
+    setMessages([]);
   };
 
   return (
@@ -121,14 +134,24 @@ export function ChatbotWidget() {
         <Card className="absolute bottom-20 right-0 w-80 h-96 shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
           {/* Chat Header */}
           <CardHeader className="bg-gradient-to-r from-primary-blue to-secondary-blue text-white p-4 flex-shrink-0">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-accent-yellow rounded-full flex items-center justify-center">
-                <Bot className="text-primary-blue h-4 w-4" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-accent-yellow rounded-full flex items-center justify-center">
+                  <Bot className="text-primary-blue h-4 w-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold">{t('chatbot.title')}</h4>
+                  <p className="text-xs text-blue-200">{t('chatbot.subtitle')}</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold">{t('chatbot.title')}</h4>
-                <p className="text-xs text-blue-200">{t('chatbot.subtitle')}</p>
-              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-blue-700"
+                onClick={clearChat}
+              >
+                <RotateCcw className="h-4 w-4" />
+              </Button>
             </div>
           </CardHeader>
 
@@ -152,9 +175,54 @@ export function ChatbotWidget() {
                         <Bot className="text-primary-blue mr-2 h-4 w-4 inline" />
                       )}
                       <p className="text-sm">{message.content}</p>
+                      
+                      {/* Follow-up suggestions */}
+                      {!message.isUser && message.followUpSuggestions && message.followUpSuggestions.length > 0 && (
+                        <div className="mt-2">
+                          <p className="text-xs font-semibold text-gray-600 mt-2">
+                            {t('chatbot.followUp')}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {message.followUpSuggestions.map((suggestion, index) => (
+                              <Button
+                                key={index}
+                                variant="outline"
+                                size="sm"
+                                className="h-6 px-2 py-1 text-xs"
+                                onClick={() => handleSuggestedQuestion(suggestion)}
+                              >
+                                {suggestion}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
+                
+                {/* Suggested questions when no messages */}
+                {messages.length === 1 && messages[0].followUpSuggestions && messages[0].followUpSuggestions.length > 0 && (
+                  <div className="flex flex-col space-y-2">
+                    <p className="text-xs font-semibold text-gray-600">
+                      {t('chatbot.followUp')}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {messages[0].followUpSuggestions.map((suggestion, index) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          size="sm"
+                          className="h-6 px-2 py-1 text-xs"
+                          onClick={() => handleSuggestedQuestion(suggestion)}
+                        >
+                          {suggestion}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
                 {chatMutation.isPending && (
                   <div className="flex justify-start">
                     <div className="bg-white shadow-sm border border-gray-100 p-3 rounded-lg max-w-xs">
@@ -180,7 +248,7 @@ export function ChatbotWidget() {
                 disabled={chatMutation.isPending}
               />
               <Button
-                onClick={sendMessage}
+                onClick={() => sendMessage(input)}
                 disabled={!input.trim() || chatMutation.isPending}
                 className="bg-primary-blue hover:bg-blue-800"
                 size="icon"

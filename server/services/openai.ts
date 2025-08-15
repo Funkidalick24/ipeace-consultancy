@@ -8,6 +8,7 @@ const openai = new OpenAI({
 export interface ChatResponse {
   response: string;
   confidence: number;
+  followUpSuggestions?: string[];
 }
 
 export async function getChatbotResponse(userMessage: string): Promise<ChatResponse> {
@@ -24,7 +25,9 @@ Your role is to provide accurate, helpful information about:
 
 Provide clear, actionable advice while being professional and concise. If you're unsure about specific legal details, recommend consulting with IPEACE's human experts.
 
-Respond in JSON format with 'response' and 'confidence' fields (confidence from 0-1).`;
+After providing your response, also include 2-3 follow-up questions that the user might have based on your answer. These should help the user explore related topics or get more detailed information.
+
+Respond in JSON format with 'response', 'confidence', and 'followUpSuggestions' fields (confidence from 0-1).`;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -42,11 +45,12 @@ Respond in JSON format with 'response' and 'confidence' fields (confidence from 
       max_tokens: 500,
     });
 
-    const result = JSON.parse(response.choices[0].message.content || '{"response": "I apologize, but I cannot process your request at this time.", "confidence": 0.1}');
+    const result = JSON.parse(response.choices[0].message.content || '{"response": "I apologize, but I cannot process your request at this time.", "confidence": 0.1, "followUpSuggestions": []}');
 
     return {
       response: result.response || "I apologize, but I cannot process your request at this time.",
       confidence: Math.max(0, Math.min(1, result.confidence || 0.5)),
+      followUpSuggestions: result.followUpSuggestions || [],
     };
   } catch (error) {
     console.error("OpenAI API error:", error);

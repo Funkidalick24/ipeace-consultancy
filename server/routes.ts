@@ -54,6 +54,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         response: aiResponse.response,
         confidence: aiResponse.confidence,
+        followUpSuggestions: aiResponse.followUpSuggestions,
         sessionId: currentSessionId,
       });
     } catch (error) {
@@ -82,8 +83,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = consultationBookingSchema.parse(req.body);
       
+      // Transform validated data to match storage function expectations
+      const storageData = {
+        ...validatedData,
+        preferredDate: new Date(validatedData.preferredDate),
+      };
+      
       // Store the consultation booking
-      const booking = await storage.createConsultationBooking(validatedData);
+      const booking = await storage.createConsultationBooking(storageData);
       
       // Send notifications
       await sendConsultationBookingNotification({

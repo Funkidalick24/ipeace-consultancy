@@ -120,12 +120,160 @@
     "terms": "Mamiriro eService",
     "cookies": "Mutemo weCookie"
   },
+  "legal": {
+    "close": "Vhara",
+    "terms": {
+      "title": "Mamiriro eService",
+      "acceptance": {
+        "title": "Kugamuchira Mamiriro",
+        "content": "Nekupinda kana kushandisa masevhisi aipeace Professional Consulting, unogamuchira kuti unovharwa neMamiriro aya uye mitemo yese yekutevera yemitemo yeZimbabwe. Kana usingagamuchiri chero chipi chinovakwa mazwi aya, haufanirwi kushandisa masevhisi edu."
+      },
+      "useOfService": {
+        "title": "Kushandisa Masevhisi",
+        "content": "Masevhisi edu anopiwa kune zvakakodzera zvebhizinesi muZimbabwe. Unogamuchira kuti usashandise masevhisi edu kune zvinhu zvose zvisina mitemo kana zvisinakodzera zvinosanganisira zvisina kugara kana zvinotevera:",
+        "prohibited": [
+          "Kuvhiringa mitemo yose kana mitemo yekutevera muZimbabwe",
+          "Kudzora kodzero dzeakatidzwa",
+          "Kutumira software yakaipa kana kodhi yakaipa",
+          "Kuita zvinhu zvakavhiringa kana zvinonyengedza",
+          "Kupoteredza kuvimba kana kushandisa masevhisi edu"
+        ]
+      },
+      "intellectualProperty": {
+        "title": "Nenguwo dzeAkabatwa",
+        "content": "Zvose zviri mukati, zvinokurudzirwa, uye nenguwo dzeakabatwa dzakabatwa neIPEACE services ndidzaIPEACE Professional Consulting kana vashandisi vayo. Haufanirwi kushandisa nenguwo dzedu dzakabatwa pasina mvumo yekunyora."
+      },
+      "termination": {
+        "title": "Kupera",
+        "content": "Tinodzivirira kodzero yekupera kana kudzima kufikira masevhisi edu nenguva chero ine, pasina kuzivisa, kune zvinoitwa zvisina kutevera mazwi aya kana zvinoitwa zvinodzudzira vatengi vamwe."
+      },
+      "disclaimer": {
+        "title": "Kuzivisa Mavirango",
+        "content": "Masevhisi edu anopiwa se 'sega uye 'sega avo' mazvo. IPEACE haifaniri kupa mavirango, akabuda kana akavanda, nezve kushandisa kana kuvapo kwezvose zvedu."
+      },
+      "limitationOfLiability": {
+        "title": "Kudzikisa Mhosho",
+        "content": "IPEACE haizofanirwi kubhadharisa zvinhu zvose zvisina zvakanaka, zviri mukati, zvakakosha, zvinobva kana zvinodzudza, zvinosanganisira kuponya zvamapera, data, kana zvinangwa zvebhizinesi, zvinobuda kana zvinobatana nekushandisa masevhisi edu."
+      },
+      "governingLaw": {
+        "title": "Mitemo Yekutevera",
+        "content": "Mamiriro aya ekushandisa anofanira kuteverwa uye kunyengerwa kufhata nezve mitemo yeZimbabwe, pasina kufunga nezve kupoteredza mitemo yacho."
+      },
+      "changesToTerms": {
+        "title": "Kuchinja Mamiriro",
+        "content": "Tinodzivirira kodzero yekuchinja Mamiriro aya ekushandisa nenguva chero ine. Zvichinja zvichava zvinoshanda mukati momupinda. Kufamba kwako kushandisa masevhisi edu kunoratidza kugamuchira zvichinja zvacho."
+      },
+      "contact": {
+        "title": "Kubata",
+        "content": "Kana uine mibvunzo nezve Mamiriro aya ekushandisa, ndapota tibate nezvedu zvinotevera:"
+      },
+      "lastUpdated": "Yakapedzisira kugadziriswa"
+    },
+    "privacy": {
+      "title": "Mutemo weKuvanzika",
+      "introduction": {
+        "title": "Kutanga",
+        "content": "IPEACE Professional Consulting inokumbira kuchengetedza kuvanzika kwako uye ruzivo rwako. Mutemo weKuvanzika uyu unoratidza kuti tinozungusha, tishandisa, uye tichengetedza ruzivo rwako kana ukashandisa masevhisi edu."
+      },
+      "informationWeCollect": {
+        "title": "Ruzivo Rwatinozungusha",
+        "personal": {
+          "title": "Ruzivo Rwakamupiro",
+          "content": "Tinozungusha ruzivo rwakamupiro rwaunotipa kune tivedu kana ukashandisa masevhisi edu, zvinosanganisira:",
+          "examples": [
+            "Zita uye zviri kubata (email, runhare, kero)",
+            "Ruzivo rwekambani uye zvinhu zvebhizinesi",
+            "Zvirungwa zvekuzvidza uye nyanzvi",
+            "Zvifanekiso chekubata uye nhoroondo"
+          ]
+        },
+        "usage": {
+        "title": "Ruzivo Rwekushandisa",
+        "content": "Tinozungusha ruzivo pamwe nekuti unoshandisa masevhisi edu, zvinosanganisira:",
+        "examples": [
+          "Rudzi rwerunyararo uye divayisi",
+          "IP kero uye ruzivo rwenharaunda",
+          "Mapeji aunoenda uye nguva yaunogara pawebsite yedu"
+        ]
+      }
+    },
+    "howWeUseInformation": {
+      "title": "Kuti Tishandisei Ruzivo Rwako",
+      "content": "Tishandisa ruzivo rwako kune zvinhu zvakawanda zvebhizinesi, zvinosanganisira:",
+      "purposes": [
+        "Kupa uye kuvandudza masevhisi edu ekubvunzurudza",
+        "Kubata newe nezve mibvunzo uye zvikumbiro zvako",
+        "Kutumira zvitsva uye zvakabatwa zvekushambira (nemvumo yako)",
+        "Kushandisa zvibodhwa zvekubvunzurudza uye zvinochekwa",
+        "Kutevera mitemo uye zviremekedzo zvekutevera",
+        "Kuongorora maitiro ekushandisa kuvandudza ruzivo rwevatengi"
+      ]
+    },
+    "dataProtection": {
+      "title": "Kuchengetedza Data",
+      "content": "Tinorongedza nzira dzakanaka dzetekinoroji uye kugadzirisa kwekuponesa kuchengetedza ruzivo rwako kubva kupinda kusashandiswa, kuziviswa, kuchinja, kana kudzima."
+    },
+    "sharingOfInformation": {
+      "title": "Kugovera Ruzivo",
+      "content": "Hatitengesi, kugovera, kana kutengesa ruzivo rwako kune vamwe. Tingagovera ruzivo mukati mezvinotevera:",
+      "cases": [
+        "Nemavheji anobatsira kuparira masevhisi edu",
+        "Kana zvinodikanwa nemutemo kana kuti kuchengetedza kodzero uye zviri kwedu",
+        "Mukati mekushandirwa kwebhizinesi kana kubatana",
+        "Nemvumo yako pamwe nezvinhu zvakakosha"
+      ]
+    },
+    "yourRights": {
+      "title": "Kodzero Dzako",
+      "content": "Une kodzero dzakasiyana nezve ruzivo rwako, zvinosanganisira:",
+      "rights": [
+        "Kodzero yekupinda uye kugamuchira kopi yedada yako",
+        "Kodzero yekugadzirisa kana kuvandudza ruzivo rusingakodzwi",
+        "Kodzero yekukumbira kudzima dada yako",
+        "Kodzero yekuvhiringa kushandiswa kweruzivo rwako",
+        "Kodzero yekugovera uye kushandirwa kwedata"
+      ]
+    },
+    "dataRetention": {
+      "title": "Kuchengeta Data",
+      "content": "Tinochengeta ruzivo rwako kanguva inodikanwa kuparira masevhisi edu uye kutevera mitemo. Nguva yekuchengeta inochinja zvichifananidzwa nerudzi rweruzivo uye chinangwa."
+    },
+    "cookies": {
+      "title": "Kuki uye Tekinoroji Yekutevera",
+      "content": "Tishandisa kuki uye tekniroji dzimwe dzekutevera kuvandudza ruzivo rwako uye kuponza nhoroondo dzekushandisa. Unogona kudzora zvifanekiso chekukuki kuburikidza nepaonero rekushandisa runyararo rwako."
+    },
+    "thirdPartyLinks": {
+      "title": "Mabatanidzwa eVamwe",
+      "content": "Masevhisi edu anogona kuve nemabatanidzwa ekune mawebhusaiti evamwe. Hatinozvifukidzi kune zviri kuitwa zvavanhu vamwe kana zviri mukati mawebhusaiti aya. Tinokukokurudza kuti mutoronese mitemo yevanhu vamwe."
+    },
+    "childrenPrivacy": {
+      "title": "Kuvanzika kweVana",
+      "content": "Masevhisi edu haasi ekune vana vasati wana makore 18. Hatinozungusha ruzivo rwakamupiro kubva kune vana kusina mvumo yedu."
+    },
+    "changesToPolicy": {
+      "title": "Kuchinja Mutemo Uyu",
+      "content": "Tinogona kugadzirisa Mutemo weKuvanzika yedu nenguva dzose. Tichazivisa pamwe nekuchinja kuburikidza nepaunopinda mupage uyu uye kugadzirisa zuva 'Rakapedzisira Kugadziriswa'."
+    },
+    "contact": {
+      "title": "Tibate",
+      "content": "Kana uine mibvunzo kana zvinhu zvinokanganisa nezve Mutemo Uyu weKuvanzika kana zvimwe zvedu zvekushandisa data, ndapota tibate pa:"
+    },
+    "lastUpdated": "Yakapedzisira kugadziriswa"
+  }
+},
   "chatbot": {
     "title": "IPEACE AI Mubatsiri",
     "subtitle": "Bvunza nezve mitemo yebhizinesi yeZimbabwe",
     "welcome": "Mhoro! Ndini mubatsiri wako weAI akadzidziswa nezve Companies Act neSecurities regulations dzeZimbabwe. Ndingakubatsira sei nhasi?",
     "placeholder": "Bvunza nezve mitemo yebhizinesi...",
-    "powered": "Inoshandiswa neAI • Yakadzidziswa pane mitemo yeZimbabwe"
+    "powered": "Inoshandiswa neAI • Yakadzidziswa pane mitemo yeZimbabwe",
+    "suggestions": [
+      "Ndinoregistera kambani muZimbabwe here?",
+      "Zvinodiwa zvekutevera mitemo yekambani ndezvi?",
+      "Ndinowana business license here?",
+      "Mitemo yeSecurities muZimbabwe ndeyi?"
+    ],
+    "followUp": "Mibvunzo inobatana yaunogona kuva nayo:"
   },
   "consultation": {
     "title": "Ronga Kubvunzurudza",
