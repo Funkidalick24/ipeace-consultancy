@@ -4,30 +4,30 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --foreground: hsl(0, 0%, 31%);
+  --muted: hsl(0, 0%, 90%);
+  --muted-foreground: hsl(0, 0%, 31%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(0, 0%, 31%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(224, 71%, 36%);
+  --card-foreground: hsl(0, 0%, 31%);
+  --border: hsl(0, 0%, 90%);
+  --input: hsl(0, 0%, 90%);
+  --primary: hsl(216, 56%, 24%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(45, 93%, 47%);
-  --accent-foreground: hsl(224, 71%, 36%);
+  --secondary: hsl(0, 0%, 90%);
+  --secondary-foreground: hsl(0, 0%, 31%);
+  --accent: hsl(38, 100%, 59%);
+  --accent-foreground: hsl(216, 56%, 24%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
+  --ring: hsl(0, 0%, 31%);
   --radius: 0.5rem;
   
   /* IPEACE Brand Colors */
-  --primary-blue: hsl(224, 71%, 36%);
+  --primary-blue: hsl(216, 56%, 24%);
   --secondary-blue: hsl(213, 93%, 68%);
-  --accent-yellow: hsl(45, 93%, 47%);
+  --accent-yellow: hsl(38, 100%, 59%);
   --light-yellow: hsl(48, 96%, 89%);
 }
 
@@ -42,12 +42,12 @@
   --card-foreground: hsl(0, 0%, 98%);
   --border: hsl(240, 3.7%, 15.9%);
   --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(224, 71%, 36%);
+  --primary: hsl(216, 56%, 24%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(240, 3.7%, 15.9%);
   --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(45, 93%, 47%);
-  --accent-foreground: hsl(224, 71%, 36%);
+  --accent: hsl(38, 100%, 59%);
+  --accent-foreground: hsl(216, 56%, 24%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(240, 4.9%, 83.9%);
@@ -60,11 +60,12 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
+    @apply font-bold;
+    font-family: 'Montserrat', system-ui, sans-serif;
   }
 }
 
@@ -106,6 +107,23 @@
   }
   
   .gradient-hero {
-    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-yellow));
+    position: relative;
+  }
+  
+  .gradient-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(27, 54, 93, 0.85); /* Dark overlay for better text contrast */
+    z-index: 1;
+  }
+  
+  .gradient-hero > * {
+    position: relative;
+    z-index: 2;
   }
 }

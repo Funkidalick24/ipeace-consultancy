@@ -5,40 +5,22 @@ import { Linkedin, Twitter } from 'lucide-react';
 
 const teamMembers = [
   {
-    name: 'Dr. Tendai Mukamuri',
-    position: 'Managing Director',
-    bio: '15+ years in corporate law and regulatory compliance. PhD in Business Administration, LLB in Corporate Law.',
+    name: 'Wilberforce T. Mushore',
+    position: 'Co-Founder & Director – Compliance and Regulatory Strategy',
+    bio: 'Wilberforce leads iPeace\'s compliance advisory, helping solopreneurs and SMEs navigate legal frameworks with confidence. He specializes in regulatory alignment, ethical governance, and risk mitigation—ensuring that businesses are built on solid, sustainable foundations. His approach is grounded in clarity, integrity, and long-term resilience.',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
   },
   {
-    name: 'Ms. Grace Chivasa',
-    position: 'Head of Compliance',
-    bio: 'Former SEC regulator with expertise in securities law and corporate governance. CPA, LLM in Securities Law.',
+    name: 'Aleta Marime',
+    position: 'Co-Founder & Director – Financial Systems and Sustainability',
+    bio: 'Aleta guides clients through financial planning, resource management, and investment readiness. She works with founders to build sustainable financial models, improve cash flow visibility, and prepare for growth. Her strength lies in simplifying financial complexity and helping businesses make informed, strategic decisions.',
     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
   },
   {
-    name: 'Mr. James Nyathi',
-    position: 'Chief Technology Officer',
-    bio: 'AI and machine learning expert specializing in regulatory technology. MSc Computer Science, 10+ years in fintech.',
+    name: 'Clarence R. Makwasha',
+    position: 'Director – Operational Strategy and Brand Identity',
+    bio: 'Clarence empowers solopreneurs and SMEs to build systems that reflect their mission and scale with clarity. He designs branded materials, workflows, and communication tools that elevate professionalism and client experience. Known for his structured thinking and design expertise, Clarence helps founders move from vision to execution with confidence.',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
-  },
-  {
-    name: 'Ms. Patricia Mupfumi',
-    position: 'Senior Business Analyst',
-    bio: 'Strategy and operations expert with Big 4 consulting background. MBA, CFA, specializing in African markets.',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
-  },
-  {
-    name: 'Mr. David Mushonga',
-    position: 'Legal Counsel',
-    bio: 'Corporate lawyer with extensive experience in mergers, acquisitions, and regulatory compliance. LLB, LLM.',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
-  },
-  {
-    name: 'Ms. Rutendo Gapare',
-    position: 'Financial Advisory Lead',
-    bio: 'Investment banking and corporate finance specialist. CA(Z), CFA, with expertise in capital markets.',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
   },
 ];
 
