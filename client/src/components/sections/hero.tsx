@@ -11,12 +11,12 @@ export function HeroSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               {t('hero.title').split('IPEACE')[0]}
               <span className="text-accent-yellow">IPEACE</span>
               {t('hero.title').split('IPEACE')[1]}
             </h1>
-            <p className="text-xl lg:text-2xl mb-8 text-blue-100">
+            <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
               {t('hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">

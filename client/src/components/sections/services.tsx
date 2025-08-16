@@ -73,10 +73,10 @@ export function ServicesSection() {
     <section id="services" className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('services.title')}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             {t('services.subtitle')}
           </p>
         </div>
@@ -93,15 +93,15 @@ export function ServicesSection() {
                   <div className="w-20 h-20 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     <Icon className="text-2xl text-white h-8 w-8" />
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">
                     {t(`contact.form.services.${service}`)}
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-gray-700 mb-6">
                     {description}
                   </p>
                   <ul className="space-y-2 mb-6">
                     {features.map((feature, index) => (
-                      <li key={index} className="flex items-center text-sm text-gray-600">
+                      <li key={index} className="flex items-center text-sm text-gray-700">
                         <Check className="text-green-500 mr-2 h-4 w-4" />
                         {feature}
                       </li>

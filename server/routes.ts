@@ -6,22 +6,34 @@ import { getChatbotResponse } from "./services/openai";
 import { sendContactNotification, sendAutoReply } from "./services/email";
 import { sendConsultationBookingNotification, sendConsultationConfirmation, getServiceTypeName, getConsultationTypeName } from "./services/consultation";
 import { nanoid } from "nanoid";
+import sanitizeHtml from 'sanitize-html';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
       const validatedData = insertContactSchema.parse(req.body);
+          
+      // Sanitize user input
+      const sanitizedData = {
+        firstName: sanitizeHtml(validatedData.firstName, { allowedTags: [], allowedAttributes: {} }),
+        lastName: sanitizeHtml(validatedData.lastName, { allowedTags: [], allowedAttributes: {} }),
+        email: sanitizeHtml(validatedData.email, { allowedTags: [], allowedAttributes: {} }),
+        company: validatedData.company ? sanitizeHtml(validatedData.company, { allowedTags: [], allowedAttributes: {} }) : undefined,
+        service: validatedData.service ? sanitizeHtml(validatedData.service, { allowedTags: [], allowedAttributes: {} }) : undefined,
+        message: sanitizeHtml(validatedData.message, { allowedTags: [], allowedAttributes: {} }),
+        newsletter: validatedData.newsletter
+      };
       
       // Store the contact submission
-      const contact = await storage.createContactSubmission(validatedData);
+      const contact = await storage.createContactSubmission(sanitizedData);
       
       // Send notifications
       await sendContactNotification({
-        ...validatedData,
-        company: validatedData.company || undefined,
-        service: validatedData.service || undefined,
-        newsletter: validatedData.newsletter || false,
+        ...sanitizedData,
+        company: sanitizedData.company || undefined,
+        service: sanitizedData.service || undefined,
+        newsletter: sanitizedData.newsletter || false,
       });
       await sendAutoReply(validatedData.email, validatedData.firstName);
       
@@ -44,12 +56,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { message, sessionId } = chatRequestSchema.parse(req.body);
       const currentSessionId = sessionId || nanoid();
+          
+      // Sanitize user input
+      const sanitizedMessage = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} });
       
       // Get AI response
-      const aiResponse = await getChatbotResponse(message);
+      const aiResponse = await getChatbotResponse(sanitizedMessage);
       
       // Store the chat message
-      await storage.createChatMessage(currentSessionId, message, aiResponse.response);
+      await storage.createChatMessage(currentSessionId, sanitizedMessage, aiResponse.response);
       
       res.json({
         response: aiResponse.response,
@@ -82,6 +97,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/consultations", async (req, res) => {
     try {
       const validatedData = consultationBookingSchema.parse(req.body);
+          
+      // Sanitize user input
+      const sanitizedData = {
+        firstName: sanitizeHtml(validatedData.firstName, { allowedTags: [], allowedAttributes: {} }),
+        lastName: sanitizeHtml(validatedData.lastName, { allowedTags: [], allowedAttributes: {} }),
+        email: sanitizeHtml(validatedData.email, { allowedTags: [], allowedAttributes: {} }),
+        phone: sanitizeHtml(validatedData.phone, { allowedTags: [], allowedAttributes: {} }),
+        company: validatedData.company ? sanitizeHtml(validatedData.company, { allowedTags: [], allowedAttributes: {} }) : undefined,
+        serviceType: sanitizeHtml(validatedData.serviceType, { allowedTags: [], allowedAttributes: {} }),
+        preferredDate: sanitizeHtml(validatedData.preferredDate, { allowedTags: [], allowedAttributes: {} }),
+        preferredTime: sanitizeHtml(validatedData.preferredTime, { allowedTags: [], allowedAttributes: {} }),
+        consultationType: sanitizeHtml(validatedData.consultationType, { allowedTags: [], allowedAttributes: {} }),
+        description: sanitizeHtml(validatedData.description, { allowedTags: [], allowedAttributes: {} })
+      };
       
       // Transform validated data to match storage function expectations
       const storageData = {
@@ -90,12 +119,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       // Store the consultation booking
-      const booking = await storage.createConsultationBooking(storageData);
+      const booking = await storage.createConsultationBooking({
+        ...storageData,
+        firstName: sanitizedData.firstName,
+        lastName: sanitizedData.lastName,
+        email: sanitizedData.email,
+        phone: sanitizedData.phone,
+        company: sanitizedData.company,
+        serviceType: sanitizedData.serviceType,
+        preferredDate: new Date(sanitizedData.preferredDate),
+        preferredTime: sanitizedData.preferredTime,
+        consultationType: sanitizedData.consultationType,
+        description: sanitizedData.description
+      });
       
       // Send notifications
       await sendConsultationBookingNotification({
-        ...validatedData,
-        company: validatedData.company || undefined,
+        ...sanitizedData,
+        company: sanitizedData.company || undefined,
       });
       await sendConsultationConfirmation(validatedData.email, validatedData.firstName, booking.id);
       

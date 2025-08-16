@@ -141,7 +141,7 @@ export function ChatbotWidget() {
                 </div>
                 <div>
                   <h4 className="font-semibold">{t('chatbot.title')}</h4>
-                  <p className="text-xs text-blue-200">{t('chatbot.subtitle')}</p>
+                  <p className="text-xs text-blue-100">{t('chatbot.subtitle')}</p>
                 </div>
               </div>
               <Button
@@ -174,12 +174,12 @@ export function ChatbotWidget() {
                       {!message.isUser && (
                         <Bot className="text-primary-blue mr-2 h-4 w-4 inline" />
                       )}
-                      <p className="text-sm">{message.content}</p>
+                      <p className="text-base sm:text-sm">{message.content}</p>
                       
                       {/* Follow-up suggestions */}
                       {!message.isUser && message.followUpSuggestions && message.followUpSuggestions.length > 0 && (
                         <div className="mt-2">
-                          <p className="text-xs font-semibold text-gray-600 mt-2">
+                          <p className="text-xs font-semibold text-gray-700 mt-2">
                             {t('chatbot.followUp')}
                           </p>
                           <div className="flex flex-wrap gap-1 mt-1">
@@ -204,7 +204,7 @@ export function ChatbotWidget() {
                 {/* Suggested questions when no messages */}
                 {messages.length === 1 && messages[0].followUpSuggestions && messages[0].followUpSuggestions.length > 0 && (
                   <div className="flex flex-col space-y-2">
-                    <p className="text-xs font-semibold text-gray-600">
+                    <p className="text-xs font-semibold text-gray-700">
                       {t('chatbot.followUp')}
                     </p>
                     <div className="flex flex-wrap gap-1">
@@ -227,7 +227,7 @@ export function ChatbotWidget() {
                   <div className="flex justify-start">
                     <div className="bg-white shadow-sm border border-gray-100 p-3 rounded-lg max-w-xs">
                       <Bot className="text-primary-blue mr-2 h-4 w-4 inline" />
-                      <span className="text-sm text-gray-500">Thinking...</span>
+                      <span className="text-base sm:text-sm text-gray-700">Thinking...</span>
                     </div>
                   </div>
                 )}
@@ -256,7 +256,7 @@ export function ChatbotWidget() {
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">{t('chatbot.powered')}</p>
+            <p className="text-xs text-gray-700 mt-2">{t('chatbot.powered')}</p>
           </div>
         </Card>
       )}

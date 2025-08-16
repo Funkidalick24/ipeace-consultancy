@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { insertContactSchema } from '@shared/schema';
 import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, Twitter, Instagram } from 'lucide-react';
+import DOMPurify from 'dompurify';
 
 type ContactFormData = {
   firstName: string;
@@ -72,17 +73,28 @@ export function ContactSection() {
   });
 
   const onSubmit = (data: ContactFormData) => {
-    contactMutation.mutate(data);
+    // Sanitize user input before sending to server
+    const sanitizedData = {
+      firstName: DOMPurify.sanitize(data.firstName),
+      lastName: DOMPurify.sanitize(data.lastName),
+      email: DOMPurify.sanitize(data.email),
+      company: data.company ? DOMPurify.sanitize(data.company) : undefined,
+      service: data.service ? DOMPurify.sanitize(data.service) : undefined,
+      message: DOMPurify.sanitize(data.message),
+      newsletter: data.newsletter
+    };
+    
+    contactMutation.mutate(sanitizedData);
   };
 
   return (
     <section id="contact" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('contact.title')}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             {t('contact.subtitle')}
           </p>
         </div>
@@ -91,7 +103,7 @@ export function ContactSection() {
           {/* Contact Form */}
           <Card className="bg-white shadow-sm border border-gray-100">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-6">
                 {t('contact.form.title')}
               </h3>
               
@@ -235,7 +247,7 @@ export function ContactSection() {
                           />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel className="text-sm text-gray-600">
+                          <FormLabel className="text-sm text-gray-700">
                             {t('contact.form.newsletter')}
                           </FormLabel>
                         </div>
@@ -273,7 +285,7 @@ export function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.address')}
                       </h4>
-                      <p className="text-gray-600">
+                      <p className="text-gray-700">
                         15th Floor, Eastgate Shopping Centre<br />
                         Robert Mugabe Road<br />
                         Harare, Zimbabwe
@@ -289,8 +301,8 @@ export function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.phone')}
                       </h4>
-                      <p className="text-gray-600">+263 4 123 4567</p>
-                      <p className="text-gray-600">+263 77 123 4567</p>
+                      <p className="text-gray-700">+263 4 123 4567</p>
+                      <p className="text-gray-700">+263 77 123 4567</p>
                     </div>
                   </div>
 
@@ -302,8 +314,8 @@ export function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.email')}
                       </h4>
-                      <p className="text-gray-600">info@ipeace.co.zw</p>
-                      <p className="text-gray-600">support@ipeace.co.zw</p>
+                      <p className="text-gray-700">info@ipeace.co.zw</p>
+                      <p className="text-gray-700">support@ipeace.co.zw</p>
                     </div>
                   </div>
 
@@ -315,9 +327,9 @@ export function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.hours')}
                       </h4>
-                      <p className="text-gray-600">Monday - Friday: 8:00 AM - 6:00 PM</p>
-                      <p className="text-gray-600">Saturday: 9:00 AM - 1:00 PM</p>
-                      <p className="text-gray-600">Sunday: Closed</p>
+                      <p className="text-gray-700">Monday - Friday: 8:00 AM - 6:00 PM</p>
+                      <p className="text-gray-700">Saturday: 9:00 AM - 1:00 PM</p>
+                      <p className="text-gray-700">Sunday: Closed</p>
                       <p className="text-sm text-accent-yellow font-medium mt-1">
                         AI Chat: 24/7 Available
                       </p>

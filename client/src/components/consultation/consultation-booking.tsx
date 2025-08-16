@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { consultationBookingSchema, type ConsultationBookingForm } from '@shared/schema';
 import { Calendar, Clock, CheckCircle, CalendarDays } from 'lucide-react';
+import DOMPurify from 'dompurify';
 
 interface ConsultationBookingProps {
   trigger?: React.ReactNode;
@@ -70,7 +71,21 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
   });
 
   const onSubmit = (data: ConsultationBookingForm) => {
-    bookingMutation.mutate(data);
+    // Sanitize user input before sending to server
+    const sanitizedData = {
+      firstName: DOMPurify.sanitize(data.firstName),
+      lastName: DOMPurify.sanitize(data.lastName),
+      email: DOMPurify.sanitize(data.email),
+      phone: DOMPurify.sanitize(data.phone),
+      company: data.company ? DOMPurify.sanitize(data.company) : undefined,
+      serviceType: DOMPurify.sanitize(data.serviceType),
+      preferredDate: DOMPurify.sanitize(data.preferredDate),
+      preferredTime: DOMPurify.sanitize(data.preferredTime),
+      consultationType: DOMPurify.sanitize(data.consultationType),
+      description: DOMPurify.sanitize(data.description)
+    };
+    
+    bookingMutation.mutate(sanitizedData as ConsultationBookingForm);
   };
 
   const resetForm = () => {
@@ -98,7 +113,7 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center text-2xl font-bold text-primary-blue">
+          <DialogTitle className="flex items-center text-xl md:text-2xl font-bold text-primary-blue">
             <Calendar className="mr-3 h-6 w-6" />
             {t('consultation.title')}
           </DialogTitle>
@@ -109,10 +124,10 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
           <div className="space-y-6">
             <div className="text-center">
               <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
                 {t('consultation.success.title')}
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-700 mb-4">
                 {t('consultation.success.message')}
               </p>
               <div className="bg-gray-50 p-4 rounded-lg">
@@ -147,7 +162,7 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
         ) : (
           // Booking Form
           <div className="space-y-6">
-            <p className="text-gray-600">{t('consultation.subtitle')}</p>
+            <p className="text-gray-700">{t('consultation.subtitle')}</p>
             
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -228,11 +243,12 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                   name="company"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('consultation.form.company')}</FormLabel>
+                      <FormLabel className="text-gray-700">{t('consultation.form.company')}</FormLabel>
                       <FormControl>
                         <Input 
                           placeholder={t('consultation.form.placeholders.company')} 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ''}
                         />
                       </FormControl>
                       <FormMessage />

@@ -8,7 +8,7 @@ export function TermsOfService() {
       <h1>{t('legal.terms.title')}</h1>
       
       <section className="mb-6">
-        <h2 className="text-xl font-semibold mt-6 mb-3">{t('legal.terms.acceptance.title')}</h2>
+        <h2 className="text-lg md:text-xl font-semibold mt-6 mb-3">{t('legal.terms.acceptance.title')}</h2>
         <p>{t('legal.terms.acceptance.content')}</p>
       </section>
 

@@ -8,13 +8,13 @@ export function PrivacyPolicy() {
       <h1>{t('legal.privacy.title')}</h1>
       
       <section className="mb-6">
-        <h2 className="text-xl font-semibold mt-6 mb-3">{t('legal.privacy.introduction.title')}</h2>
+        <h2 className="text-lg md:text-xl font-semibold mt-6 mb-3">{t('legal.privacy.introduction.title')}</h2>
         <p>{t('legal.privacy.introduction.content')}</p>
       </section>
 
       <section className="mb-6">
         <h2 className="text-xl font-semibold mt-6 mb-3">{t('legal.privacy.informationWeCollect.title')}</h2>
-        <h3 className="text-lg font-medium mt-4 mb-2">{t('legal.privacy.informationWeCollect.personal.title')}</h3>
+        <h3 className="text-base md:text-lg font-medium mt-4 mb-2">{t('legal.privacy.informationWeCollect.personal.title')}</h3>
         <p>{t('legal.privacy.informationWeCollect.personal.content')}</p>
         <ul className="list-disc pl-6 mt-2 space-y-1">
           <li>{t('legal.privacy.informationWeCollect.personal.examples.0')}</li>
@@ -23,7 +23,7 @@ export function PrivacyPolicy() {
           <li>{t('legal.privacy.informationWeCollect.personal.examples.3')}</li>
         </ul>
 
-        <h3 className="text-lg font-medium mt-4 mb-2">{t('legal.privacy.informationWeCollect.usage.title')}</h3>
+        <h3 className="text-base md:text-lg font-medium mt-4 mb-2">{t('legal.privacy.informationWeCollect.usage.title')}</h3>
         <p>{t('legal.privacy.informationWeCollect.usage.content')}</p>
         <ul className="list-disc pl-6 mt-2 space-y-1">
           <li>{t('legal.privacy.informationWeCollect.usage.examples.0')}</li>

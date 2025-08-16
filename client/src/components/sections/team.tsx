@@ -31,10 +31,10 @@ export function TeamSection() {
     <section id="team" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('team.title')}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             {t('team.subtitle')}
           </p>
         </div>
@@ -48,13 +48,13 @@ export function TeamSection() {
                 className="w-full h-64 object-cover"
               />
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
                   {member.name}
                 </h3>
                 <p className="text-primary-blue font-medium mb-3">
                   {member.position}
                 </p>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-gray-700 text-sm mb-4">
                   {member.bio}
                 </p>
                 <div className="flex space-x-3">

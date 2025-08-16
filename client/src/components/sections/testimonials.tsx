@@ -60,10 +60,10 @@ export function TestimonialsSection() {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('testimonials.title')}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             {t('testimonials.subtitle')}
           </p>
         </div>
@@ -72,7 +72,7 @@ export function TestimonialsSection() {
           <Card className="bg-gradient-to-br from-gray-50 to-white shadow-lg border border-gray-100">
             <CardContent className="p-8 lg:p-12 text-center">
               <Quote className="text-4xl text-primary-blue mb-6 mx-auto h-12 w-12" />
-              <blockquote className="text-xl lg:text-2xl text-gray-700 font-medium mb-8 leading-relaxed">
+              <blockquote className="text-lg md:text-xl lg:text-2xl text-gray-800 font-medium mb-8 leading-relaxed">
                 "{testimonials[currentTestimonial].quote}"
               </blockquote>
               <div className="flex items-center justify-center space-x-4">
@@ -85,7 +85,7 @@ export function TestimonialsSection() {
                   <div className="font-semibold text-gray-900">
                     {testimonials[currentTestimonial].name}
                   </div>
-                  <div className="text-gray-600">
+                  <div className="text-gray-700">
                     {testimonials[currentTestimonial].position}
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export function TestimonialsSection() {
             <Card key={index} className="bg-gray-50 border border-gray-100">
               <CardContent className="p-6">
                 <Quote className="text-2xl text-primary-blue mb-4 h-8 w-8" />
-                <p className="text-gray-700 mb-4">"{testimonial.quote}"</p>
+                <p className="text-gray-800 mb-4">"{testimonial.quote}"</p>
                 <div className="flex items-center space-x-3">
                   <img 
                     src={testimonial.image}
@@ -126,7 +126,7 @@ export function TestimonialsSection() {
                   />
                   <div>
                     <div className="font-semibold text-sm">{testimonial.name}</div>
-                    <div className="text-gray-600 text-xs">{testimonial.position}</div>
+                    <div className="text-gray-700 text-xs">{testimonial.position}</div>
                   </div>
                 </div>
               </CardContent>
