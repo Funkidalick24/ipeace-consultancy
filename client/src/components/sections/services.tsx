@@ -130,7 +130,7 @@ export function ServicesSection() {
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-primary-blue to-secondary-blue rounded-2xl p-12 text-white">
             <h3 className="text-3xl font-bold mb-4">{t('services.cta.title')}</h3>
-            <p className="text-xl mb-8 text-blue-100">{t('services.cta.subtitle')}</p>
+            <p className="text-xl mb-8 text-black">{t('services.cta.subtitle')}</p>
             <ConsultationBooking 
               trigger={
                 <Button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">

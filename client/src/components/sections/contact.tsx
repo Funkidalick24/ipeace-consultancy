@@ -286,8 +286,8 @@ export function ContactSection() {
                         {t('contact.office.address')}
                       </h4>
                       <p className="text-gray-700">
-                        15th Floor, Eastgate Shopping Centre<br />
-                        Robert Mugabe Road<br />
+                        135 Baines Avenue<br />
+                        Avenues<br />
                         Harare, Zimbabwe
                       </p>
                     </div>
