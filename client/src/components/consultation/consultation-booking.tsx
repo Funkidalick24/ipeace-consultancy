@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,7 +28,7 @@ interface BookingSuccess {
   booking: any;
 }
 
-export function ConsultationBooking({ trigger, className }: ConsultationBookingProps) {
+export const ConsultationBooking = memo(function ConsultationBooking({ trigger, className }: ConsultationBookingProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState<BookingSuccess | null>(null);
@@ -155,8 +155,8 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
               </CardContent>
             </Card>
 
-            <Button onClick={resetForm} className="w-full btn-primary">
-              Book Another Consultation
+            <Button onClick={resetForm} className="w-full btn-primary" aria-label={t('consultation.success.bookAnother')}>
+              {t('consultation.success.bookAnother')}
             </Button>
           </div>
         ) : (
@@ -174,9 +174,9 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                       <FormItem>
                         <FormLabel>{t('consultation.form.firstName')} *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder={t('consultation.form.placeholders.firstName')} 
-                            {...field} 
+                          <Input
+                            placeholder={t('consultation.form.placeholders.firstName')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -190,9 +190,9 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                       <FormItem>
                         <FormLabel>{t('consultation.form.lastName')} *</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder={t('consultation.form.placeholders.lastName')} 
-                            {...field} 
+                          <Input
+                            placeholder={t('consultation.form.placeholders.lastName')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -209,10 +209,10 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                       <FormItem>
                         <FormLabel>{t('consultation.form.email')} *</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="email"
-                            placeholder={t('consultation.form.placeholders.email')} 
-                            {...field} 
+                            placeholder={t('consultation.form.placeholders.email')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -226,10 +226,10 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                       <FormItem>
                         <FormLabel>{t('consultation.form.phone')} *</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="tel"
-                            placeholder={t('consultation.form.placeholders.phone')} 
-                            {...field} 
+                            placeholder={t('consultation.form.placeholders.phone')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -245,8 +245,8 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                     <FormItem>
                       <FormLabel className="text-gray-700">{t('consultation.form.company')}</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder={t('consultation.form.placeholders.company')} 
+                        <Input
+                          placeholder={t('consultation.form.placeholders.company')}
                           {...field}
                           value={field.value ?? ''}
                         />
@@ -332,10 +332,10 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                       <FormItem>
                         <FormLabel>{t('consultation.form.preferredDate')} *</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="date"
                             min={minDate}
-                            {...field} 
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -388,10 +388,10 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                     <FormItem>
                       <FormLabel>{t('consultation.form.description')} *</FormLabel>
                       <FormControl>
-                        <Textarea 
+                        <Textarea
                           rows={4}
-                          placeholder={t('consultation.form.placeholders.description')} 
-                          {...field} 
+                          placeholder={t('consultation.form.placeholders.description')}
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -399,15 +399,16 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
                   )}
                 />
 
-                <Button 
-                  type="submit" 
-                  className="w-full btn-primary py-4" 
+                <Button
+                  type="submit"
+                  className="w-full btn-primary py-4"
                   disabled={bookingMutation.isPending}
+                  aria-label={bookingMutation.isPending ? t('consultation.form.booking') : t('consultation.form.book')}
                 >
                   {bookingMutation.isPending ? (
                     <>
                       <Clock className="mr-2 h-4 w-4 animate-spin" />
-                      Booking...
+                      {t('consultation.form.booking')}
                     </>
                   ) : (
                     <>
@@ -423,4 +424,4 @@ export function ConsultationBooking({ trigger, className }: ConsultationBookingP
       </DialogContent>
     </Dialog>
   );
-}
+});

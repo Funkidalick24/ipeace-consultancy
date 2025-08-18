@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,7 +36,7 @@ const contactFormSchema = insertContactSchema.extend({
   newsletter: insertContactSchema.shape.newsletter,
 });
 
-export function ContactSection() {
+export const ContactSection = memo(function ContactSection() {
   const { t } = useTranslation();
 
   const form = useForm<ContactFormData>({
@@ -117,9 +117,9 @@ export function ContactSection() {
                         <FormItem>
                           <FormLabel>{t('contact.form.firstName')} *</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder={t('contact.form.placeholders.firstName')} 
-                              {...field} 
+                            <Input
+                              placeholder={t('contact.form.placeholders.firstName')}
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -133,9 +133,9 @@ export function ContactSection() {
                         <FormItem>
                           <FormLabel>{t('contact.form.lastName')} *</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder={t('contact.form.placeholders.lastName')} 
-                              {...field} 
+                            <Input
+                              placeholder={t('contact.form.placeholders.lastName')}
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -151,10 +151,10 @@ export function ContactSection() {
                       <FormItem>
                         <FormLabel>{t('contact.form.email')} *</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="email"
-                            placeholder={t('contact.form.placeholders.email')} 
-                            {...field} 
+                            placeholder={t('contact.form.placeholders.email')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -169,9 +169,9 @@ export function ContactSection() {
                       <FormItem>
                         <FormLabel>{t('contact.form.company')}</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder={t('contact.form.placeholders.company')} 
-                            {...field} 
+                          <Input
+                            placeholder={t('contact.form.placeholders.company')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -224,10 +224,10 @@ export function ContactSection() {
                       <FormItem>
                         <FormLabel>{t('contact.form.message')} *</FormLabel>
                         <FormControl>
-                          <Textarea 
+                          <Textarea
                             rows={4}
-                            placeholder={t('contact.form.placeholders.message')} 
-                            {...field} 
+                            placeholder={t('contact.form.placeholders.message')}
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
@@ -255,9 +255,9 @@ export function ContactSection() {
                     )}
                   />
 
-                  <Button 
-                    type="submit" 
-                    className="w-full btn-primary py-4" 
+                  <Button
+                    type="submit"
+                    className="w-full btn-primary py-4"
                     disabled={contactMutation.isPending}
                   >
                     {contactMutation.isPending ? 'Sending...' : t('contact.form.send')}
@@ -330,7 +330,7 @@ export function ContactSection() {
                       <p className="text-gray-700">Monday - Friday: 8:00 AM - 6:00 PM</p>
                       <p className="text-gray-700">Saturday: 9:00 AM - 1:00 PM</p>
                       <p className="text-gray-700">Sunday: Closed</p>
-                      <p className="text-sm text-accent-yellow font-medium mt-1">
+                      <p className="text-sm text-primary-blue font-medium mt-1">
                         AI Chat: 24/7 Available
                       </p>
                     </div>
@@ -353,6 +353,7 @@ export function ContactSection() {
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
+                    title="Google Maps location of IPEACE office"
                   ></iframe>
                 </div>
                 
@@ -361,6 +362,7 @@ export function ContactSection() {
                   onClick={() => {
                     window.open('https://www.google.com/maps/dir/?api=1&destination=Eastgate+Shopping+Centre,+Harare,+Zimbabwe', '_blank');
                   }}
+                  aria-label={t('contact.office.directions')}
                 >
                   <Navigation className="mr-2 h-4 w-4" />
                   {t('contact.office.directions')}
@@ -380,6 +382,7 @@ export function ContactSection() {
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
                     onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
+                    aria-label="LinkedIn"
                   >
                     <Linkedin className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">LinkedIn</span>
@@ -388,6 +391,7 @@ export function ContactSection() {
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
                     onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
+                    aria-label="Twitter"
                   >
                     <Twitter className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">Twitter</span>
@@ -396,6 +400,7 @@ export function ContactSection() {
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
                     onClick={() => window.open('https://instagram.com/ipeace', '_blank')}
+                    aria-label="Instagram"
                   >
                     <Instagram className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">Instagram</span>
@@ -408,4 +413,4 @@ export function ContactSection() {
       </div>
     </section>
   );
-}
+});

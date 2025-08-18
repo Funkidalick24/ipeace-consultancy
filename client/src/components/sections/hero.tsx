@@ -1,9 +1,10 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 import { VideoModal } from '@/components/layout/video-modal';
 
-export function HeroSection() {
+export const HeroSection = memo(function HeroSection() {
   const { t } = useTranslation();
 
   return (
@@ -70,14 +71,16 @@ export function HeroSection() {
           </div>
           
           <div className="order-1 lg:order-2">
-            <img 
-              src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&h=716" 
-              alt="Professional business consulting team collaborating" 
-              className="rounded-xl shadow-2xl w-full h-auto" 
+            <img
+              src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=533"
+              alt="Professional business consulting team collaborating"
+width="800"
+              height="533"
+              className="rounded-xl shadow-2xl w-full h-auto"
             />
           </div>
         </div>
       </div>
     </section>
   );
-}
+});

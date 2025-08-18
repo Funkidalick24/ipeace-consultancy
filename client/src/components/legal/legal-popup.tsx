@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
@@ -16,18 +16,18 @@ interface LegalPopupProps {
   children: React.ReactNode;
 }
 
-export function LegalPopup({ type, children }: LegalPopupProps) {
+export const LegalPopup = memo(function LegalPopup({ type, children }: LegalPopupProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const getTitle = () => {
-    return type === 'terms' 
+    return type === 'terms'
       ? t('footer.terms')
       : t('footer.privacy');
   };
 
   const getContent = () => {
-    return type === 'terms' 
+    return type === 'terms'
       ? <TermsOfService />
       : <PrivacyPolicy />;
   };
@@ -45,11 +45,11 @@ export function LegalPopup({ type, children }: LegalPopupProps) {
           {getContent()}
         </div>
         <div className="flex justify-end">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={() => setOpen(false)} aria-label={t('legal.close')}>
             {t('legal.close')}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
-}
+});

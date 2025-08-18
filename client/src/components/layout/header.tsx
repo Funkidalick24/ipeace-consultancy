@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 import { Menu } from 'lucide-react';
 
-export function Header() {
+export const Header = memo(function Header() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,6 +35,8 @@ export function Header() {
               <img
                 src="/logo.png"
                 alt="IPEACE Logo"
+width="180"
+                height="180"
                 className="h-10 w-auto"
               />
             </a>
@@ -50,6 +52,7 @@ export function Header() {
                 key={item.key}
                 onClick={() => scrollToSection(item.href)}
                 className="text-gray-700 hover:text-primary-blue transition-colors duration-200 font-medium"
+                aria-label={t(`nav.${item.key}`)}
               >
                 {t(`nav.${item.key}`)}
               </button>
@@ -76,7 +79,7 @@ export function Header() {
             {/* Mobile menu trigger */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
@@ -87,6 +90,7 @@ export function Header() {
                       key={item.key}
                       onClick={() => scrollToSection(item.href)}
                       className="text-left py-2 text-gray-700 hover:text-primary-blue transition-colors duration-200"
+                      aria-label={t(`nav.${item.key}`)}
                     >
                       {t(`nav.${item.key}`)}
                     </button>
@@ -112,4 +116,4 @@ export function Header() {
       </nav>
     </header>
   );
-}
+});

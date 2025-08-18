@@ -273,7 +273,12 @@
       "How do I obtain a business license?",
       "What are the securities regulations in Zimbabwe?"
     ],
-    "followUp": "Related questions you might have:"
+    "followUp": "Related questions you might have:",
+    "open": "Open chat",
+    "close": "Close chat",
+    "clear": "Clear chat",
+    "askQuestion": "Ask question:",
+    "send": "Send message"
   },
   "consultation": {
     "title": "Book a Consultation",
@@ -291,6 +296,7 @@
       "consultationType": "Consultation Type",
       "description": "How can we help you?",
       "book": "Book Consultation",
+      "booking": "Booking...",
       "placeholders": {
         "firstName": "Enter your first name",
         "lastName": "Enter your last name",
@@ -334,7 +340,8 @@
         "We'll confirm your preferred date and time or suggest alternatives",
         "You'll receive a calendar invitation with meeting details",
         "Prepare any documents or questions you'd like to discuss"
-      ]
+      ],
+      "bookAnother": "Book Another Consultation"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ interface VideoModalProps {
   trigger: React.ReactNode;
 }
 
-export function VideoModal({ videoUrl, title, trigger }: VideoModalProps) {
+export const VideoModal = memo(function VideoModal({ videoUrl, title, trigger }: VideoModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   
   // Convert YouTube URL to embed format if needed
@@ -57,4 +57,4 @@ export function VideoModal({ videoUrl, title, trigger }: VideoModalProps) {
       </DialogContent>
     </Dialog>
   );
-}
+});

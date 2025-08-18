@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { HeroSection } from '@/components/sections/hero';
@@ -6,7 +7,9 @@ import { ServicesSection } from '@/components/sections/services';
 import { TeamSection } from '@/components/sections/team';
 import { TestimonialsSection } from '@/components/sections/testimonials';
 import { ContactSection } from '@/components/sections/contact';
-import { ChatbotWidget } from '@/components/chatbot/chatbot-widget';
+
+// Lazy load components that are not immediately needed
+const ChatbotWidget = lazy(() => import('@/components/chatbot/chatbot-widget').then(module => ({ default: module.ChatbotWidget })));
 
 export default function Home() {
   return (
@@ -21,7 +24,9 @@ export default function Home() {
         <ContactSection />
       </main>
       <Footer />
-      <ChatbotWidget />
+      <Suspense fallback={null}>
+        <ChatbotWidget />
+      </Suspense>
     </div>
   );
 }

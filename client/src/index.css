@@ -28,7 +28,6 @@
   --primary-blue: hsl(216, 56%, 24%);
   --secondary-blue: hsl(213, 93%, 68%);
   --accent-yellow: hsl(38, 100%, 59%);
-  --light-yellow: hsl(48, 96%, 89%);
 }
 
 .dark {
@@ -61,11 +60,13 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     font-family: 'Open Sans', system-ui, sans-serif;
+    font-display: swap;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold;
     font-family: 'Montserrat', system-ui, sans-serif;
+    font-display: swap;
   }
 }
 

@@ -28,6 +28,51 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Core vendor libraries
+          vendor: ['react', 'react-dom'],
+          
+          // Data fetching and state management
+          data: ['@tanstack/react-query'],
+          
+          // UI components - split by functionality
+          uiDialogs: ['@radix-ui/react-dialog', '@radix-ui/react-alert-dialog'],
+          uiForms: ['@radix-ui/react-select', '@radix-ui/react-checkbox', '@radix-ui/react-label'],
+          uiNavigation: ['@radix-ui/react-tabs', '@radix-ui/react-navigation-menu'],
+          uiDisplay: ['@radix-ui/react-tooltip', '@radix-ui/react-popover', '@radix-ui/react-hover-card'],
+          
+          // Icon libraries
+          icons: ['lucide-react', 'react-icons'],
+          
+          // Form handling
+          forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
+          
+          // Utility libraries
+          utils: ['clsx', 'tailwind-merge', 'class-variance-authority']
+        }
+      }
+    },
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        ecma: 2020,
+        module: true,
+        pure_funcs: ['console.info', 'console.debug', 'console.warn'],
+        passes: 3
+      },
+      mangle: {
+        properties: {
+          regex: /^__/
+        }
+      },
+      output: {
+        comments: false,
+        ascii_only: true
+      }
+    }
   },
   server: {
     fs: {

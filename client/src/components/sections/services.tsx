@@ -1,13 +1,14 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
-import { 
-  Gavel, 
-  Bot, 
-  TrendingUp, 
-  GraduationCap, 
-  FileText, 
+import {
+  Gavel,
+  Bot,
+  TrendingUp,
+  GraduationCap,
+  FileText,
   Headphones,
   Check,
   ArrowRight
@@ -64,7 +65,7 @@ const serviceDescriptions = {
   support: 'Round-the-clock support through our AI chatbot and expert consultants for urgent business and compliance queries.'
 };
 
-export function ServicesSection() {
+export const ServicesSection = memo(function ServicesSection() {
   const { t } = useTranslation();
 
   const services = ['regulatory', 'ai', 'strategy', 'training', 'documents', 'support'];
@@ -117,6 +118,7 @@ export function ServicesSection() {
                         contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                       }
                     }}
+                    aria-label={`${t('services.learnMore')} about ${t(`contact.form.services.${service}`)}`}
                   >
                     {t('services.learnMore')} <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>
@@ -131,7 +133,7 @@ export function ServicesSection() {
           <div className="bg-gradient-to-r from-primary-blue to-secondary-blue rounded-2xl p-12 text-white">
             <h3 className="text-3xl font-bold mb-4">{t('services.cta.title')}</h3>
             <p className="text-xl mb-8 text-black">{t('services.cta.subtitle')}</p>
-            <ConsultationBooking 
+            <ConsultationBooking
               trigger={
                 <Button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">
                   {t('services.cta.button')}
@@ -143,4 +145,4 @@ export function ServicesSection() {
       </div>
     </section>
   );
-}
+});

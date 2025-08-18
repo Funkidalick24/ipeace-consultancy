@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -52,7 +52,7 @@ const additionalTestimonials = [
   }
 ];
 
-export function TestimonialsSection() {
+export const TestimonialsSection = memo(function TestimonialsSection() {
   const { t } = useTranslation();
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
@@ -76,7 +76,7 @@ export function TestimonialsSection() {
                 "{testimonials[currentTestimonial].quote}"
               </blockquote>
               <div className="flex items-center justify-center space-x-4">
-                <img 
+                <img
                   src={testimonials[currentTestimonial].image}
                   alt={`${testimonials[currentTestimonial].name} - ${testimonials[currentTestimonial].position}`}
                   className="w-16 h-16 rounded-full object-cover"
@@ -102,10 +102,11 @@ export function TestimonialsSection() {
                 size="sm"
                 onClick={() => setCurrentTestimonial(index)}
                 className={`w-3 h-3 rounded-full p-0 transition-all duration-200 ${
-                  index === currentTestimonial 
-                    ? 'bg-primary-blue' 
+                  index === currentTestimonial
+                    ? 'bg-primary-blue'
                     : 'bg-gray-300 hover:bg-gray-400'
                 }`}
+                aria-label={`View testimonial ${index + 1}`}
               />
             ))}
           </div>
@@ -119,7 +120,7 @@ export function TestimonialsSection() {
                 <Quote className="text-2xl text-primary-blue mb-4 h-8 w-8" />
                 <p className="text-gray-800 mb-4">"{testimonial.quote}"</p>
                 <div className="flex items-center space-x-3">
-                  <img 
+                  <img
                     src={testimonial.image}
                     alt={`${testimonial.name} - ${testimonial.position}`}
                     className="w-12 h-12 rounded-full object-cover"
@@ -136,4 +137,4 @@ export function TestimonialsSection() {
       </div>
     </section>
   );
-}
+});

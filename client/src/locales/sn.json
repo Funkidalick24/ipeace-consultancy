@@ -273,7 +273,12 @@
       "Ndinowana business license here?",
       "Mitemo yeSecurities muZimbabwe ndeyi?"
     ],
-    "followUp": "Mibvunzo inobatana yaunogona kuva nayo:"
+    "followUp": "Mibvunzo inobatana yaunogona kuva nayo:",
+    "open": "Vhura chat",
+    "close": "Vhara chat",
+    "clear": "Bvisa chat",
+    "askQuestion": "Bvunza mubvunzo:",
+    "send": "Tumira meseji"
   },
   "consultation": {
     "title": "Ronga Kubvunzurudza",
@@ -291,6 +296,7 @@
       "consultationType": "Rudzi rweKubvunzurudza",
       "description": "Tingakubatsira sei?",
       "book": "Ronga Kubvunzurudza",
+      "booking": "Kuronga...",
       "placeholders": {
         "firstName": "Isa zita rako rekutanga",
         "lastName": "Isa zita rako rekupedzisira",
@@ -334,7 +340,8 @@
         "Tichasimbisa zuva nenguva yaunoda kana kukupa dzimwe sarudzo",
         "Uchagamuchira calendar invitation ine ruzivo rwekusangana",
         "Gadzirira zvinyorwa kana mibvunzo yaunoda kutaura"
-      ]
+      ],
+      "bookAnother": "Ronga Kubvunzurudza Kuririmuka"
     }
   }
 }

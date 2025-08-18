@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ interface ChatResponse {
   sessionId: string;
 }
 
-export function ChatbotWidget() {
+export const ChatbotWidget = memo(function ChatbotWidget() {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -125,6 +125,7 @@ export function ChatbotWidget() {
         onClick={() => setIsOpen(!isOpen)}
         className="bg-primary-blue text-white w-16 h-16 rounded-full shadow-lg hover:bg-blue-800 transition-all duration-200 transform hover:scale-110"
         size="icon"
+        aria-label={isOpen ? t('chatbot.close') : t('chatbot.open')}
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </Button>
@@ -149,6 +150,7 @@ export function ChatbotWidget() {
                 size="icon"
                 className="text-white hover:bg-blue-700"
                 onClick={clearChat}
+                aria-label={t('chatbot.clear')}
               >
                 <RotateCcw className="h-4 w-4" />
               </Button>
@@ -190,6 +192,7 @@ export function ChatbotWidget() {
                                 size="sm"
                                 className="h-6 px-2 py-1 text-xs"
                                 onClick={() => handleSuggestedQuestion(suggestion)}
+                                aria-label={`${t('chatbot.askQuestion')} ${suggestion}`}
                               >
                                 {suggestion}
                               </Button>
@@ -215,6 +218,7 @@ export function ChatbotWidget() {
                           size="sm"
                           className="h-6 px-2 py-1 text-xs"
                           onClick={() => handleSuggestedQuestion(suggestion)}
+                          aria-label={`${t('chatbot.askQuestion')} ${suggestion}`}
                         >
                           {suggestion}
                         </Button>
@@ -252,6 +256,7 @@ export function ChatbotWidget() {
                 disabled={!input.trim() || chatMutation.isPending}
                 className="bg-primary-blue hover:bg-blue-800"
                 size="icon"
+                aria-label={t('chatbot.send')}
               >
                 <Send className="h-4 w-4" />
               </Button>
@@ -262,4 +267,4 @@ export function ChatbotWidget() {
       )}
     </div>
   );
-}
+});

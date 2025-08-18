@@ -1,7 +1,9 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Twitter } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
+import { BiLogoTwitter } from 'react-icons/bi';
 
 const teamMembers = [
   {
@@ -24,7 +26,7 @@ const teamMembers = [
   },
 ];
 
-export function TeamSection() {
+export const TeamSection = memo(function TeamSection() {
   const { t } = useTranslation();
 
   return (
@@ -42,7 +44,7 @@ export function TeamSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {teamMembers.map((member, index) => (
             <Card key={index} className="bg-white overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
-              <img 
+              <img
                 src={member.image}
                 alt={`${member.name} - ${member.position}`}
                 className="w-full h-64 object-cover"
@@ -63,6 +65,7 @@ export function TeamSection() {
                     size="icon"
                     className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
                     onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
+                    aria-label="LinkedIn"
                   >
                     <Linkedin className="h-4 w-4" />
                   </Button>
@@ -71,8 +74,9 @@ export function TeamSection() {
                     size="icon"
                     className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
                     onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
+                    aria-label="Twitter"
                   >
-                    <Twitter className="h-4 w-4" />
+                    <BiLogoTwitter className="h-4 w-4" />
                   </Button>
                 </div>
               </CardContent>
@@ -82,4 +86,4 @@ export function TeamSection() {
       </div>
     </section>
   );
-}
+});

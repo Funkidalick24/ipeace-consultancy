@@ -1,9 +1,11 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Twitter, Instagram } from 'lucide-react';
+import { Linkedin, Instagram } from 'lucide-react';
+import { BiLogoTwitter } from 'react-icons/bi';
 import { LegalPopup } from '@/components/legal/legal-popup';
 
-export function Footer() {
+export const Footer = memo(function Footer() {
   const { t } = useTranslation();
 
   const scrollToSection = (href: string) => {
@@ -29,6 +31,7 @@ export function Footer() {
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
                 onClick={() => window.open('https://www.linkedin.com/in/ipeace-consulting-63b899329?originalSubdomain=zw', '_blank')}
+                aria-label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
               </Button>
@@ -37,14 +40,16 @@ export function Footer() {
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
                 onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
+                aria-label="Twitter"
               >
-                <Twitter className="h-5 w-5" />
+                <BiLogoTwitter className="h-5 w-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
                 onClick={() => window.open('https://instagram.com/ipeace', '_blank')}
+                aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </Button>
@@ -60,6 +65,7 @@ export function Footer() {
                   <button
                     onClick={() => scrollToSection(`#${item}`)}
                     className="text-blue-100 hover:text-white transition-colors duration-200"
+                    aria-label={t(`nav.${item}`)}
                   >
                     {t(`nav.${item}`)}
                   </button>
@@ -76,6 +82,7 @@ export function Footer() {
                 <button
                   onClick={() => scrollToSection('#services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('contact.form.services.regulatory')}
                 >
                   {t('contact.form.services.regulatory')}
                 </button>
@@ -84,6 +91,7 @@ export function Footer() {
                 <button
                   onClick={() => scrollToSection('#services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('contact.form.services.ai')}
                 >
                   {t('contact.form.services.ai')}
                 </button>
@@ -92,6 +100,7 @@ export function Footer() {
                 <button
                   onClick={() => scrollToSection('#services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('contact.form.services.strategy')}
                 >
                   {t('contact.form.services.strategy')}
                 </button>
@@ -100,6 +109,7 @@ export function Footer() {
                 <button
                   onClick={() => scrollToSection('#services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('contact.form.services.training')}
                 >
                   {t('contact.form.services.training')}
                 </button>
@@ -108,6 +118,7 @@ export function Footer() {
                 <button
                   onClick={() => scrollToSection('#services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('contact.form.services.support')}
                 >
                   {t('contact.form.services.support')}
                 </button>
@@ -121,18 +132,19 @@ export function Footer() {
           <p className="text-blue-100 text-sm">{t('footer.copyright')}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <LegalPopup type="privacy">
-              <button className="text-blue-100 hover:text-white text-sm transition-colors duration-200">
+              <button className="text-blue-100 hover:text-white text-sm transition-colors duration-200" aria-label={t('footer.privacy')}>
                 {t('footer.privacy')}
               </button>
             </LegalPopup>
             <LegalPopup type="terms">
-              <button className="text-blue-100 hover:text-white text-sm transition-colors duration-200">
+              <button className="text-blue-100 hover:text-white text-sm transition-colors duration-200" aria-label={t('footer.terms')}>
                 {t('footer.terms')}
               </button>
             </LegalPopup>
             <button
               onClick={() => alert('Cookie Policy page coming soon')}
               className="text-blue-100 hover:text-white text-sm transition-colors duration-200"
+              aria-label={t('footer.cookies')}
             >
               {t('footer.cookies')}
             </button>
@@ -141,4 +153,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Lightbulb, Target, Users, Rocket, Shield, Trophy } from 'lucide-react';
@@ -11,12 +12,12 @@ const valueIcons = {
   excellence: Trophy,
 };
 
-export function IPEACEValuesSection() {
+export const IPEACEValuesSection = memo(function IPEACEValuesSection() {
   const { t } = useTranslation();
 
   const values = [
     'innovation',
-    'precision', 
+    'precision',
     'empowerment',
     'agility',
     'compliance',
@@ -58,4 +59,4 @@ export function IPEACEValuesSection() {
       </div>
     </section>
   );
-}
+});
