@@ -1,0 +1,93 @@
+{
+  "nav": {
+    "home": "Kumba",
+    "services": "Masevhisi",
+    "contact": "Kubata",
+    "chat": "AI Chat",
+    "consultation": "Ronga Kubvunzurudza"
+  },
+  "hero": {
+    "title": "Famba neBhizinesi reZimbabwe pamwe neIPEACE",
+    "subtitle": "Nyanzvi mukubvunzurudza nezve mitemo yebhizinesi, kutonga kwemakambani, uye zvirongwa zvebhizinesi zvinoshandiswa neAI.",
+    "startJourney": "Tanga Rwendo Rwako",
+    "bookConsultation": "Ronga Kubvunzurudza",
+    "stats": {
+      "clients": "100+",
+      "clientsLabel": "Vatengi Vakabatsirwa",
+      "compliance": "99.8%",
+      "complianceLabel": "Chiyero chekutevera Mitemo",
+      "experience": "3+",
+      "experienceLabel": "Makore eRuzivo"
+    }
+  },
+  "services": {
+    "title": "Masevhisi Edu",
+    "subtitle": "Mhinduro dzakakwana dzekubvunzurudza bhizinesi dzakagadzirisirwa nharaunda yemitemo yeZimbabwe.",
+    "regulatory": {
+      "title": "Kutevera Mitemo",
+      "description": "Famba nemitemo yeZimbabwe Companies Act neSecurities regulations nekuvimba."
+    },
+    "ai": {
+      "title": "Kubvunzurudza kwakaongororwa neAI",
+      "description": "Shandisa artificial intelligence kuti uwane kubvunzurudza kwekukurumidza uye kwakanaka."
+    },
+    "strategy": {
+      "title": "Zvirongwa zveBhizinesi",
+      "description": "Masevhisi ekuronga uye kuita zvirongwa zvekukurumidza kukura."
+    },
+    "training": {
+      "title": "Kudzidzisa & Kukudziridza",
+      "description": "Zvirongwa zvakakwana zvekudzidzisa zve mitemo uye maitiro akanaka."
+    }
+  },
+  "contact": {
+    "title": "Bata Nesu",
+    "subtitle": "Wakagadzirira kushandura bhizinesi rako? Tibate nhasi kuti uwane kubvunzurudza kwemahara.",
+    "form": {
+      "firstName": "Zita Rekutanga",
+      "lastName": "Zita Rekupedzisira",
+      "email": "Email Address",
+      "company": "Kambani",
+      "message": "Meseji",
+      "send": "Tumira Meseji",
+      "sending": "Kutumira..."
+    },
+    "office": {
+      "title": "Shanyira Hofisi Yedu",
+      "address": "135 Baines Avenue, Avenues, Harare, Zimbabwe",
+      "phone": "+263 4 123 4567",
+      "email": "info@ipeace.co.zw"
+    }
+  },
+  "chat": {
+    "title": "AI Mubatsiri",
+    "subtitle": "Bvunza nezve mitemo yebhizinesi yeZimbabwe",
+    "welcome": "Mhoro! Ndini mubatsiri wako weAI akadzidziswa nezve Companies Act neSecurities regulations dzeZimbabwe. Ndingakubatsira sei nhasi?",
+    "placeholder": "Bvunza nezve mitemo yebhizinesi...",
+    "send": "Tumira",
+    "suggestions": [
+      "Ndinoregistera kambani muZimbabwe here?",
+      "Zvinodiwa zvekutevera mitemo yekambani ndezvi?",
+      "Ndinowana business license here?",
+      "Mitemo yeSecurities muZimbabwe ndeyi?"
+    ]
+  },
+  "consultation": {
+    "title": "Ronga Kubvunzurudza",
+    "subtitle": "Ronga kubvunzurudza kwakasarudzika netimu yedu yenyanzvi.",
+    "form": {
+      "firstName": "Zita Rekutanga",
+      "lastName": "Zita Rekupedzisira",
+      "email": "Email Address",
+      "phone": "Nhamba Yerunhare",
+      "company": "Kambani",
+      "serviceType": "Rudzi rweSevhisi",
+      "preferredDate": "Zuva Rinodiwa",
+      "preferredTime": "Nguva Inodiwa",
+      "consultationType": "Rudzi rweKubvunzurudza",
+      "description": "Tingakubatsira sei?",
+      "book": "Ronga Kubvunzurudza",
+      "booking": "Kuronga..."
+    }
+  }
+}
