@@ -10,16 +10,17 @@ export const Header = memo(function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { key: 'home', href: '#home' },
-    { key: 'about', href: '#about' },
-    { key: 'services', href: '#services' },
+    { key: 'home', href: '/', isPage: true },
+    { key: 'about', href: '/about', isPage: true },
+    { key: 'services', href: '/services', isPage: true },
+    { key: 'faq', href: '/faq', isPage: true },
     { key: 'resources', href: '/resources', isPage: true },
-    { key: 'contact', href: '#contact' },
+    { key: 'contact', href: '/contact', isPage: true },
   ];
 
   const handleNavigation = (item: { href: string; isPage?: boolean }) => {
     if (item.isPage) {
-      // Navigate to page
+      // Navigate to page using wouter
       window.location.href = item.href;
     } else {
       // Scroll to section
@@ -71,12 +72,7 @@ width="180"
             <Button
               className="hidden lg:block btn-accent px-4 py-2 rounded-md font-medium"
               onClick={() => {
-                // Scroll to contact section and open consultation modal
-                const contactSection = document.querySelector('#contact');
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  // We could also trigger the consultation modal here if needed
-                }
+                window.location.href = '/contact';
               }}
             >
               {t('nav.getConsultation')}
@@ -104,12 +100,8 @@ width="180"
                   <Button
                     className="btn-accent mt-4 w-full"
                     onClick={() => {
-                      // Scroll to contact section
-                      const contactSection = document.querySelector('#contact');
-                      if (contactSection) {
-                        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        setIsOpen(false); // Close mobile menu
-                      }
+                      window.location.href = '/contact';
+                      setIsOpen(false); // Close mobile menu
                     }}
                   >
                     {t('nav.getConsultation')}

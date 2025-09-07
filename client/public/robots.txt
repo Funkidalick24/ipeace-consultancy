@@ -11,6 +11,13 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /node_modules/
 
+# Allow access to main pages
+Allow: /about
+Allow: /services
+Allow: /contact
+Allow: /faq
+Allow: /resources
+
 # Disallow duplicate content
 Disallow: /*?*
 Disallow: /*&*

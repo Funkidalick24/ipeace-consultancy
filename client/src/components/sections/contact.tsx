@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { insertContactSchema } from '@shared/schema';
-import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, Twitter, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, X, Instagram } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
 type ContactFormData = {
@@ -390,11 +390,11 @@ export const ContactSection = memo(function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
-                    aria-label="Twitter"
+                    onClick={() => window.open('https://x.com/ipeace', '_blank')}
+                    aria-label="X (Twitter)"
                   >
-                    <Twitter className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">Twitter</span>
+                    <X className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">X</span>
                   </Button>
                   <Button
                     variant="outline"

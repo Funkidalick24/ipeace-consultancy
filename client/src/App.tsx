@@ -9,6 +9,10 @@ import "./lib/i18n";
 
 // Lazy load components
 const Home = lazy(() => import("@/pages/home"));
+const About = lazy(() => import("@/pages/about"));
+const Services = lazy(() => import("@/pages/services"));
+const Contact = lazy(() => import("@/pages/contact"));
+const FAQ = lazy(() => import("@/pages/faq"));
 const Resources = lazy(() => import("@/pages/resources"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
@@ -16,6 +20,10 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/about" component={About} />
+      <Route path="/services" component={Services} />
+      <Route path="/contact" component={Contact} />
+      <Route path="/faq" component={FAQ} />
       <Route path="/resources" component={Resources} />
       <Route component={NotFound} />
     </Switch>

@@ -112,11 +112,7 @@ export const ServicesSection = memo(function ServicesSection() {
                     variant="ghost"
                     className="text-primary-blue font-semibold hover:text-secondary-blue transition-colors duration-200 p-0"
                     onClick={() => {
-                      // Scroll to contact section when clicking Learn More
-                      const contactSection = document.querySelector('#contact');
-                      if (contactSection) {
-                        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }
+                      window.location.href = '/contact';
                     }}
                     aria-label={`${t('services.learnMore')} about ${t(`contact.form.services.${service}`)}`}
                   >

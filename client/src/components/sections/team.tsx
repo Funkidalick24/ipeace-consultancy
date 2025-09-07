@@ -2,8 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Linkedin } from 'lucide-react';
-import { BiLogoTwitter } from 'react-icons/bi';
+import { Linkedin, X } from 'lucide-react';
 
 const teamMembers = [
   {
@@ -73,10 +72,10 @@ export const TeamSection = memo(function TeamSection() {
                     variant="ghost"
                     size="icon"
                     className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
-                    onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
-                    aria-label="Twitter"
+                    onClick={() => window.open('https://x.com/ipeace', '_blank')}
+                    aria-label="X (Twitter)"
                   >
-                    <BiLogoTwitter className="h-4 w-4" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               </CardContent>

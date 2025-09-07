@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,6 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileText, BookOpen, Download, ExternalLink, Calendar, User, Link, Share2 } from 'lucide-react';
 import { BacklinkTracker } from '@/components/seo/backlink-tracker';
+
+// Lazy load chatbot widget
+const ChatbotWidget = lazy(() => import('@/components/chatbot/chatbot-widget').then(module => ({ default: module.ChatbotWidget })));
 
 export default function Resources() {
   const resources = [
@@ -203,13 +207,19 @@ export default function Resources() {
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
             Our AI-powered consultants can provide tailored advice for your specific business situation in Zimbabwe.
           </p>
-          <Button className="btn-accent px-8 py-4 text-lg">
+          <Button
+            className="btn-accent px-8 py-4 text-lg"
+            onClick={() => window.location.href = '/contact'}
+          >
             Get Free Consultation
           </Button>
         </div>
       </section>
 
       <Footer />
+      <Suspense fallback={null}>
+        <ChatbotWidget />
+      </Suspense>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 
 export const FAQSection = memo(function FAQSection() {
   const { t } = useTranslation();
@@ -78,9 +79,13 @@ export const FAQSection = memo(function FAQSection() {
               <p className="text-lg mb-6 opacity-90">
                 Our AI-powered consultants can answer any question about company registration, compliance requirements, or business licensing in Zimbabwe.
               </p>
-              <Button className="btn-accent px-8 py-3">
-                Ask Our AI Assistant
-              </Button>
+              <ConsultationBooking
+                trigger={
+                  <Button className="btn-accent px-8 py-3">
+                    Ask Our AI Assistant
+                  </Button>
+                }
+              />
             </div>
           </div>
         </div>
