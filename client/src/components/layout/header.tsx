@@ -13,14 +13,20 @@ export const Header = memo(function Header() {
     { key: 'home', href: '#home' },
     { key: 'about', href: '#about' },
     { key: 'services', href: '#services' },
-    { key: 'team', href: '#team' },
+    { key: 'resources', href: '/resources', isPage: true },
     { key: 'contact', href: '#contact' },
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleNavigation = (item: { href: string; isPage?: boolean }) => {
+    if (item.isPage) {
+      // Navigate to page
+      window.location.href = item.href;
+    } else {
+      // Scroll to section
+      const element = document.querySelector(item.href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     setIsOpen(false);
   };
@@ -50,7 +56,7 @@ width="180"
             {navItems.map((item) => (
               <button
                 key={item.key}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item)}
                 className="text-gray-700 hover:text-primary-blue transition-colors duration-200 font-medium"
                 aria-label={t(`nav.${item.key}`)}
               >
@@ -88,7 +94,7 @@ width="180"
                   {navItems.map((item) => (
                     <button
                       key={item.key}
-                      onClick={() => scrollToSection(item.href)}
+                      onClick={() => handleNavigation(item)}
                       className="text-left py-2 text-gray-700 hover:text-primary-blue transition-colors duration-200"
                       aria-label={t(`nav.${item.key}`)}
                     >

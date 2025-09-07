@@ -3,22 +3,22 @@
     "home": "Home",
     "about": "About Us",
     "services": "Services",
-    "team": "Team",
+    "resources": "Resources",
     "contact": "Contact",
     "getConsultation": "Get Consultation"
   },
   "hero": {
-    "title": "Navigate Zimbabwe's Business Landscape with IPEACE",
-    "subtitle": "Expert consulting in regulatory compliance, corporate governance, and business strategy powered by AI-driven insights.",
-    "startJourney": "Start Your Journey",
+    "title": "How to Register a Company in Zimbabwe? Expert Guidance Available",
+    "subtitle": "Get your Zimbabwe company registered fast with our AI-powered compliance experts. Navigate Companies Act requirements, obtain business licenses, and ensure full regulatory compliance.",
+    "startJourney": "Get Free Consultation",
     "watchDemo": "Watch Demo",
     "stats": {
       "clients": "100+",
-      "clientsLabel": "Clients Served",
+      "clientsLabel": "Companies Registered",
       "compliance": "99.8%",
-      "complianceLabel": "Compliance Rate",
+      "complianceLabel": "Compliance Success Rate",
       "experience": "3+",
-      "experienceLabel": "Years Experience"
+      "experienceLabel": "Years in Zimbabwe Business Law"
     }
   },
   "about": {
@@ -52,13 +52,13 @@
     }
   },
   "services": {
-    "title": "Our Services",
-    "subtitle": "Comprehensive business consulting solutions tailored for Zimbabwe's regulatory environment and powered by cutting-edge AI insights.",
+    "title": "Zimbabwe Business Services: Compliance, Registration & Strategy",
+    "subtitle": "Complete business solutions for Zimbabwe entrepreneurs. From company registration to compliance audits, get expert guidance on Companies Act requirements, business licensing, and regulatory compliance.",
     "learnMore": "Learn More",
     "cta": {
-      "title": "Ready to Transform Your Business?",
-      "subtitle": "Get started with a free consultation and discover how IPEACE can accelerate your success.",
-      "button": "Schedule Free Consultation"
+      "title": "Need Help with Zimbabwe Business Compliance?",
+      "subtitle": "Get your free consultation today. Our AI-powered experts can answer: How to register a company in Zimbabwe? What are the compliance requirements? How to get a business license?",
+      "button": "Get Free Compliance Check"
     }
   },
   "team": {
@@ -70,8 +70,8 @@
     "subtitle": "Don't just take our word for it. Here's what business leaders across Zimbabwe say about their IPEACE experience."
   },
   "contact": {
-    "title": "Get In Touch",
-    "subtitle": "Ready to transform your business? Contact us today for a free consultation and discover how IPEACE can help you achieve your goals.",
+    "title": "Contact IPEACE: Zimbabwe Business Compliance Experts",
+    "subtitle": "Have questions about company registration in Zimbabwe? Need help with compliance requirements? Our AI-powered consultants are here to help. Get expert answers to: How to register a business in Zimbabwe? What licenses do I need? How to stay compliant with Companies Act?",
     "form": {
       "title": "Send Us a Message",
       "firstName": "First Name",
@@ -343,5 +343,35 @@
       ],
       "bookAnother": "Book Another Consultation"
     }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions: Zimbabwe Business Compliance",
+    "subtitle": "Get answers to common questions about starting and running a business in Zimbabwe",
+    "questions": [
+      {
+        "question": "How do I register a company in Zimbabwe?",
+        "answer": "To register a company in Zimbabwe, you need to: 1) Choose a unique company name, 2) Prepare Memorandum and Articles of Association, 3) File with the Companies Office, 4) Obtain a tax clearance certificate, and 5) Register for VAT if applicable. Our AI system can guide you through each step."
+      },
+      {
+        "question": "What are the requirements for company compliance in Zimbabwe?",
+        "answer": "Zimbabwe companies must comply with: Companies Act Chapter 24:03, annual returns filing, director's reports, audited financial statements, tax compliance, and industry-specific regulations. We provide comprehensive compliance checklists and AI-powered monitoring."
+      },
+      {
+        "question": "How much does it cost to register a company in Zimbabwe?",
+        "answer": "Company registration costs vary by type: Private companies (~$50-200 USD), Public companies (~$500+ USD), plus additional costs for legal fees, tax clearance, and business licenses. We offer cost-effective registration packages with all required documentation."
+      },
+      {
+        "question": "What business licenses do I need in Zimbabwe?",
+        "answer": "Required licenses depend on your business type: Trading License from local council, Tax Clearance Certificate, VAT registration (if turnover >$60,000), Specific industry licenses (mining, tourism, etc.). We help identify and obtain all necessary licenses."
+      },
+      {
+        "question": "How can AI help with Zimbabwe business compliance?",
+        "answer": "Our AI systems provide: 24/7 compliance monitoring, automated document analysis, regulatory updates, risk assessment, instant legal queries, and predictive compliance insights trained on Zimbabwe's legal framework."
+      },
+      {
+        "question": "What are the penalties for non-compliance in Zimbabwe?",
+        "answer": "Penalties include fines up to $500,000, imprisonment up to 5 years, business closure, director disqualification, and reputational damage. We help businesses maintain 99.8% compliance rate through proactive monitoring."
+      }
+    ]
   }
 }

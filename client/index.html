@@ -31,18 +31,157 @@
     
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
-    
+
     <title>IPEACE Professional Consulting - Business Consulting & AI Solutions</title>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "IPEACE Professional Consulting",
+      "description": "Expert business consulting in regulatory compliance, corporate governance, and business strategy powered by AI-driven insights for Zimbabwean businesses.",
+      "url": "https://ipeace.co.zw",
+      "logo": "https://ipeace.co.zw/logo.png",
+      "image": "https://ipeace.co.zw/logo.png",
+      "telephone": "+263-4-123-4567",
+      "email": "info@ipeace.co.zw",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "135 Baines Avenue",
+        "addressLocality": "Harare",
+        "addressRegion": "Harare",
+        "addressCountry": "ZW",
+        "postalCode": "0000"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-17.8265",
+        "longitude": "31.0532"
+      },
+      "openingHours": "Mo-Fr 08:00-18:00, Sa 09:00-13:00",
+      "priceRange": "$$",
+      "serviceArea": {
+        "@type": "Country",
+        "name": "Zimbabwe"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Business Consulting Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Regulatory Compliance",
+              "description": "Navigate Zimbabwe's Companies Act, Securities regulations, and other statutory requirements with confidence and precision."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI-Powered Advisory",
+              "description": "Leverage artificial intelligence trained on Zimbabwe's legal frameworks for instant, accurate business guidance."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Business Strategy",
+              "description": "Strategic planning and implementation services designed to accelerate growth while maintaining regulatory compliance."
+            }
+          }
+        ]
+      },
+      "sameAs": [
+        "https://linkedin.com/company/ipeace",
+        "https://twitter.com/ipeace",
+        "https://instagram.com/ipeace"
+      ],
+      "knowsAbout": [
+        "Zimbabwe Companies Act",
+        "Securities Regulations Zimbabwe",
+        "Corporate Governance",
+        "Business Compliance",
+        "AI Consulting",
+        "Business Strategy"
+      ],
+      "founder": {
+        "@type": "Organization",
+        "name": "IPEACE Professional Consulting"
+      },
+      "foundingDate": "2023",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Zimbabwe"
+      }
+    }
+    </script>
+
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I register a company in Zimbabwe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To register a company in Zimbabwe, you need to file articles of association with the Companies and Other Business Entities Registrar, obtain a tax clearance certificate, and register for VAT if applicable. Our AI-powered advisory can guide you through the entire process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the compliance requirements for Zimbabwe businesses?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zimbabwe businesses must comply with the Companies Act, tax regulations, employment laws, and industry-specific requirements. Regular audits, proper record-keeping, and timely filings are essential for maintaining compliance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can AI help with business compliance in Zimbabwe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our AI systems are trained on Zimbabwe's legal frameworks and can provide instant analysis of documents, identify compliance gaps, suggest regulatory updates, and offer 24/7 advisory support for business decisions."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script defer>
-      // Google Analytics - Replace 'G-XXXXXXXXXX' with your actual Google Analytics ID
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX'); // Replace with your Google Analytics ID
+
+      // Replace 'GA_MEASUREMENT_ID' with your actual Google Analytics 4 Measurement ID
+      gtag('config', 'GA_MEASUREMENT_ID', {
+        'custom_map': {'dimension1': 'page_location'},
+        'send_page_view': true
+      });
+
+      // Track engagement metrics
+      gtag('event', 'page_view', {
+        'page_title': document.title,
+        'page_location': window.location.href,
+        'send_to': 'GA_MEASUREMENT_ID'
+      });
     </script>
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_VERIFICATION_CODE" />
+
+    <!-- Microsoft Bing Webmaster Tools -->
+    <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" />
   </body>
 </html>

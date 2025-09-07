@@ -6,6 +6,7 @@ import { IPEACEValuesSection } from '@/components/sections/ipeace-values';
 import { ServicesSection } from '@/components/sections/services';
 import { TeamSection } from '@/components/sections/team';
 import { TestimonialsSection } from '@/components/sections/testimonials';
+import { FAQSection } from '@/components/sections/faq';
 import { ContactSection } from '@/components/sections/contact';
 
 // Lazy load components that are not immediately needed
@@ -21,6 +22,7 @@ export default function Home() {
         <ServicesSection />
         <TeamSection />
         <TestimonialsSection />
+        <FAQSection />
         <ContactSection />
       </main>
       <Footer />

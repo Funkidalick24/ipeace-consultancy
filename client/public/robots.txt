@@ -1,4 +1,32 @@
+# Robots.txt for IPEACE Professional Consulting
+# Single-page application
+
 User-agent: *
 Allow: /
+Crawl-delay: 1
 
+# Disallow admin and development areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Disallow duplicate content
+Disallow: /*?*
+Disallow: /*&*
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# Sitemap location
 Sitemap: https://ipeace.co.zw/sitemap.xml
