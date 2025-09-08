@@ -13,8 +13,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { insertContactSchema } from '@shared/schema';
-import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, X, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, Instagram } from 'lucide-react';
 import DOMPurify from 'dompurify';
+
+// Bootstrap X icon component
+const BootstrapXIcon = () => (
+  <i className="bi bi-twitter-x" style={{ fontSize: '1.5rem' }}></i>
+);
 
 type ContactFormData = {
   firstName: string;
@@ -393,7 +398,7 @@ export const ContactSection = memo(function ContactSection() {
                     onClick={() => window.open('https://x.com/ipeace', '_blank')}
                     aria-label="X (Twitter)"
                   >
-                    <X className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
+                    <BootstrapXIcon />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">X</span>
                   </Button>
                   <Button

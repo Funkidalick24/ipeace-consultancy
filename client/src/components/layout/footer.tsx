@@ -2,17 +2,18 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Linkedin, Instagram } from 'lucide-react';
-import { BiLogoTwitter } from 'react-icons/bi';
 import { LegalPopup } from '@/components/legal/legal-popup';
+
+// Bootstrap X icon component
+const BootstrapXIcon = () => (
+  <i className="bi bi-twitter-x" style={{ fontSize: '1.25rem' }}></i>
+);
 
 export const Footer = memo(function Footer() {
   const { t } = useTranslation();
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  const navigateToPage = (path: string) => {
+    window.location.href = path;
   };
 
   return (
@@ -39,10 +40,10 @@ export const Footer = memo(function Footer() {
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
-                onClick={() => window.open('https://twitter.com/ipeace', '_blank')}
-                aria-label="Twitter"
+                onClick={() => window.open('https://x.com/ipeace', '_blank')}
+                aria-label="X (Twitter)"
               >
-                <BiLogoTwitter className="h-5 w-5" />
+                <BootstrapXIcon />
               </Button>
               <Button
                 variant="ghost"
@@ -60,17 +61,60 @@ export const Footer = memo(function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h4>
             <ul className="space-y-2">
-              {['home', 'about', 'services', 'team', 'contact'].map((item) => (
-                <li key={item}>
-                  <button
-                    onClick={() => scrollToSection(`#${item}`)}
-                    className="text-blue-100 hover:text-white transition-colors duration-200"
-                    aria-label={t(`nav.${item}`)}
-                  >
-                    {t(`nav.${item}`)}
-                  </button>
-                </li>
-              ))}
+              <li>
+                <button
+                  onClick={() => navigateToPage('/')}
+                  className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('nav.home')}
+                >
+                  {t('nav.home')}
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigateToPage('/about')}
+                  className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('nav.about')}
+                >
+                  {t('nav.about')}
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigateToPage('/services')}
+                  className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('nav.services')}
+                >
+                  {t('nav.services')}
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigateToPage('/faq')}
+                  className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('nav.faq')}
+                >
+                  {t('nav.faq')}
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigateToPage('/resources')}
+                  className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('nav.resources')}
+                >
+                  {t('nav.resources')}
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => navigateToPage('/contact')}
+                  className="text-blue-100 hover:text-white transition-colors duration-200"
+                  aria-label={t('nav.contact')}
+                >
+                  {t('nav.contact')}
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -80,7 +124,7 @@ export const Footer = memo(function Footer() {
             <ul className="space-y-2">
               <li>
                 <button
-                  onClick={() => scrollToSection('#services')}
+                  onClick={() => navigateToPage('/services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
                   aria-label={t('contact.form.services.regulatory')}
                 >
@@ -89,7 +133,7 @@ export const Footer = memo(function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('#services')}
+                  onClick={() => navigateToPage('/services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
                   aria-label={t('contact.form.services.ai')}
                 >
@@ -98,7 +142,7 @@ export const Footer = memo(function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('#services')}
+                  onClick={() => navigateToPage('/services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
                   aria-label={t('contact.form.services.strategy')}
                 >
@@ -107,7 +151,7 @@ export const Footer = memo(function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('#services')}
+                  onClick={() => navigateToPage('/services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
                   aria-label={t('contact.form.services.training')}
                 >
@@ -116,7 +160,7 @@ export const Footer = memo(function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('#services')}
+                  onClick={() => navigateToPage('/services')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
                   aria-label={t('contact.form.services.support')}
                 >

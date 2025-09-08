@@ -2,7 +2,12 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Linkedin, X } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
+
+// Bootstrap X icon component
+const BootstrapXIcon = () => (
+  <i className="bi bi-twitter-x" style={{ fontSize: '1rem' }}></i>
+);
 
 const teamMembers = [
   {
@@ -75,7 +80,7 @@ export const TeamSection = memo(function TeamSection() {
                     onClick={() => window.open('https://x.com/ipeace', '_blank')}
                     aria-label="X (Twitter)"
                   >
-                    <X className="h-4 w-4" />
+                    <BootstrapXIcon />
                   </Button>
                 </div>
               </CardContent>
