@@ -14,7 +14,7 @@ export const Header = memo(function Header() {
     { key: 'about', href: '/about', isPage: true },
     { key: 'services', href: '/services', isPage: true },
     { key: 'faq', href: '/faq', isPage: true },
-    { key: 'resources', href: '/resources', isPage: true },
+    { key: 'blog', href: '/blogs', isPage: true },
     { key: 'contact', href: '/contact', isPage: true },
   ];
 

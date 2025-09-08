@@ -99,11 +99,11 @@ export const Footer = memo(function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => navigateToPage('/resources')}
+                  onClick={() => navigateToPage('/blogs')}
                   className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.resources')}
+                  aria-label={t('nav.blog')}
                 >
-                  {t('nav.resources')}
+                  {t('nav.blog')}
                 </button>
               </li>
               <li>
@@ -185,6 +185,13 @@ export const Footer = memo(function Footer() {
                 {t('footer.terms')}
               </button>
             </LegalPopup>
+            <button
+              onClick={() => navigateToPage('/admin')}
+              className="text-blue-100 hover:text-white text-sm transition-colors duration-200"
+              aria-label="Admin Portal"
+            >
+              Portal
+            </button>
             <button
               onClick={() => alert('Cookie Policy page coming soon')}
               className="text-blue-100 hover:text-white text-sm transition-colors duration-200"

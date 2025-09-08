@@ -6,6 +6,7 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  role: text("role").default("user").notNull(), // 'admin' or 'user'
 });
 
 export const contactSubmissions = pgTable("contact_submissions", {
@@ -44,9 +45,23 @@ export const consultationBookings = pgTable("consultation_bookings", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt"),
+  authorId: integer("author_id").notNull(),
+  published: boolean("published").default(false).notNull(),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  role: true,
 });
 
 export const insertContactSchema = createInsertSchema(contactSubmissions).omit({
@@ -77,6 +92,16 @@ export const consultationBookingSchema = insertConsultationSchema.extend({
   }),
 });
 
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const blogPostSchema = insertBlogPostSchema.extend({
+  publishedAt: z.string().optional(),
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
@@ -86,3 +111,6 @@ export type ChatMessage = typeof chatMessages.$inferSelect;
 export type InsertConsultation = z.infer<typeof insertConsultationSchema>;
 export type ConsultationBooking = typeof consultationBookings.$inferSelect;
 export type ConsultationBookingForm = z.infer<typeof consultationBookingSchema>;
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type BlogPostForm = z.infer<typeof blogPostSchema>;

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank you for contacting IPEACE</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
+        .container { max-width: 600px; margin: 0 auto; background-color: white; }
+        .header { background: linear-gradient(135deg, #1b365e, #ff8c00); color: white; padding: 40px 30px; text-align: center; }
+        .content { padding: 40px 30px; color: #333; line-height: 1.6; }
+        .footer { background-color: #f8f9fa; padding: 30px; text-align: center; color: #666; font-size: 14px; }
+        .button { display: inline-block; background-color: #ff8c00; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .highlight { background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .contact-info { background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Thank You for Contacting IPEACE</h1>
+            <p>Your message has been received successfully</p>
+        </div>
+
+        <div class="content">
+            <p>Dear {{firstName}} {{lastName}},</p>
+
+            <p>Thank you for reaching out to IPEACE Legal Services. We have received your message and appreciate you taking the time to contact us.</p>
+
+            <div class="highlight">
+                <h3>Message Summary:</h3>
+                <p><strong>Service:</strong> {{service}}</p>
+                <p><strong>Company:</strong> {{company}}</p>
+                <p><strong>Message:</strong> {{message}}</p>
+            </div>
+
+            <p>Our team will review your inquiry and get back to you within 24-48 hours. If you have any urgent matters, please don't hesitate to call us directly.</p>
+
+            <div class="contact-info">
+                <h4>Get in Touch:</h4>
+                <p>📞 Phone: +263 4 123 4567 | +263 77 123 4567</p>
+                <p>📧 Email: info@ipeace.co.zw</p>
+                <p>🏢 Address: 135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                <p>💬 AI Chat: Available 24/7</p>
+            </div>
+
+            <p>In the meantime, feel free to explore our website for more information about our services.</p>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="https://ipeace.co.zw" class="button">Visit Our Website</a>
+            </div>
+
+            <p>Best regards,<br>
+            <strong>The IPEACE Legal Services Team</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>This is an automated response. Please do not reply to this email.</p>
+            <p>&copy; 2025 IPEACE Legal Services. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

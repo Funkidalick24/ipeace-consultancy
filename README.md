@@ -6,6 +6,11 @@ A professional business consulting website with enhanced navigation features.
 
 1. **Logo Navigation**: Added a logo image in the header that links to the home page
 2. **Video Demo Popup**: Implemented a YouTube video popup for the "Watch Demo" button
+3. **Dual Email System**: Automated email notifications for contact forms and consultation bookings
+   - Customer confirmation emails with booking details
+   - Company notification emails with action items
+   - Professional HTML email templates
+   - Configurable SMTP settings
 
 ## How to Run the Application
 
@@ -28,6 +33,28 @@ npm run dev
 ```
 
 The application will be available at `http://localhost:5000` (or the next available port).
+
+### Email Configuration
+The application includes a dual email system for contact forms and consultation bookings.
+
+1. **Environment Setup**:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your email service credentials
+   ```
+
+2. **Required Environment Variables**:
+   - `SMTP_HOST`: Your SMTP server (e.g., smtp.gmail.com)
+   - `SMTP_PORT`: SMTP port (587 for TLS, 465 for SSL)
+   - `SMTP_USER`: Your email address
+   - `SMTP_PASS`: Your email password or app password
+   - `FROM_EMAIL`: Sender email address
+   - `COMPANY_EMAIL`: Company notification email
+
+3. **Email Templates**:
+   - Located in `server/templates/`
+   - HTML templates for professional email formatting
+   - Customizable with your branding
 
 ### Building for Production
 To create a production build:

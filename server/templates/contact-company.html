@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Contact Form Submission</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
+        .container { max-width: 600px; margin: 0 auto; background-color: white; }
+        .header { background: linear-gradient(135deg, #1b365e, #ff8c00); color: white; padding: 40px 30px; text-align: center; }
+        .content { padding: 40px 30px; color: #333; line-height: 1.6; }
+        .footer { background-color: #f8f9fa; padding: 30px; text-align: center; color: #666; font-size: 14px; }
+        .button { display: inline-block; background-color: #1b365e; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .alert { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .contact-details { background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .message-box { background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1b365e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 New Contact Form Submission</h1>
+            <p>Action Required - Customer Inquiry</p>
+        </div>
+
+        <div class="content">
+            <div class="alert">
+                <strong>Action Required:</strong> A new customer inquiry has been submitted and requires your attention.
+            </div>
+
+            <h2>Customer Information:</h2>
+            <div class="contact-details">
+                <p><strong>Name:</strong> {{firstName}} {{lastName}}</p>
+                <p><strong>Email:</strong> {{email}}</p>
+                <p><strong>Company:</strong> {{company}}</p>
+                <p><strong>Service Requested:</strong> {{service}}</p>
+                <p><strong>Newsletter Subscription:</strong> {{newsletter}}</p>
+                <p><strong>Submission Date:</strong> {{timestamp}}</p>
+            </div>
+
+            <h2>Customer Message:</h2>
+            <div class="message-box">
+                <p>{{message}}</p>
+            </div>
+
+            <h3>Recommended Actions:</h3>
+            <ul>
+                <li>Review the inquiry and determine the appropriate response</li>
+                <li>Contact the customer within 24-48 hours</li>
+                <li>Log the interaction in our CRM system</li>
+                <li>Update the customer on our services if applicable</li>
+            </ul>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="mailto:{{email}}?subject=Re: Your IPEACE Inquiry" class="button">Reply to Customer</a>
+            </div>
+
+            <p><strong>Priority Level:</strong> Normal Response Time (24-48 hours)</p>
+            <p><strong>Response Template:</strong> Use our standard customer inquiry response template.</p>
+        </div>
+
+        <div class="footer">
+            <p>This notification was generated automatically by the IPEACE contact form system.</p>
+            <p>&copy; 2025 IPEACE Legal Services. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,14 +1,274 @@
-import type { Express } from "express";
+import express, { type Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, chatRequestSchema, consultationBookingSchema } from "@shared/schema";
+import { insertContactSchema, chatRequestSchema, consultationBookingSchema, insertUserSchema, insertBlogPostSchema, blogPostSchema } from "@shared/schema";
 import { getChatbotResponse } from "./services/openai";
 import { sendContactNotification, sendAutoReply } from "./services/email";
 import { sendConsultationBookingNotification, sendConsultationConfirmation, getServiceTypeName, getConsultationTypeName } from "./services/consultation";
+import { authService } from "./services/auth";
 import { nanoid } from "nanoid";
 import sanitizeHtml from 'sanitize-html';
+import { upload, saveFileMetadata } from "./upload";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Auth middleware
+  const authenticateToken = async (req: any, res: any, next: any) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+    if (!token) {
+      return res.status(401).json({ error: 'Access token required' });
+    }
+
+    const user = await authService.getUserFromToken(token);
+    if (!user) {
+      return res.status(403).json({ error: 'Invalid or expired token' });
+    }
+
+    req.user = user;
+    next();
+  };
+
+  // Register
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const validatedData = insertUserSchema.parse(req.body);
+
+      const result = await authService.register(validatedData);
+      if (!result) {
+        return res.status(400).json({ error: 'User already exists or registration failed' });
+      }
+
+      res.json({
+        success: true,
+        message: 'User registered successfully',
+        user: { id: result.user._id.toString(), username: result.user.username, role: result.user.role },
+        token: result.token
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Registration failed"
+      });
+    }
+  });
+
+  // Login
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password required' });
+      }
+
+      const result = await authService.login(username, password);
+      if (!result) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      res.json({
+        success: true,
+        message: 'Login successful',
+        user: { id: result.user._id.toString(), username: result.user.username, role: result.user.role },
+        token: result.token
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ error: 'Login failed' });
+    }
+  });
+
+  // Verify token
+  app.get("/api/auth/verify", authenticateToken, async (req: any, res) => {
+    res.json({
+      success: true,
+      user: { id: req.user._id.toString(), username: req.user.username, role: req.user.role }
+    });
+  });
+
+  // Blog routes
+  // Get all published blog posts (public)
+  app.get("/api/blogs", async (req, res) => {
+    try {
+      const blogs = await storage.getPublishedBlogPosts();
+      res.json({ blogs });
+    } catch (error) {
+      console.error("Get blogs error:", error);
+      res.status(500).json({ error: "Failed to get blogs" });
+    }
+  });
+
+  // Get blog post by slug (public)
+  app.get("/api/blogs/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const blog = await storage.getBlogPostBySlug(slug);
+      if (!blog || !blog.published) {
+        return res.status(404).json({ error: "Blog post not found" });
+      }
+
+      // Parse content JSON back to object
+      const blogWithParsedContent = {
+        ...blog,
+        content: JSON.parse(blog.content)
+      };
+
+      res.json({ blog: blogWithParsedContent });
+    } catch (error) {
+      console.error("Get blog error:", error);
+      res.status(500).json({ error: "Failed to get blog post" });
+    }
+  });
+
+  // Create blog post (admin only)
+  app.post("/api/blogs", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { title, slug, excerpt, content, published } = req.body;
+
+      // Validate required fields
+      if (!title || !slug || !content) {
+        return res.status(400).json({
+          success: false,
+          message: "Title, slug, and content are required"
+        });
+      }
+
+      // Convert content array to JSON string for storage
+      const contentJson = JSON.stringify(content);
+
+      const blogPost = await storage.createBlogPost({
+        title,
+        slug,
+        excerpt: excerpt || null,
+        content: contentJson,
+        published: published || false,
+        authorId: req.user._id,
+      });
+
+      res.json({
+        success: true,
+        message: 'Blog post created successfully',
+        blog: {
+          ...blogPost,
+          content: JSON.parse(blogPost.content) // Parse back for response
+        }
+      });
+    } catch (error) {
+      console.error("Create blog error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to create blog post"
+      });
+    }
+  });
+
+  // Update blog post (admin only)
+  app.put("/api/blogs/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const { title, slug, excerpt, content, published } = req.body;
+
+      const updates: any = {};
+      if (title !== undefined) updates.title = title;
+      if (slug !== undefined) updates.slug = slug;
+      if (excerpt !== undefined) updates.excerpt = excerpt;
+      if (content !== undefined) updates.content = JSON.stringify(content);
+      if (published !== undefined) updates.published = published;
+
+      const blogPost = await storage.updateBlogPost(id, updates);
+      if (!blogPost) {
+        return res.status(404).json({ error: "Blog post not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Blog post updated successfully',
+        blog: {
+          ...blogPost,
+          content: JSON.parse(blogPost.content) // Parse back for response
+        }
+      });
+    } catch (error) {
+      console.error("Update blog error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to update blog post"
+      });
+    }
+  });
+
+  // Delete blog post (admin only)
+  app.delete("/api/blogs/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const deleted = await storage.deleteBlogPost(id);
+
+      if (!deleted) {
+        return res.status(404).json({ error: "Blog post not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Blog post deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete blog error:", error);
+      res.status(500).json({ error: "Failed to delete blog post" });
+    }
+  });
+
+  // Get all blog posts (admin only - includes drafts)
+  app.get("/api/admin/blogs", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const blogs = await storage.getAllBlogPosts();
+
+      // Parse content JSON for all blogs and convert _id to id
+      const blogsWithParsedContent = blogs.map(blog => {
+        const convertedBlog = {
+          id: blog._id.toString(),
+          title: blog.title,
+          slug: blog.slug,
+          excerpt: blog.excerpt,
+          content: JSON.parse(blog.content),
+          published: blog.published,
+          publishedAt: blog.publishedAt,
+          createdAt: blog.createdAt,
+          authorId: blog.authorId
+        };
+        console.log('Converted blog ID:', convertedBlog.id, 'Original _id:', blog._id);
+        return convertedBlog;
+      });
+
+      console.log('Sending blogs response with', blogsWithParsedContent.length, 'blogs');
+      res.json({ blogs: blogsWithParsedContent });
+    } catch (error) {
+      console.error("Get admin blogs error:", error);
+      res.status(500).json({ error: "Failed to get blogs" });
+    }
+  });
+
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
@@ -37,10 +297,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       await sendAutoReply(validatedData.email, validatedData.firstName);
       
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: "Thank you for your message! We will get back to you soon.",
-        id: contact.id 
+        id: contact._id?.toString()
       });
     } catch (error) {
       console.error("Contact form error:", error);
@@ -138,12 +398,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...sanitizedData,
         company: sanitizedData.company || undefined,
       });
-      await sendConsultationConfirmation(validatedData.email, validatedData.firstName, booking.id);
+      await sendConsultationConfirmation(validatedData.email, validatedData.firstName, booking._id?.toString(), {
+        ...booking,
+        firstName: sanitizedData.firstName,
+        lastName: sanitizedData.lastName,
+        email: sanitizedData.email,
+        phone: sanitizedData.phone,
+        company: sanitizedData.company,
+        serviceType: sanitizedData.serviceType,
+        preferredDate: sanitizedData.preferredDate,
+        preferredTime: sanitizedData.preferredTime,
+        consultationType: sanitizedData.consultationType,
+        description: sanitizedData.description
+      });
       
       res.json({ 
         success: true, 
         message: "Consultation booked successfully! We will contact you soon to confirm your appointment.",
-        bookingId: booking.id,
+        bookingId: booking._id?.toString(),
         booking: {
           ...booking,
           serviceTypeName: getServiceTypeName(booking.serviceType),
@@ -178,7 +450,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get specific consultation booking
   app.get("/api/consultations/:id", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const booking = await storage.getConsultationBooking(id);
       if (!booking) {
         return res.status(404).json({ error: "Consultation booking not found" });
@@ -199,7 +471,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update consultation booking status
   app.patch("/api/consultations/:id/status", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const { status } = req.body;
       
       if (!["pending", "confirmed", "cancelled", "completed"].includes(status)) {
@@ -223,6 +495,151 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Update consultation status error:", error);
       res.status(500).json({ error: "Failed to update consultation booking status" });
+    }
+  });
+
+  // File upload routes
+  // Upload single file
+  app.post("/api/upload", authenticateToken, upload.single('file'), async (req: any, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const fileRecord = await saveFileMetadata(req.file, req.user._id.toString());
+
+      res.json({
+        success: true,
+        message: 'File uploaded successfully',
+        file: {
+          id: fileRecord._id.toString(),
+          filename: fileRecord.filename,
+          originalName: fileRecord.originalName,
+          url: fileRecord.url,
+          size: fileRecord.size,
+          mimetype: fileRecord.mimetype
+        }
+      });
+    } catch (error) {
+      console.error('File upload error:', error);
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to upload file"
+      });
+    }
+  });
+
+  // Upload multiple files
+  app.post("/api/upload/multiple", authenticateToken, upload.array('files', 10), async (req: any, res) => {
+    try {
+      if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
+        return res.status(400).json({ error: 'No files uploaded' });
+      }
+
+      const files = req.files as Express.Multer.File[];
+      const uploadedFiles = [];
+
+      for (const file of files) {
+        const fileRecord = await saveFileMetadata(file, req.user._id.toString());
+        uploadedFiles.push({
+          id: fileRecord._id.toString(),
+          filename: fileRecord.filename,
+          originalName: fileRecord.originalName,
+          url: fileRecord.url,
+          size: fileRecord.size,
+          mimetype: fileRecord.mimetype
+        });
+      }
+
+      res.json({
+        success: true,
+        message: `${uploadedFiles.length} files uploaded successfully`,
+        files: uploadedFiles
+      });
+    } catch (error) {
+      console.error('Multiple file upload error:', error);
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to upload files"
+      });
+    }
+  });
+
+  // Get user's files
+  app.get("/api/files", authenticateToken, async (req: any, res) => {
+    try {
+      const files = await storage.getFilesByUser(req.user._id.toString());
+      const filesWithIds = files.map(file => ({
+        id: file._id.toString(),
+        filename: file.filename,
+        originalName: file.originalName,
+        url: file.url,
+        size: file.size,
+        mimetype: file.mimetype,
+        createdAt: file.createdAt
+      }));
+
+      res.json({ files: filesWithIds });
+    } catch (error) {
+      console.error('Get files error:', error);
+      res.status(500).json({ error: "Failed to get files" });
+    }
+  });
+
+  // Delete file
+  app.delete("/api/files/:id", authenticateToken, async (req: any, res) => {
+    try {
+      const fileId = req.params.id;
+
+      // First get the file to check ownership
+      const file = await storage.getFile(fileId);
+      if (!file) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
+      // Check if user owns the file
+      if (file.uploadedBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
+      const deleted = await storage.deleteFile(fileId);
+      if (!deleted) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'File deleted successfully'
+      });
+    } catch (error) {
+      console.error('Delete file error:', error);
+      res.status(500).json({ error: "Failed to delete file" });
+    }
+  });
+
+  // Serve uploaded files from MongoDB
+  app.get('/api/files/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const file = await storage.getFile(id);
+
+      if (!file) {
+        return res.status(404).json({ error: 'File not found' });
+      }
+
+      // Set appropriate headers
+      res.set({
+        'Content-Type': file.mimetype,
+        'Content-Length': file.size,
+        'Content-Disposition': `inline; filename="${file.originalName}"`
+      });
+
+      // Send the binary data
+      res.send(file.data);
+    } catch (error) {
+      console.error('File serving error:', error);
+      res.status(500).json({ error: 'Failed to serve file' });
     }
   });
 
