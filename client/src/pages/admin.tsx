@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { RegisterForm } from '@/components/auth/register-form';
 import AddBlogPostForm from '@/components/blog/AddBlogPostForm';
 import { ContentBlock } from '@/components/blog/BlogContentEditor';
+import AITrainingManager from '@/components/admin/AITrainingManager';
 
 interface User {
   id: number;
@@ -400,6 +401,11 @@ export default function Admin() {
           key={editingBlog?.id || 'new'} // Force re-render when switching between edit/add
           isEditing={!!editingBlog}
         />
+
+        {/* AI Training Data Section */}
+        <div className="mt-8">
+          <AITrainingManager />
+        </div>
       </div>
     </div>
   );

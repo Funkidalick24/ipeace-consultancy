@@ -24,6 +24,8 @@ export interface IStorage {
   createFile(file: Partial<IFile>): Promise<IFile>;
   getFile(id: string): Promise<IFile | null>;
   getFilesByUser(userId: string): Promise<IFile[]>;
+  getTrainingFiles(): Promise<IFile[]>;
+  updateFileTrainingStatus(id: string, isTrainingData: boolean, trainingEnabled?: boolean): Promise<IFile | null>;
   deleteFile(id: string): Promise<boolean>;
 }
 
@@ -259,6 +261,28 @@ export class MongoStorage implements IStorage {
     } catch (error) {
       console.error('Error deleting file:', error);
       return false;
+    }
+  }
+
+  async getTrainingFiles(): Promise<IFile[]> {
+    try {
+      return await File.find({ isTrainingData: true }).sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting training files:', error);
+      return [];
+    }
+  }
+
+  async updateFileTrainingStatus(id: string, isTrainingData: boolean, trainingEnabled?: boolean): Promise<IFile | null> {
+    try {
+      const updateData: any = { isTrainingData };
+      if (trainingEnabled !== undefined) {
+        updateData.trainingEnabled = trainingEnabled;
+      }
+      return await File.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+      console.error('Error updating file training status:', error);
+      return null;
     }
   }
 }

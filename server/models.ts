@@ -125,6 +125,10 @@ export interface IFile extends Document {
   data: Buffer;
   url: string;
   uploadedBy: mongoose.Types.ObjectId;
+  // AI Training Data fields
+  isTrainingData?: boolean;
+  extractedText?: string;
+  trainingEnabled?: boolean;
   createdAt: Date;
 }
 
@@ -135,7 +139,11 @@ const FileSchema = new Schema<IFile>({
   size: { type: Number, required: true },
   data: { type: Buffer, required: true },
   url: { type: String, required: true },
-  uploadedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+  uploadedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  // AI Training Data fields
+  isTrainingData: { type: Boolean, default: false },
+  extractedText: { type: String },
+  trainingEnabled: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // Create models

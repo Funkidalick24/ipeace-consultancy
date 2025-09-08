@@ -9,6 +9,7 @@ import { authService } from "./services/auth";
 import { nanoid } from "nanoid";
 import sanitizeHtml from 'sanitize-html';
 import { upload, saveFileMetadata } from "./upload";
+import { textExtractionService } from "./services/text-extraction";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -640,6 +641,170 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('File serving error:', error);
       res.status(500).json({ error: 'Failed to serve file' });
+    }
+  });
+
+  // AI Training Data Routes
+  // Upload training data file
+  app.post("/api/admin/training/upload", authenticateToken, upload.single('file'), async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const fileRecord = await saveFileMetadata(req.file, req.user._id.toString(), true);
+
+      res.json({
+        success: true,
+        message: 'Training file uploaded successfully',
+        file: {
+          id: fileRecord._id.toString(),
+          filename: fileRecord.filename,
+          originalName: fileRecord.originalName,
+          url: fileRecord.url,
+          size: fileRecord.size,
+          mimetype: fileRecord.mimetype,
+          isTrainingData: fileRecord.isTrainingData,
+          trainingEnabled: fileRecord.trainingEnabled,
+          extractedText: fileRecord.extractedText ? 'Text extracted successfully' : 'Text extraction failed or not supported'
+        }
+      });
+    } catch (error) {
+      console.error('Training file upload error:', error);
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to upload training file"
+      });
+    }
+  });
+
+  // Get all training files (admin only)
+  app.get("/api/admin/training/files", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const trainingFiles = await storage.getTrainingFiles();
+      const filesWithIds = trainingFiles.map(file => ({
+        id: file._id.toString(),
+        filename: file.filename,
+        originalName: file.originalName,
+        url: file.url,
+        size: file.size,
+        mimetype: file.mimetype,
+        isTrainingData: file.isTrainingData,
+        trainingEnabled: file.trainingEnabled,
+        extractedText: file.extractedText,
+        createdAt: file.createdAt
+      }));
+
+      res.json({ files: filesWithIds });
+    } catch (error) {
+      console.error('Get training files error:', error);
+      res.status(500).json({ error: "Failed to get training files" });
+    }
+  });
+
+  // Update training file status (enable/disable)
+  app.patch("/api/admin/training/files/:id/status", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+      const { trainingEnabled } = req.body;
+
+      if (typeof trainingEnabled !== 'boolean') {
+        return res.status(400).json({ error: 'trainingEnabled must be a boolean' });
+      }
+
+      const updatedFile = await storage.updateFileTrainingStatus(id, true, trainingEnabled);
+      if (!updatedFile) {
+        return res.status(404).json({ error: "Training file not found" });
+      }
+
+      res.json({
+        success: true,
+        message: `Training file ${trainingEnabled ? 'enabled' : 'disabled'} successfully`,
+        file: {
+          id: updatedFile._id.toString(),
+          trainingEnabled: updatedFile.trainingEnabled
+        }
+      });
+    } catch (error) {
+      console.error('Update training file status error:', error);
+      res.status(500).json({ error: "Failed to update training file status" });
+    }
+  });
+
+  // Mark existing file as training data
+  app.patch("/api/admin/files/:id/mark-training", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+
+      // First get the file to check ownership and extract text if needed
+      const file = await storage.getFile(id);
+      if (!file) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
+      // Check if user owns the file
+      if (file.uploadedBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
+      // Extract text if not already extracted and file type is supported
+      let extractedText = file.extractedText;
+      if (!extractedText && textExtractionService.isSupportedType(file.mimetype)) {
+        const extractionResult = await textExtractionService.extractText(
+          file.data,
+          file.mimetype,
+          file.originalName
+        );
+
+        if (extractionResult.success && extractionResult.text) {
+          extractedText = extractionResult.text;
+        }
+      }
+
+      // Update file to mark as training data
+      const updateData: any = {
+        isTrainingData: true,
+        trainingEnabled: true
+      };
+
+      if (extractedText && !file.extractedText) {
+        updateData.extractedText = extractedText;
+      }
+
+      const updatedFile = await storage.updateFileTrainingStatus(id, true, true);
+      if (!updatedFile) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'File marked as training data successfully',
+        file: {
+          id: updatedFile._id.toString(),
+          isTrainingData: updatedFile.isTrainingData,
+          trainingEnabled: updatedFile.trainingEnabled,
+          extractedText: updatedFile.extractedText ? 'Text extracted successfully' : 'Text extraction failed or not supported'
+        }
+      });
+    } catch (error) {
+      console.error('Mark file as training error:', error);
+      res.status(500).json({ error: "Failed to mark file as training data" });
     }
   });
 

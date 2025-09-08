@@ -1,5 +1,5 @@
 # Robots.txt for IPEACE Professional Consulting
-# Single-page application
+# Single-page application with React Router
 
 User-agent: *
 Allow: /
@@ -16,9 +16,10 @@ Allow: /about
 Allow: /services
 Allow: /contact
 Allow: /faq
-Allow: /resources
+Allow: /blogs
+Allow: /blog/
 
-# Disallow duplicate content
+# Disallow duplicate content and query parameters
 Disallow: /*?*
 Disallow: /*&*
 
@@ -36,4 +37,4 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemap location
-Sitemap: https://ipeace.co.zw/sitemap.xml
+Sitemap: https://ipeace-consultancy.com/sitemap.xml

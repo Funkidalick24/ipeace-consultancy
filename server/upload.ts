@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import { storage } from './storage';
+import { textExtractionService } from './services/text-extraction';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -25,7 +26,24 @@ export const upload = multer({
 });
 
 // Helper function to save file metadata to database
-export const saveFileMetadata = async (file: Express.Multer.File, userId: string) => {
+export const saveFileMetadata = async (file: Express.Multer.File, userId: string, isTrainingData: boolean = false) => {
+  let extractedText: string | undefined;
+
+  // Extract text if this is a training data file and the file type is supported
+  if (isTrainingData && textExtractionService.isSupportedType(file.mimetype)) {
+    const extractionResult = await textExtractionService.extractText(
+      file.buffer,
+      file.mimetype,
+      file.originalname
+    );
+
+    if (extractionResult.success && extractionResult.text) {
+      extractedText = extractionResult.text;
+    } else {
+      console.warn(`Text extraction failed for ${file.originalname}: ${extractionResult.error}`);
+    }
+  }
+
   const fileData = {
     filename: file.originalname, // Use original name as filename since we're not generating unique names
     originalName: file.originalname,
@@ -33,7 +51,11 @@ export const saveFileMetadata = async (file: Express.Multer.File, userId: string
     size: file.size,
     data: file.buffer, // Store the binary data
     url: `/api/files/`, // Base URL, ID will be appended
-    uploadedBy: new mongoose.Types.ObjectId(userId)
+    uploadedBy: new mongoose.Types.ObjectId(userId),
+    // AI Training Data fields
+    isTrainingData,
+    extractedText,
+    trainingEnabled: isTrainingData // Enable by default if marked as training data
   };
 
   const savedFile = await storage.createFile(fileData);
