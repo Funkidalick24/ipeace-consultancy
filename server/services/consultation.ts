@@ -37,20 +37,25 @@ const transporter = new MockEmailTransporter();
 
 export async function sendConsultationBookingNotification(booking: ConsultationNotification): Promise<void> {
   try {
+    // Validate required booking data
+    if (!booking.firstName || !booking.lastName || !booking.email || !booking.phone) {
+      throw new Error('Missing required booking information for notification');
+    }
+
     const timestamp = new Date().toISOString();
 
-    // Prepare data for templates
+    // Prepare data for templates with safe fallbacks
     const templateData = {
-      firstName: booking.firstName,
-      lastName: booking.lastName,
-      email: booking.email,
-      phone: booking.phone,
+      firstName: booking.firstName || 'Unknown',
+      lastName: booking.lastName || 'Unknown',
+      email: booking.email || 'Not provided',
+      phone: booking.phone || 'Not provided',
       company: booking.company || 'Not specified',
       serviceType: getServiceTypeName(booking.serviceType),
       consultationType: getConsultationTypeName(booking.consultationType),
       preferredDate: formatEmailDate(booking.preferredDate),
       preferredTime: formatEmailTime(booking.preferredTime),
-      description: booking.description,
+      description: booking.description || 'No description provided',
       timestamp: formatEmailDate(new Date()),
     };
 
@@ -68,29 +73,36 @@ export async function sendConsultationBookingNotification(booking: ConsultationN
     console.log('✅ Consultation company notification sent successfully');
   } catch (error) {
     console.error('❌ Error sending consultation company notification:', error);
-    throw error;
+    // Don't throw error to prevent booking failure due to email issues
+    console.log('⚠️ Continuing with booking despite email notification failure');
   }
 }
 
 export async function sendConsultationConfirmation(email: string, firstName: string, bookingId: string, booking?: any): Promise<void> {
   try {
+    // Validate required parameters
+    if (!email || !firstName || !bookingId) {
+      console.log(`⚠️ Missing required parameters for confirmation email: email=${!!email}, firstName=${!!firstName}, bookingId=${!!bookingId}`);
+      return;
+    }
+
     if (!booking) {
       console.log(`⚠️ Booking data not provided for confirmation email to ${firstName} at ${email}`);
       return;
     }
 
-    // Prepare data for customer template
+    // Prepare data for customer template with safe fallbacks
     const templateData = {
-      firstName: firstName,
-      lastName: booking.lastName,
+      firstName: firstName || 'Valued Customer',
+      lastName: booking.lastName || 'Unknown',
       email: email,
-      phone: booking.phone,
+      phone: booking.phone || 'Not provided',
       company: booking.company || 'Not specified',
       serviceType: getServiceTypeName(booking.serviceType),
       consultationType: getConsultationTypeName(booking.consultationType),
       preferredDate: formatEmailDate(booking.preferredDate),
       preferredTime: formatEmailTime(booking.preferredTime),
-      description: booking.description,
+      description: booking.description || 'No description provided',
       bookingId: bookingId,
     };
 
@@ -108,7 +120,8 @@ export async function sendConsultationConfirmation(email: string, firstName: str
     console.log('✅ Consultation customer confirmation sent successfully');
   } catch (error) {
     console.error('❌ Error sending consultation confirmation:', error);
-    throw error;
+    // Don't throw error to prevent booking failure due to email issues
+    console.log('⚠️ Continuing with booking despite customer confirmation email failure');
   }
 }
 

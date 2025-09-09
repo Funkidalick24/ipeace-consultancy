@@ -93,6 +93,216 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // Admin User Management Routes
+  // Get all users (admin only)
+  app.get("/api/admin/users", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const users = await storage.getAllUsers();
+      const usersWithIds = users.map(user => ({
+        id: user._id.toString(),
+        username: user.username,
+        role: user.role,
+        createdAt: user.createdAt
+      }));
+
+      res.json({ users: usersWithIds });
+    } catch (error) {
+      console.error("Get admin users error:", error);
+      res.status(500).json({ error: "Failed to get users" });
+    }
+  });
+
+  // Update user role (admin only)
+  app.patch("/api/admin/users/:id/role", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+      const { role } = req.body;
+
+      if (!['admin', 'user'].includes(role)) {
+        return res.status(400).json({ error: 'Invalid role' });
+      }
+
+      const user = await storage.updateUserRole(id, role);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'User role updated successfully',
+        user: {
+          id: user._id.toString(),
+          username: user.username,
+          role: user.role
+        }
+      });
+    } catch (error) {
+      console.error("Update user role error:", error);
+      res.status(500).json({ error: "Failed to update user role" });
+    }
+  });
+
+  // Delete user (admin only)
+  app.delete("/api/admin/users/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { id } = req.params;
+
+      // Prevent admin from deleting themselves
+      if (id === req.user._id.toString()) {
+        return res.status(400).json({ error: 'Cannot delete your own account' });
+      }
+
+      const deleted = await storage.deleteUser(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'User deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete user error:", error);
+      res.status(500).json({ error: "Failed to delete user" });
+    }
+  });
+
+  // Get all contact submissions (admin only)
+  app.get("/api/admin/contacts", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const contacts = await storage.getAllContactSubmissions();
+      console.log(`[DEBUG] Retrieved ${contacts.length} contact submissions from database`);
+      const contactsWithIds = contacts.map(contact => ({
+        id: contact._id.toString(),
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        email: contact.email,
+        company: contact.company,
+        service: contact.service,
+        message: contact.message,
+        newsletter: contact.newsletter,
+        status: contact.status,
+        respondedAt: contact.respondedAt,
+        createdAt: contact.createdAt
+      }));
+
+      console.log(`[DEBUG] Contact submissions response includes fields:`, Object.keys(contactsWithIds[0] || {}));
+      res.json({ contacts: contactsWithIds });
+    } catch (error) {
+      console.error("Get admin contacts error:", error);
+      res.status(500).json({ error: "Failed to get contacts" });
+    }
+  });
+
+  // Get dashboard statistics (admin only)
+  app.get("/api/admin/dashboard-stats", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const [users, consultations, contacts, blogs] = await Promise.all([
+        storage.getAllUsers(),
+        storage.getAllConsultationBookings(),
+        storage.getAllContactSubmissions(),
+        storage.getAllBlogPosts()
+      ]);
+
+      const publishedBlogs = blogs.filter(blog => blog.published);
+
+      res.json({
+        stats: {
+          totalUsers: users.length,
+          totalConsultations: consultations.length,
+          totalContacts: contacts.length,
+          totalBlogs: publishedBlogs.length
+        }
+      });
+    } catch (error) {
+      console.error("Get dashboard stats error:", error);
+      res.status(500).json({ error: "Failed to get dashboard statistics" });
+    }
+  });
+
+  // Get recent activity (admin only)
+  app.get("/api/admin/recent-activity", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const [consultations, contacts, blogs] = await Promise.all([
+        storage.getAllConsultationBookings(),
+        storage.getAllContactSubmissions(),
+        storage.getAllBlogPosts()
+      ]);
+
+      // Get recent items from each collection
+      const recentConsultations = consultations
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 5)
+        .map(item => ({
+          id: item._id.toString(),
+          type: 'consultation',
+          title: 'New consultation booking',
+          description: `${item.firstName} ${item.lastName} booked a consultation`,
+          timestamp: item.createdAt,
+          color: 'green'
+        }));
+
+      const recentContacts = contacts
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 5)
+        .map(item => ({
+          id: item._id.toString(),
+          type: 'contact',
+          title: 'Contact form submitted',
+          description: `${item.firstName} ${item.lastName} submitted a contact form`,
+          timestamp: item.createdAt,
+          color: 'yellow'
+        }));
+
+      const recentBlogs = blogs
+        .filter(blog => blog.published)
+        .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
+        .slice(0, 5)
+        .map(item => ({
+          id: item._id.toString(),
+          type: 'blog',
+          title: 'Blog post published',
+          description: `"${item.title}" was published`,
+          timestamp: item.publishedAt || item.createdAt,
+          color: 'blue'
+        }));
+
+      // Combine and sort all recent activities
+      const allActivities = [...recentConsultations, ...recentContacts, ...recentBlogs]
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+        .slice(0, 10); // Return top 10 most recent
+
+      res.json({ activities: allActivities });
+    } catch (error) {
+      console.error("Get recent activity error:", error);
+      res.status(500).json({ error: "Failed to get recent activity" });
+    }
+  });
+
   // Blog routes
   // Get all published blog posts (public)
   app.get("/api/blogs", async (req, res) => {
@@ -357,9 +567,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Book consultation
   app.post("/api/consultations", async (req, res) => {
     try {
+      // Validate request body structure
+      if (!req.body || typeof req.body !== 'object') {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid request body format"
+        });
+      }
+
       const validatedData = consultationBookingSchema.parse(req.body);
-          
-      // Sanitize user input
+
+      // Sanitize user input with additional validation
       const sanitizedData = {
         firstName: sanitizeHtml(validatedData.firstName, { allowedTags: [], allowedAttributes: {} }),
         lastName: sanitizeHtml(validatedData.lastName, { allowedTags: [], allowedAttributes: {} }),
@@ -372,23 +590,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         consultationType: sanitizeHtml(validatedData.consultationType, { allowedTags: [], allowedAttributes: {} }),
         description: sanitizeHtml(validatedData.description, { allowedTags: [], allowedAttributes: {} })
       };
+
+      // Additional validation for required fields after sanitization
+      if (!sanitizedData.firstName || !sanitizedData.lastName || !sanitizedData.email || !sanitizedData.phone) {
+        return res.status(400).json({
+          success: false,
+          message: "Required fields are missing or invalid after sanitization"
+        });
+      }
       
       // Transform validated data to match storage function expectations
-      const storageData = {
-        ...validatedData,
-        preferredDate: new Date(validatedData.preferredDate),
-      };
-      
+      const preferredDateObj = new Date(validatedData.preferredDate);
+      if (isNaN(preferredDateObj.getTime())) {
+        throw new Error('Invalid preferred date format');
+      }
+
       // Store the consultation booking
       const booking = await storage.createConsultationBooking({
-        ...storageData,
         firstName: sanitizedData.firstName,
         lastName: sanitizedData.lastName,
         email: sanitizedData.email,
         phone: sanitizedData.phone,
         company: sanitizedData.company,
         serviceType: sanitizedData.serviceType,
-        preferredDate: new Date(sanitizedData.preferredDate),
+        preferredDate: preferredDateObj,
         preferredTime: sanitizedData.preferredTime,
         consultationType: sanitizedData.consultationType,
         description: sanitizedData.description
@@ -432,16 +657,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update contact submission status
+  app.patch("/api/admin/contacts/:id/status", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const { status } = req.body;
+
+      console.log(`[DEBUG] Attempting to update contact ${id} status to: ${status}`);
+
+      if (!["pending", "responded"].includes(status)) {
+        console.log(`[DEBUG] Invalid status provided: ${status}`);
+        return res.status(400).json({ error: "Invalid status" });
+      }
+
+      const contact = await storage.updateContactSubmissionStatus(id, status);
+      if (!contact) {
+        console.log(`[DEBUG] Contact submission not found: ${id}`);
+        return res.status(404).json({ error: "Contact submission not found" });
+      }
+
+      console.log(`[DEBUG] Successfully updated contact ${id} status to: ${contact.status}`);
+
+      res.json({
+        success: true,
+        message: `Contact submission status updated to ${status}`,
+        contact: {
+          id: contact._id.toString(),
+          firstName: contact.firstName,
+          lastName: contact.lastName,
+          email: contact.email,
+          company: contact.company,
+          service: contact.service,
+          message: contact.message,
+          newsletter: contact.newsletter,
+          status: contact.status,
+          respondedAt: contact.respondedAt,
+          createdAt: contact.createdAt
+        }
+      });
+    } catch (error) {
+      console.error("Update contact status error:", error);
+      res.status(500).json({ error: "Failed to update contact submission status" });
+    }
+  });
+
   // Get all consultation bookings (for admin purposes)
   app.get("/api/consultations", async (req, res) => {
     try {
       const bookings = await storage.getAllConsultationBookings();
-      const bookingsWithNames = bookings.map(booking => ({
-        ...booking,
-        serviceTypeName: getServiceTypeName(booking.serviceType),
-        consultationTypeName: getConsultationTypeName(booking.consultationType),
-      }));
-      res.json({ bookings: bookingsWithNames });
+      const bookingsWithNames = bookings.map(booking => {
+        // Use toObject() to get plain object and manually construct the response
+        const plainBooking = booking.toObject ? booking.toObject() : booking;
+        return {
+          id: plainBooking._id.toString(),
+          firstName: plainBooking.firstName,
+          lastName: plainBooking.lastName,
+          email: plainBooking.email,
+          phone: plainBooking.phone,
+          company: plainBooking.company,
+          serviceType: plainBooking.serviceType,
+          preferredDate: plainBooking.preferredDate?.toISOString(),
+          preferredTime: plainBooking.preferredTime,
+          consultationType: plainBooking.consultationType,
+          description: plainBooking.description,
+          status: plainBooking.status,
+          createdAt: plainBooking.createdAt?.toISOString(),
+          serviceTypeName: getServiceTypeName(plainBooking.serviceType),
+          consultationTypeName: getConsultationTypeName(plainBooking.consultationType),
+        };
+      });
+
+      console.log(`[DEBUG] Returning ${bookingsWithNames.length} consultation bookings`);
+      console.log(`[DEBUG] Sample booking keys:`, Object.keys(bookingsWithNames[0] || {}));
+
+      // Send response with explicit JSON content type and custom serializer
+      res.setHeader('Content-Type', 'application/json');
+
+      // Use JSON.stringify with replacer to ensure clean output
+      const cleanJson = JSON.stringify({ bookings: bookingsWithNames }, (key, value) => {
+        // Remove any Mongoose-specific properties
+        if (key.startsWith('$') || key.startsWith('_') && key !== '_id') {
+          return undefined;
+        }
+        return value;
+      });
+
+      res.send(cleanJson);
     } catch (error) {
       console.error("Get consultations error:", error);
       res.status(500).json({ error: "Failed to get consultation bookings" });
@@ -456,11 +761,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!booking) {
         return res.status(404).json({ error: "Consultation booking not found" });
       }
-      res.json({ 
+
+      // Convert to plain object to avoid Mongoose metadata
+      const plainBooking = JSON.parse(JSON.stringify(booking));
+
+      res.json({
         booking: {
-          ...booking,
-          serviceTypeName: getServiceTypeName(booking.serviceType),
-          consultationTypeName: getConsultationTypeName(booking.consultationType),
+          id: plainBooking._id,
+          firstName: plainBooking.firstName,
+          lastName: plainBooking.lastName,
+          email: plainBooking.email,
+          phone: plainBooking.phone,
+          company: plainBooking.company,
+          serviceType: plainBooking.serviceType,
+          preferredDate: plainBooking.preferredDate,
+          preferredTime: plainBooking.preferredTime,
+          consultationType: plainBooking.consultationType,
+          description: plainBooking.description,
+          status: plainBooking.status,
+          createdAt: plainBooking.createdAt,
+          serviceTypeName: getServiceTypeName(plainBooking.serviceType),
+          consultationTypeName: getConsultationTypeName(plainBooking.consultationType),
         }
       });
     } catch (error) {
@@ -474,23 +795,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = req.params.id;
       const { status } = req.body;
-      
+
+      console.log(`[DEBUG] Attempting to update consultation ${id} status to: ${status}`);
+
       if (!["pending", "confirmed", "cancelled", "completed"].includes(status)) {
+        console.log(`[DEBUG] Invalid status provided: ${status}`);
         return res.status(400).json({ error: "Invalid status" });
       }
-      
+
       const booking = await storage.updateConsultationBookingStatus(id, status);
       if (!booking) {
+        console.log(`[DEBUG] Consultation booking not found: ${id}`);
         return res.status(404).json({ error: "Consultation booking not found" });
       }
-      
-      res.json({ 
-        success: true, 
+
+      // Convert to plain object to avoid Mongoose metadata
+      const plainBooking = JSON.parse(JSON.stringify(booking));
+
+      console.log(`[DEBUG] Successfully updated consultation ${id} status to: ${plainBooking.status}`);
+
+      res.json({
+        success: true,
         message: `Consultation booking status updated to ${status}`,
         booking: {
-          ...booking,
-          serviceTypeName: getServiceTypeName(booking.serviceType),
-          consultationTypeName: getConsultationTypeName(booking.consultationType),
+          id: plainBooking._id,
+          firstName: plainBooking.firstName,
+          lastName: plainBooking.lastName,
+          email: plainBooking.email,
+          phone: plainBooking.phone,
+          company: plainBooking.company,
+          serviceType: plainBooking.serviceType,
+          preferredDate: plainBooking.preferredDate,
+          preferredTime: plainBooking.preferredTime,
+          consultationType: plainBooking.consultationType,
+          description: plainBooking.description,
+          status: plainBooking.status,
+          createdAt: plainBooking.createdAt,
+          serviceTypeName: getServiceTypeName(plainBooking.serviceType),
+          consultationTypeName: getConsultationTypeName(plainBooking.consultationType),
         }
       });
     } catch (error) {

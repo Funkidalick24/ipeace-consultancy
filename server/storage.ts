@@ -4,8 +4,14 @@ import { type InsertUser, type InsertContact, type InsertConsultation, type Inse
 export interface IStorage {
   getUser(id: string): Promise<IUser | null>;
   getUserByUsername(username: string): Promise<IUser | null>;
+  getAllUsers(): Promise<IUser[]>;
   createUser(user: InsertUser): Promise<IUser>;
+  updateUserRole(id: string, role: string): Promise<IUser | null>;
+  deleteUser(id: string): Promise<boolean>;
   createContactSubmission(contact: InsertContact): Promise<IContactSubmission>;
+  getAllContactSubmissions(): Promise<IContactSubmission[]>;
+  getContactSubmission(id: string): Promise<IContactSubmission | null>;
+  updateContactSubmissionStatus(id: string, status: string): Promise<IContactSubmission | null>;
   createChatMessage(sessionId: string, userMessage: string, aiResponse: string): Promise<IChatMessage>;
   getChatHistory(sessionId: string): Promise<IChatMessage[]>;
   createConsultationBooking(booking: InsertConsultation): Promise<IConsultationBooking>;
@@ -61,6 +67,38 @@ export class MongoStorage implements IStorage {
     }
   }
 
+  async getAllUsers(): Promise<IUser[]> {
+    try {
+      return await User.find().sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all users:', error);
+      return [];
+    }
+  }
+
+  async updateUserRole(id: string, role: string): Promise<IUser | null> {
+    try {
+      return await User.findByIdAndUpdate(
+        id,
+        { role },
+        { new: true }
+      );
+    } catch (error) {
+      console.error('Error updating user role:', error);
+      return null;
+    }
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    try {
+      const result = await User.findByIdAndDelete(id);
+      return !!result;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return false;
+    }
+  }
+
   async createContactSubmission(contact: InsertContact): Promise<IContactSubmission> {
     try {
       const submission = new ContactSubmission({
@@ -73,6 +111,37 @@ export class MongoStorage implements IStorage {
     } catch (error) {
       console.error('Error creating contact submission:', error);
       throw error;
+    }
+  }
+
+  async getAllContactSubmissions(): Promise<IContactSubmission[]> {
+    try {
+      return await ContactSubmission.find().sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all contact submissions:', error);
+      return [];
+    }
+  }
+
+  async getContactSubmission(id: string): Promise<IContactSubmission | null> {
+    try {
+      return await ContactSubmission.findById(id);
+    } catch (error) {
+      console.error('Error getting contact submission:', error);
+      return null;
+    }
+  }
+
+  async updateContactSubmissionStatus(id: string, status: string): Promise<IContactSubmission | null> {
+    try {
+      const updateData: any = { status };
+      if (status === 'responded') {
+        updateData.respondedAt = new Date();
+      }
+      return await ContactSubmission.findByIdAndUpdate(id, updateData, { new: true }).lean();
+    } catch (error) {
+      console.error('Error updating contact submission status:', error);
+      return null;
     }
   }
 
@@ -116,7 +185,7 @@ export class MongoStorage implements IStorage {
 
   async getAllConsultationBookings(): Promise<IConsultationBooking[]> {
     try {
-      return await ConsultationBooking.find().sort({ createdAt: -1 });
+      return await ConsultationBooking.find().sort({ createdAt: -1 }).lean();
     } catch (error) {
       console.error('Error getting consultation bookings:', error);
       return [];
@@ -125,7 +194,7 @@ export class MongoStorage implements IStorage {
 
   async getConsultationBooking(id: string): Promise<IConsultationBooking | null> {
     try {
-      return await ConsultationBooking.findById(id);
+      return await ConsultationBooking.findById(id).lean();
     } catch (error) {
       console.error('Error getting consultation booking:', error);
       return null;
@@ -138,7 +207,7 @@ export class MongoStorage implements IStorage {
         id,
         { status },
         { new: true }
-      );
+      ).lean();
     } catch (error) {
       console.error('Error updating consultation booking status:', error);
       return null;

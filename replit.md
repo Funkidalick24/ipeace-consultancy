@@ -123,7 +123,7 @@ Preferred communication style: Simple, everyday language.
 - **Development**: NODE_ENV=development with local database
 - **Production**: NODE_ENV=production with PostgreSQL connection
 - **API Keys**: OpenAI API key via environment variables
-- **Database**: DATABASE_URL for PostgreSQL connection string
+- **Database**: MONGODB_URI for MongoDB Atlas connection string
 
 ### Key Architectural Decisions
 

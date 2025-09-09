@@ -1,9 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RegisterForm } from '@/components/auth/register-form';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Users, Calendar, Mail, FileText, BarChart3, MessageSquare, Image, Settings, Brain, LogOut } from 'lucide-react';
 import AddBlogPostForm from '@/components/blog/AddBlogPostForm';
 import { ContentBlock } from '@/components/blog/BlogContentEditor';
 import AITrainingManager from '@/components/admin/AITrainingManager';
+import UserList from '@/components/admin/UserList';
+import ConsultationList from '@/components/admin/ConsultationList';
+import ContactList from '@/components/admin/ContactList';
+import MediaLibrary from '@/components/admin/MediaLibrary';
 
 interface User {
   id: number;
@@ -23,6 +32,22 @@ interface BlogPost {
   displayImage?: string;
 }
 
+interface DashboardStats {
+  totalUsers: number;
+  totalConsultations: number;
+  totalContacts: number;
+  totalBlogs: number;
+}
+
+interface RecentActivity {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  timestamp: Date;
+  color: string;
+}
+
 export default function Admin() {
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
@@ -34,6 +59,13 @@ export default function Admin() {
   const [loginError, setLoginError] = useState('');
   const [showAddBlogForm, setShowAddBlogForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    totalConsultations: 0,
+    totalContacts: 0,
+    totalBlogs: 0
+  });
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
 
   useEffect(() => {
     checkAuth();
@@ -52,6 +84,8 @@ export default function Admin() {
           const data = await response.json();
           setUser(data.user);
           fetchBlogs();
+          fetchDashboardStats();
+          fetchRecentActivities();
         } else {
           localStorage.removeItem('authToken');
           setShowAuth(true);
@@ -82,6 +116,43 @@ export default function Admin() {
     }
   };
 
+  const fetchDashboardStats = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch('/api/admin/dashboard-stats', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (data.stats) {
+        setDashboardStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard stats:', error);
+    }
+  };
+
+  const fetchRecentActivities = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch('/api/admin/recent-activity', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (data.activities) {
+        setRecentActivities(data.activities.map((activity: any) => ({
+          ...activity,
+          timestamp: new Date(activity.timestamp)
+        })));
+      }
+    } catch (error) {
+      console.error('Failed to fetch recent activities:', error);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -99,7 +170,6 @@ export default function Admin() {
         setUser(data.user);
         setShowAuth(false);
         setLoginError('');
-        fetchBlogs();
       } else {
         setLoginError(data.error || 'Login failed');
       }
@@ -137,7 +207,6 @@ export default function Admin() {
       });
 
       if (response.ok) {
-        // Refresh the blogs list
         fetchBlogs();
         alert('Blog post created successfully!');
       } else {
@@ -147,7 +216,7 @@ export default function Admin() {
     } catch (error) {
       console.error('Failed to create blog post:', error);
       alert('Failed to create blog post. Please try again.');
-      throw error; // Re-throw to let the form handle it
+      throw error;
     }
   };
 
@@ -179,7 +248,6 @@ export default function Admin() {
       });
 
       if (response.ok) {
-        // Refresh the blogs list
         fetchBlogs();
         alert('Blog post updated successfully!');
         setEditingBlog(null);
@@ -289,7 +357,6 @@ export default function Admin() {
               onSuccess={() => {
                 setIsLoginMode(true);
                 setLoginError('');
-                // Optionally show success message
                 alert('Account created successfully! Please login with your credentials.');
               }}
               onSwitchToLogin={() => setIsLoginMode(true)}
@@ -314,74 +381,276 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
-          >
-            Logout
-          </button>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Welcome, {user.username}!</h2>
-          <p className="text-gray-600">Manage your blog posts and site content here.</p>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Blog Posts</h2>
-              <button
-                onClick={() => setShowAddBlogForm(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Add New Post
-              </button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
+              <Badge variant="secondary" className="ml-3">
+                Welcome, {user.username}
+              </Badge>
             </div>
-          </div>
-          <div className="p-6">
-            {blogs.length === 0 ? (
-              <p className="text-gray-500">No blog posts yet.</p>
-            ) : (
-              <div className="space-y-4">
-                {blogs.map((blog) => (
-                  <div key={blog.id} className="flex justify-between items-center p-4 border border-gray-200 rounded-md">
-                    <div>
-                      <h3 className="font-medium">{blog.title}</h3>
-                      <p className="text-sm text-gray-600">
-                        {blog.published ? 'Published' : 'Draft'} • {new Date(blog.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        className="text-blue-600 hover:text-blue-800"
-                        onClick={() => {
-                          console.log('Edit button clicked for blog:', blog.id);
-                          handleEditBlog(blog);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="text-red-600 hover:text-red-800"
-                        onClick={() => {
-                          console.log('Delete button clicked for blog:', blog.id);
-                          handleDeleteBlog(blog.id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              size="sm"
+              className="text-red-600 border-red-300 hover:bg-red-50"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
           </div>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 mb-8">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Users</span>
+            </TabsTrigger>
+            <TabsTrigger value="consultations" className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span className="hidden sm:inline">Consultations</span>
+            </TabsTrigger>
+            <TabsTrigger value="contacts" className="flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              <span className="hidden sm:inline">Contacts</span>
+            </TabsTrigger>
+            <TabsTrigger value="content" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Content</span>
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Analytics</span>
+            </TabsTrigger>
+            <TabsTrigger value="communication" className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">Communication</span>
+            </TabsTrigger>
+            <TabsTrigger value="media" className="flex items-center gap-2">
+              <Image className="w-4 h-4" />
+              <span className="hidden sm:inline">Media</span>
+            </TabsTrigger>
+            <TabsTrigger value="system" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">System</span>
+            </TabsTrigger>
+            <TabsTrigger value="ai" className="flex items-center gap-2">
+              <Brain className="w-4 h-4" />
+              <span className="hidden sm:inline">AI</span>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{dashboardStats.totalUsers.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">Active users</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Consultations</CardTitle>
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{dashboardStats.totalConsultations.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">Total bookings</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Contact Forms</CardTitle>
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{dashboardStats.totalContacts.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">Total submissions</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Blog Posts</CardTitle>
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{dashboardStats.totalBlogs.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">Published posts</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Activity</CardTitle>
+                  <CardDescription>Latest admin actions and system events</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {recentActivities.length > 0 ? (
+                      recentActivities.slice(0, 5).map((activity) => (
+                        <div key={activity.id} className="flex items-center space-x-4">
+                          <div className={`w-2 h-2 bg-${activity.color}-500 rounded-full`}></div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{activity.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {activity.description} • {new Date(activity.timestamp).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4">
+                        <p className="text-sm text-muted-foreground">No recent activity</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                  <CardDescription>Common administrative tasks</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                      <Users className="w-6 h-6 mb-2" />
+                      <span className="text-sm">Add User</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                      <FileText className="w-6 h-6 mb-2" />
+                      <span className="text-sm">New Blog Post</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                      <Mail className="w-6 h-6 mb-2" />
+                      <span className="text-sm">Send Email</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                      <BarChart3 className="w-6 h-6 mb-2" />
+                      <span className="text-sm">View Reports</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Users Tab */}
+          <TabsContent value="users">
+            <UserList />
+          </TabsContent>
+
+          {/* Consultations Tab */}
+          <TabsContent value="consultations">
+            <ConsultationList />
+          </TabsContent>
+
+          {/* Contacts Tab */}
+          <TabsContent value="contacts">
+            <ContactList />
+          </TabsContent>
+
+          {/* Content Tab */}
+          <TabsContent value="content">
+            <Card>
+              <CardHeader>
+                <CardTitle>Content Management</CardTitle>
+                <CardDescription>Manage website content, pages, and media</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Content Editor</h3>
+                  <p className="text-muted-foreground mb-4">Coming soon - Static page editor, testimonials, team profiles, and FAQ management</p>
+                  <Button disabled>Feature in Development</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics">
+            <Card>
+              <CardHeader>
+                <CardTitle>Analytics & Reporting</CardTitle>
+                <CardDescription>View detailed analytics and generate reports</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Analytics Dashboard</h3>
+                  <p className="text-muted-foreground mb-4">Coming soon - Traffic analytics, conversion tracking, and custom reports</p>
+                  <Button disabled>Feature in Development</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Communication Tab */}
+          <TabsContent value="communication">
+            <Card>
+              <CardHeader>
+                <CardTitle>Email & Communication</CardTitle>
+                <CardDescription>Manage email templates and communications</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">Communication Center</h3>
+                  <p className="text-muted-foreground mb-4">Coming soon - Email templates, newsletter management, and communication history</p>
+                  <Button disabled>Feature in Development</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Media Tab */}
+          <TabsContent value="media">
+            <MediaLibrary />
+          </TabsContent>
+
+          {/* System Tab */}
+          <TabsContent value="system">
+            <Card>
+              <CardHeader>
+                <CardTitle>System Administration</CardTitle>
+                <CardDescription>System settings, backups, and maintenance</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <Settings className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">System Tools</h3>
+                  <p className="text-muted-foreground mb-4">Coming soon - Settings management, backups, audit logs, and system monitoring</p>
+                  <Button disabled>Feature in Development</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* AI Tab */}
+          <TabsContent value="ai">
+            <AITrainingManager />
+          </TabsContent>
+        </Tabs>
 
         <AddBlogPostForm
           isOpen={showAddBlogForm}
@@ -398,14 +667,9 @@ export default function Admin() {
             published: editingBlog.published,
             displayImage: editingBlog.displayImage || ''
           } : undefined}
-          key={editingBlog?.id || 'new'} // Force re-render when switching between edit/add
+          key={editingBlog?.id || 'new'}
           isEditing={!!editingBlog}
         />
-
-        {/* AI Training Data Section */}
-        <div className="mt-8">
-          <AITrainingManager />
-        </div>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ interface ConsultationBookingProps {
 interface BookingSuccess {
   success: boolean;
   message: string;
-  bookingId: number;
+  bookingId: string;
   booking: any;
 }
 

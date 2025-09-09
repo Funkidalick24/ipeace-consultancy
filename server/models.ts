@@ -6,6 +6,8 @@ export interface IUser extends Document {
   username: string;
   password: string;
   role: 'admin' | 'user';
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -24,6 +26,8 @@ export interface IContactSubmission extends Document {
   service?: string;
   message: string;
   newsletter: boolean;
+  status: 'pending' | 'responded';
+  respondedAt?: Date;
   createdAt: Date;
 }
 
@@ -34,7 +38,13 @@ const ContactSubmissionSchema = new Schema<IContactSubmission>({
   company: { type: String },
   service: { type: String },
   message: { type: String, required: true },
-  newsletter: { type: Boolean, default: false }
+  newsletter: { type: Boolean, default: false },
+  status: {
+    type: String,
+    enum: ['pending', 'responded'],
+    default: 'pending'
+  },
+  respondedAt: { type: Date }
 }, { timestamps: true });
 
 // Chat message interface and schema
