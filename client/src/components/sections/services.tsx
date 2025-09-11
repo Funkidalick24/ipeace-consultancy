@@ -30,7 +30,7 @@ const serviceFeatures = {
     'Corporate governance frameworks'
   ],
   ai: [
-    '24/7 AI consultation chatbot',
+    '24/7 consultation chatbot',
     'Document analysis and review',
     'Risk assessment algorithms'
   ],
@@ -50,7 +50,7 @@ const serviceFeatures = {
     'Contract review and drafting'
   ],
   support: [
-    'Instant AI responses',
+    'Instant responses',
     'Expert escalation',
     'Emergency consultation'
   ]
@@ -58,11 +58,11 @@ const serviceFeatures = {
 
 const serviceDescriptions = {
   regulatory: 'Navigate Zimbabwe\'s Companies Act, Securities regulations, and other statutory requirements with confidence and precision.',
-  ai: 'Leverage artificial intelligence trained on Zimbabwe\'s legal frameworks for instant, accurate business guidance.',
+  ai: 'Get instant, accurate business guidance trained on Zimbabwe\'s legal frameworks.',
   strategy: 'Strategic planning and implementation services designed to accelerate growth while maintaining regulatory compliance.',
   training: 'Comprehensive training programs to upskill your team on regulatory requirements and best business practices.',
   documents: 'Professional document preparation, review, and filing services for all business registration and compliance needs.',
-  support: 'Round-the-clock support through our AI chatbot and expert consultants for urgent business and compliance queries.'
+  support: 'Round-the-clock support through our chatbot and expert consultants for urgent business and compliance queries.'
 };
 
 export const ServicesSection = memo(function ServicesSection() {

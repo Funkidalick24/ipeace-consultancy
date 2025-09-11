@@ -1,8 +1,8 @@
 {
   "nav": {
     "home": "Kumba",
-    "about": "Nezvedu",
     "services": "Masevhisi",
+    "about": "Nezvedu",
     "faq": "Mibvunzo Inowanzo Bvunzwa",
     "blog": "Blog",
     "contact": "Kubata",
@@ -10,7 +10,7 @@
   },
   "hero": {
     "title": "Nyanzvi dzeZimbabwe Bhizinesi Compliance & Kunyoresa",
-    "subtitle": "Famba nemitemo yeCompanies Act neAI-powered chaiyo. Kubva pakunyoresa kusvika pakuteerera kwakazara, tinomaka mutemo webhizinesi reZimbabwe riri nyore.",
+    "subtitle": "Famba nemitemo yeCompanies Act nechaiyo. Kubva pakunyoresa kusvika pakuteerera kwakazara, tinomaka mutemo webhizinesi reZimbabwe riri nyore.",
     "startJourney": "Tora Kuraira Kwemahara",
     "watchDemo": "Ona Masevhisi Edu",
     "stats": {
@@ -54,7 +54,7 @@
   },
   "services": {
     "title": "Masevhisi Edu",
-    "subtitle": "Mhinduro dzakakwana dzekubvunzurudza bhizinesi dzakagadzirisirwa nharaunda yemitemo yeZimbabwe uye dzinoshandiswa neAI yemazuva ano.",
+    "subtitle": "Mhinduro dzakakwana dzekubvunzurudza bhizinesi dzakagadzirisirwa nharaunda yemitemo yeZimbabwe.",
     "learnMore": "Dzidza Zvimwe",
     "cta": {
       "title": "Wakagadzirira Kushandura Bhizinesi Rako?",
@@ -93,7 +93,7 @@
       "services": {
         "select": "Sarudza sevhisi",
         "regulatory": "Kutevera Mitemo",
-        "ai": "Kubvunzurudza kwakaongororwa neAI",
+        "ai": "Kubvunzurudza kwakaongororwa",
         "strategy": "Zvirongwa zveBhizinesi",
         "training": "Kudzidzisa & Kukudziridza",
         "documents": "Masevhisi eZvinyorwa",
@@ -113,7 +113,7 @@
     }
   },
   "footer": {
-    "description": "Masevhisi ekubvunzurudza bhizinesi ehunyanzvi anoshandiswa nekusika kweAI, anoita hunyanzvi munharaunda yemitemo yeZimbabwe uye zvirongwa zvekukura kwebhizinesi.",
+    "description": "Masevhisi ekubvunzurudza bhizinesi ehunyanzvi anoita hunyanzvi munharaunda yemitemo yeZimbabwe uye zvirongwa zvekukura kwebhizinesi.",
     "quickLinks": "Mabatanidzwi Ekukurumidza",
     "services": "Masevhisi",
     "copyright": "© 2025 IPEACE Professional Consulting. Kodzero dzese dzakachengetedzwa.",
@@ -263,11 +263,11 @@
   }
 },
   "chatbot": {
-    "title": "IPEACE AI Mubatsiri",
+    "title": "IPEACE Mubatsiri",
     "subtitle": "Bvunza nezve mitemo yebhizinesi yeZimbabwe",
-    "welcome": "Mhoro! Ndini mubatsiri wako weAI akadzidziswa nezve Companies Act neSecurities regulations dzeZimbabwe. Ndingakubatsira sei nhasi?",
+    "welcome": "Mhoro! Ndini mubatsiri wako akadzidziswa nezve Companies Act neSecurities regulations dzeZimbabwe. Ndingakubatsira sei nhasi?",
     "placeholder": "Bvunza nezve mitemo yebhizinesi...",
-    "powered": "Inoshandiswa neAI • Yakadzidziswa pane mitemo yeZimbabwe",
+    "powered": "Yakadzidziswa pane mitemo yeZimbabwe",
     "suggestions": [
       "Ndinoregistera kambani muZimbabwe here?",
       "Zvinodiwa zvekutevera mitemo yekambani ndezvi?",
@@ -309,7 +309,7 @@
       "serviceTypes": {
         "select": "Sarudza sevhisi",
         "regulatory": "Kutevera Mitemo",
-        "ai": "Kubvunzurudza kwakaongororwa neAI",
+        "ai": "Kubvunzurudza kwakaongororwa",
         "strategy": "Zvirongwa zveBhizinesi",
         "training": "Kudzidzisa & Kukudziridza",
         "documents": "Masevhisi eZvinyorwa",

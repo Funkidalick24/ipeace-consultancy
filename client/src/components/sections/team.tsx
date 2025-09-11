@@ -1,37 +1,96 @@
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Linkedin } from 'lucide-react';
+import { Linkedin, User, Mail, Twitter, Facebook, Instagram, Globe } from 'lucide-react';
 
 // Bootstrap X icon component
 const BootstrapXIcon = () => (
   <i className="bi bi-twitter-x" style={{ fontSize: '1rem' }}></i>
 );
 
-const teamMembers = [
-  {
-    name: 'Wilberforce T. Mushore',
-    position: 'Co-Founder & Director – Compliance and Regulatory Strategy',
-    bio: 'Wilberforce leads iPeace\'s compliance advisory, helping solopreneurs and SMEs navigate legal frameworks with confidence. He specializes in regulatory alignment, ethical governance, and risk mitigation—ensuring that businesses are built on solid, sustainable foundations. His approach is grounded in clarity, integrity, and long-term resilience.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
-  },
-  {
-    name: 'Aleta Marime',
-    position: 'Director – Financial Systems and Sustainability',
-    bio: 'Aleta guides clients through financial planning, resource management, and investment readiness. She works with founders to build sustainable financial models, improve cash flow visibility, and prepare for growth. Her strength lies in simplifying financial complexity and helping businesses make informed, strategic decisions.',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
-  },
-  {
-    name: 'Clarence R. Makwasha',
-    position: 'Director – Operational Strategy and Brand Identity',
-    bio: 'Clarence empowers solopreneurs and SMEs to build systems that reflect their mission and scale with clarity. He designs branded materials, workflows, and communication tools that elevate professionalism and client experience. Known for his structured thinking and design expertise, Clarence helps founders move from vision to execution with confidence.',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400'
-  },
-];
+interface TeamMember {
+  id: string;
+  name: string;
+  position: string;
+  bio?: string;
+  imageUrl?: string;
+  email?: string;
+  linkedinUrl?: string;
+  twitterUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  websiteUrl?: string;
+  published: boolean;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export const TeamSection = memo(function TeamSection() {
   const { t } = useTranslation();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await fetch('/api/team');
+        if (response.ok) {
+          const data = await response.json();
+          // Sort by order field
+          const sortedMembers = (data.members || []).sort((a: TeamMember, b: TeamMember) => a.order - b.order);
+          setTeamMembers(sortedMembers);
+        } else {
+          console.error('Failed to fetch team members');
+        }
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="team" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {t('team.title')}
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              {t('team.subtitle')}
+            </p>
+          </div>
+          <div className="text-center">Loading team members...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (teamMembers.length === 0) {
+    return (
+      <section id="team" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {t('team.title')}
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              {t('team.subtitle')}
+            </p>
+          </div>
+          <div className="text-center text-gray-600">
+            No team members available at the moment.
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="team" className="py-20 bg-gray-50">
@@ -46,13 +105,19 @@ export const TeamSection = memo(function TeamSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teamMembers.map((member, index) => (
-            <Card key={index} className="bg-white overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
-              <img
-                src={member.image}
-                alt={`${member.name} - ${member.position}`}
-                className="w-full h-64 object-cover"
-              />
+          {teamMembers.map((member) => (
+            <Card key={member.id} className="bg-white overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+              {member.imageUrl ? (
+                <img
+                  src={member.imageUrl}
+                  alt={`${member.name} - ${member.position}`}
+                  className="w-full h-64 object-cover"
+                />
+              ) : (
+                <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+                  <User className="w-16 h-16 text-gray-500" />
+                </div>
+              )}
               <CardContent className="p-6">
                 <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
                   {member.name}
@@ -60,19 +125,78 @@ export const TeamSection = memo(function TeamSection() {
                 <p className="text-primary-blue font-medium mb-3">
                   {member.position}
                 </p>
-                <p className="text-gray-700 text-sm mb-4">
-                  {member.bio}
-                </p>
+                {member.bio && (
+                  <p className="text-gray-700 text-sm mb-4">
+                    {member.bio}
+                  </p>
+                )}
                 <div className="flex space-x-3">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
-                    onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </Button>
+                  {member.email && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                      onClick={() => window.open(`mailto:${member.email}`, '_blank')}
+                      aria-label="Email"
+                    >
+                      <Mail className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {member.linkedinUrl && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                      onClick={() => window.open(member.linkedinUrl, '_blank')}
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {member.twitterUrl && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                      onClick={() => window.open(member.twitterUrl, '_blank')}
+                      aria-label="Twitter"
+                    >
+                      <Twitter className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {member.facebookUrl && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                      onClick={() => window.open(member.facebookUrl, '_blank')}
+                      aria-label="Facebook"
+                    >
+                      <Facebook className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {member.instagramUrl && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                      onClick={() => window.open(member.instagramUrl, '_blank')}
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {member.websiteUrl && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
+                      onClick={() => window.open(member.websiteUrl, '_blank')}
+                      aria-label="Website"
+                    >
+                      <Globe className="h-4 w-4" />
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="icon"

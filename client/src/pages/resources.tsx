@@ -205,7 +205,7 @@ export default function Resources() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Need Personalized Business Guidance?</h2>
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Our AI-powered consultants can provide tailored advice for your specific business situation in Zimbabwe.
+            Our consultants can provide tailored advice for your specific business situation in Zimbabwe.
           </p>
           <Button
             className="btn-accent px-8 py-4 text-lg"

@@ -1,4 +1,4 @@
-import { User, ContactSubmission, ChatMessage, ConsultationBooking, BlogPost, File, IUser, IContactSubmission, IChatMessage, IConsultationBooking, IBlogPost, IFile } from "./models";
+import { User, ContactSubmission, ChatMessage, ConsultationBooking, BlogPost, StaticPage, Testimonial, TeamMember, FAQItem, File, IUser, IContactSubmission, IChatMessage, IConsultationBooking, IBlogPost, IStaticPage, ITestimonial, ITeamMember, IFAQItem, IFile } from "./models";
 import { type InsertUser, type InsertContact, type InsertConsultation, type InsertBlogPost } from "@shared/schema";
 
 export interface IStorage {
@@ -26,6 +26,36 @@ export interface IStorage {
   getPublishedBlogPosts(): Promise<IBlogPost[]>;
   updateBlogPost(id: string, blogPost: Partial<InsertBlogPost>): Promise<IBlogPost | null>;
   deleteBlogPost(id: string): Promise<boolean>;
+  // Content management methods
+  createStaticPage(page: Partial<IStaticPage>): Promise<IStaticPage>;
+  getStaticPage(id: string): Promise<IStaticPage | null>;
+  getStaticPageBySlug(slug: string): Promise<IStaticPage | null>;
+  getAllStaticPages(): Promise<IStaticPage[]>;
+  getPublishedStaticPages(): Promise<IStaticPage[]>;
+  updateStaticPage(id: string, page: Partial<IStaticPage>): Promise<IStaticPage | null>;
+  deleteStaticPage(id: string): Promise<boolean>;
+
+  createTestimonial(testimonial: Partial<ITestimonial>): Promise<ITestimonial>;
+  getTestimonial(id: string): Promise<ITestimonial | null>;
+  getAllTestimonials(): Promise<ITestimonial[]>;
+  getPublishedTestimonials(): Promise<ITestimonial[]>;
+  updateTestimonial(id: string, testimonial: Partial<ITestimonial>): Promise<ITestimonial | null>;
+  deleteTestimonial(id: string): Promise<boolean>;
+
+  createTeamMember(member: Partial<ITeamMember>): Promise<ITeamMember>;
+  getTeamMember(id: string): Promise<ITeamMember | null>;
+  getAllTeamMembers(): Promise<ITeamMember[]>;
+  getPublishedTeamMembers(): Promise<ITeamMember[]>;
+  updateTeamMember(id: string, member: Partial<ITeamMember>): Promise<ITeamMember | null>;
+  deleteTeamMember(id: string): Promise<boolean>;
+
+  createFAQItem(item: Partial<IFAQItem>): Promise<IFAQItem>;
+  getFAQItem(id: string): Promise<IFAQItem | null>;
+  getAllFAQItems(): Promise<IFAQItem[]>;
+  getPublishedFAQItems(): Promise<IFAQItem[]>;
+  updateFAQItem(id: string, item: Partial<IFAQItem>): Promise<IFAQItem | null>;
+  deleteFAQItem(id: string): Promise<boolean>;
+
   // File methods
   createFile(file: Partial<IFile>): Promise<IFile>;
   getFile(id: string): Promise<IFile | null>;
@@ -352,6 +382,266 @@ export class MongoStorage implements IStorage {
     } catch (error) {
       console.error('Error updating file training status:', error);
       return null;
+    }
+  }
+
+  // Content management methods
+  async createStaticPage(page: Partial<IStaticPage>): Promise<IStaticPage> {
+    try {
+      const staticPage = new StaticPage({
+        ...page,
+        excerpt: page.excerpt || undefined,
+        published: page.published || false,
+        publishedAt: page.published ? new Date() : undefined
+      });
+      return await staticPage.save();
+    } catch (error) {
+      console.error('Error creating static page:', error);
+      throw error;
+    }
+  }
+
+  async getStaticPage(id: string): Promise<IStaticPage | null> {
+    try {
+      return await StaticPage.findById(id);
+    } catch (error) {
+      console.error('Error getting static page:', error);
+      return null;
+    }
+  }
+
+  async getStaticPageBySlug(slug: string): Promise<IStaticPage | null> {
+    try {
+      return await StaticPage.findOne({ slug });
+    } catch (error) {
+      console.error('Error getting static page by slug:', error);
+      return null;
+    }
+  }
+
+  async getAllStaticPages(): Promise<IStaticPage[]> {
+    try {
+      return await StaticPage.find().sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all static pages:', error);
+      return [];
+    }
+  }
+
+  async getPublishedStaticPages(): Promise<IStaticPage[]> {
+    try {
+      return await StaticPage.find({ published: true }).sort({ publishedAt: -1 });
+    } catch (error) {
+      console.error('Error getting published static pages:', error);
+      return [];
+    }
+  }
+
+  async updateStaticPage(id: string, updates: Partial<IStaticPage>): Promise<IStaticPage | null> {
+    try {
+      const updateData: any = {
+        ...updates,
+        updatedAt: new Date()
+      };
+
+      if (updates.published !== undefined) {
+        updateData.publishedAt = updates.published ? new Date() : null;
+      }
+
+      return await StaticPage.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+      console.error('Error updating static page:', error);
+      return null;
+    }
+  }
+
+  async deleteStaticPage(id: string): Promise<boolean> {
+    try {
+      const result = await StaticPage.findByIdAndDelete(id);
+      return !!result;
+    } catch (error) {
+      console.error('Error deleting static page:', error);
+      return false;
+    }
+  }
+
+  async createTestimonial(testimonial: Partial<ITestimonial>): Promise<ITestimonial> {
+    try {
+      const newTestimonial = new Testimonial({
+        ...testimonial,
+        rating: testimonial.rating || undefined,
+        published: testimonial.published || false
+      });
+      return await newTestimonial.save();
+    } catch (error) {
+      console.error('Error creating testimonial:', error);
+      throw error;
+    }
+  }
+
+  async getTestimonial(id: string): Promise<ITestimonial | null> {
+    try {
+      return await Testimonial.findById(id);
+    } catch (error) {
+      console.error('Error getting testimonial:', error);
+      return null;
+    }
+  }
+
+  async getAllTestimonials(): Promise<ITestimonial[]> {
+    try {
+      return await Testimonial.find().sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all testimonials:', error);
+      return [];
+    }
+  }
+
+  async getPublishedTestimonials(): Promise<ITestimonial[]> {
+    try {
+      return await Testimonial.find({ published: true }).sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting published testimonials:', error);
+      return [];
+    }
+  }
+
+  async updateTestimonial(id: string, updates: Partial<ITestimonial>): Promise<ITestimonial | null> {
+    try {
+      return await Testimonial.findByIdAndUpdate(id, { ...updates, updatedAt: new Date() }, { new: true });
+    } catch (error) {
+      console.error('Error updating testimonial:', error);
+      return null;
+    }
+  }
+
+  async deleteTestimonial(id: string): Promise<boolean> {
+    try {
+      const result = await Testimonial.findByIdAndDelete(id);
+      return !!result;
+    } catch (error) {
+      console.error('Error deleting testimonial:', error);
+      return false;
+    }
+  }
+
+  async createTeamMember(member: Partial<ITeamMember>): Promise<ITeamMember> {
+    try {
+      const newMember = new TeamMember({
+        ...member,
+        order: member.order || 0,
+        published: member.published || false
+      });
+      return await newMember.save();
+    } catch (error) {
+      console.error('Error creating team member:', error);
+      throw error;
+    }
+  }
+
+  async getTeamMember(id: string): Promise<ITeamMember | null> {
+    try {
+      return await TeamMember.findById(id);
+    } catch (error) {
+      console.error('Error getting team member:', error);
+      return null;
+    }
+  }
+
+  async getAllTeamMembers(): Promise<ITeamMember[]> {
+    try {
+      return await TeamMember.find().sort({ order: 1, createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all team members:', error);
+      return [];
+    }
+  }
+
+  async getPublishedTeamMembers(): Promise<ITeamMember[]> {
+    try {
+      return await TeamMember.find({ published: true }).sort({ order: 1, createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting published team members:', error);
+      return [];
+    }
+  }
+
+  async updateTeamMember(id: string, updates: Partial<ITeamMember>): Promise<ITeamMember | null> {
+    try {
+      return await TeamMember.findByIdAndUpdate(id, { ...updates, updatedAt: new Date() }, { new: true });
+    } catch (error) {
+      console.error('Error updating team member:', error);
+      return null;
+    }
+  }
+
+  async deleteTeamMember(id: string): Promise<boolean> {
+    try {
+      const result = await TeamMember.findByIdAndDelete(id);
+      return !!result;
+    } catch (error) {
+      console.error('Error deleting team member:', error);
+      return false;
+    }
+  }
+
+  async createFAQItem(item: Partial<IFAQItem>): Promise<IFAQItem> {
+    try {
+      const newItem = new FAQItem({
+        ...item,
+        order: item.order || 0,
+        published: item.published || false
+      });
+      return await newItem.save();
+    } catch (error) {
+      console.error('Error creating FAQ item:', error);
+      throw error;
+    }
+  }
+
+  async getFAQItem(id: string): Promise<IFAQItem | null> {
+    try {
+      return await FAQItem.findById(id);
+    } catch (error) {
+      console.error('Error getting FAQ item:', error);
+      return null;
+    }
+  }
+
+  async getAllFAQItems(): Promise<IFAQItem[]> {
+    try {
+      return await FAQItem.find().sort({ order: 1, createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all FAQ items:', error);
+      return [];
+    }
+  }
+
+  async getPublishedFAQItems(): Promise<IFAQItem[]> {
+    try {
+      return await FAQItem.find({ published: true }).sort({ order: 1, createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting published FAQ items:', error);
+      return [];
+    }
+  }
+
+  async updateFAQItem(id: string, updates: Partial<IFAQItem>): Promise<IFAQItem | null> {
+    try {
+      return await FAQItem.findByIdAndUpdate(id, { ...updates, updatedAt: new Date() }, { new: true });
+    } catch (error) {
+      console.error('Error updating FAQ item:', error);
+      return null;
+    }
+  }
+
+  async deleteFAQItem(id: string): Promise<boolean> {
+    try {
+      const result = await FAQItem.findByIdAndDelete(id);
+      return !!result;
+    } catch (error) {
+      console.error('Error deleting FAQ item:', error);
+      return false;
     }
   }
 }

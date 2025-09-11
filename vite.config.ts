@@ -14,6 +14,7 @@ export default defineConfig({
     runtimeErrorModal(),
   ],
   root: "client",
+  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client/src"),

@@ -319,8 +319,23 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.email')}
                       </h4>
-                      <p className="text-gray-700">info@ipeace.co.zw</p>
-                      <p className="text-gray-700">support@ipeace.co.zw</p>
+                      <div className="space-y-1">
+                        <p className="text-gray-700">
+                          <strong>General Inquiries:</strong> info@ipeace-consultancy.com
+                        </p>
+                        <p className="text-gray-700">
+                          <strong>Support:</strong> support@ipeace-consultancy.com
+                        </p>
+                        <p className="text-gray-700">
+                          <strong>HR & Recruitment:</strong> hr@ipeace-consultancy.com
+                        </p>
+                        <p className="text-gray-700">
+                          <strong>Compliance Services:</strong> wilberforce@ipeace-consultancy.com
+                        </p>
+                        <p className="text-gray-700">
+                          <strong>Operations & Finance:</strong> clarence@ipeace-consultancy.com
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -336,7 +351,7 @@ export const ContactSection = memo(function ContactSection() {
                       <p className="text-gray-700">Saturday: 9:00 AM - 1:00 PM</p>
                       <p className="text-gray-700">Sunday: Closed</p>
                       <p className="text-sm text-primary-blue font-medium mt-1">
-                        AI Chat: 24/7 Available
+                        Chat: 24/7 Available
                       </p>
                     </div>
                   </div>

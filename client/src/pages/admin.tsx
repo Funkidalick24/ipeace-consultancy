@@ -1,3 +1,5 @@
+console.log('[DEBUG] Admin module loading...');
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RegisterForm } from '@/components/auth/register-form';
@@ -13,6 +15,9 @@ import UserList from '@/components/admin/UserList';
 import ConsultationList from '@/components/admin/ConsultationList';
 import ContactList from '@/components/admin/ContactList';
 import MediaLibrary from '@/components/admin/MediaLibrary';
+import ContentManager from '@/components/admin/ContentManager';
+
+console.log('[DEBUG] Admin module imports completed');
 
 interface User {
   id: number;
@@ -49,6 +54,8 @@ interface RecentActivity {
 }
 
 export default function Admin() {
+  console.log('[DEBUG] Admin component rendering');
+
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -571,20 +578,7 @@ export default function Admin() {
 
           {/* Content Tab */}
           <TabsContent value="content">
-            <Card>
-              <CardHeader>
-                <CardTitle>Content Management</CardTitle>
-                <CardDescription>Manage website content, pages, and media</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Content Editor</h3>
-                  <p className="text-muted-foreground mb-4">Coming soon - Static page editor, testimonials, team profiles, and FAQ management</p>
-                  <Button disabled>Feature in Development</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <ContentManager />
           </TabsContent>
 
           {/* Analytics Tab */}

@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSchema, chatRequestSchema, consultationBookingSchema, insertUserSchema, insertBlogPostSchema, blogPostSchema } from "@shared/schema";
 import { getChatbotResponse } from "./services/openai";
-import { sendContactNotification, sendAutoReply } from "./services/email";
+import { sendContactNotification, sendAutoReply, sendContactConfirmation, sendConsultationConfirmationEmail } from "./services/email";
 import { sendConsultationBookingNotification, sendConsultationConfirmation, getServiceTypeName, getConsultationTypeName } from "./services/consultation";
 import { authService } from "./services/auth";
 import { nanoid } from "nanoid";
@@ -480,6 +480,660 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Content Management Routes - Static Pages
+  app.get("/api/admin/content/pages", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const pages = await storage.getAllStaticPages();
+      const pagesWithIds = pages.map(page => ({
+        id: page._id.toString(),
+        title: page.title,
+        slug: page.slug,
+        content: page.content,
+        excerpt: page.excerpt,
+        published: page.published,
+        publishedAt: page.publishedAt,
+        createdAt: page.createdAt,
+        updatedAt: page.updatedAt,
+        authorId: page.authorId
+      }));
+
+      res.json({ pages: pagesWithIds });
+    } catch (error) {
+      console.error("Get admin pages error:", error);
+      res.status(500).json({ error: "Failed to get pages" });
+    }
+  });
+
+  app.post("/api/admin/content/pages", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { title, slug, content, excerpt, published } = req.body;
+
+      if (!title || !slug || !content) {
+        return res.status(400).json({
+          success: false,
+          message: "Title, slug, and content are required"
+        });
+      }
+
+      const page = await storage.createStaticPage({
+        title,
+        slug,
+        content,
+        excerpt: excerpt || null,
+        published: published || false,
+        authorId: req.user._id
+      });
+
+      res.json({
+        success: true,
+        message: 'Page created successfully',
+        page: {
+          id: page._id.toString(),
+          title: page.title,
+          slug: page.slug,
+          content: page.content,
+          excerpt: page.excerpt,
+          published: page.published,
+          publishedAt: page.publishedAt,
+          createdAt: page.createdAt,
+          updatedAt: page.updatedAt,
+          authorId: page.authorId
+        }
+      });
+    } catch (error) {
+      console.error("Create page error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to create page"
+      });
+    }
+  });
+
+  app.put("/api/admin/content/pages/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const { title, slug, content, excerpt, published } = req.body;
+
+      const updates: any = {};
+      if (title !== undefined) updates.title = title;
+      if (slug !== undefined) updates.slug = slug;
+      if (content !== undefined) updates.content = content;
+      if (excerpt !== undefined) updates.excerpt = excerpt;
+      if (published !== undefined) updates.published = published;
+
+      const page = await storage.updateStaticPage(id, updates);
+      if (!page) {
+        return res.status(404).json({ error: "Page not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Page updated successfully',
+        page: {
+          id: page._id.toString(),
+          title: page.title,
+          slug: page.slug,
+          content: page.content,
+          excerpt: page.excerpt,
+          published: page.published,
+          publishedAt: page.publishedAt,
+          createdAt: page.createdAt,
+          updatedAt: page.updatedAt,
+          authorId: page.authorId
+        }
+      });
+    } catch (error) {
+      console.error("Update page error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to update page"
+      });
+    }
+  });
+
+  app.delete("/api/admin/content/pages/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const deleted = await storage.deleteStaticPage(id);
+
+      if (!deleted) {
+        return res.status(404).json({ error: "Page not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Page deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete page error:", error);
+      res.status(500).json({ error: "Failed to delete page" });
+    }
+  });
+
+  // Content Management Routes - Testimonials
+  app.get("/api/admin/testimonials", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const testimonials = await storage.getAllTestimonials();
+      const testimonialsWithIds = testimonials.map(testimonial => ({
+        id: testimonial._id.toString(),
+        name: testimonial.name,
+        position: testimonial.position,
+        company: testimonial.company,
+        content: testimonial.content,
+        rating: testimonial.rating,
+        imageUrl: testimonial.imageUrl,
+        published: testimonial.published,
+        createdAt: testimonial.createdAt,
+        updatedAt: testimonial.updatedAt
+      }));
+
+      res.json({ testimonials: testimonialsWithIds });
+    } catch (error) {
+      console.error("Get testimonials error:", error);
+      res.status(500).json({ error: "Failed to get testimonials" });
+    }
+  });
+
+  app.post("/api/admin/testimonials", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { name, position, company, content, rating, imageUrl, published } = req.body;
+
+      if (!name || !content) {
+        return res.status(400).json({
+          success: false,
+          message: "Name and content are required"
+        });
+      }
+
+      const testimonial = await storage.createTestimonial({
+        name,
+        position: position || null,
+        company: company || null,
+        content,
+        rating: rating || null,
+        imageUrl: imageUrl || null,
+        published: published || false
+      });
+
+      res.json({
+        success: true,
+        message: 'Testimonial created successfully',
+        testimonial: {
+          id: testimonial._id.toString(),
+          name: testimonial.name,
+          position: testimonial.position,
+          company: testimonial.company,
+          content: testimonial.content,
+          rating: testimonial.rating,
+          imageUrl: testimonial.imageUrl,
+          published: testimonial.published,
+          createdAt: testimonial.createdAt,
+          updatedAt: testimonial.updatedAt
+        }
+      });
+    } catch (error) {
+      console.error("Create testimonial error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to create testimonial"
+      });
+    }
+  });
+
+  app.put("/api/admin/testimonials/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const updates = req.body;
+
+      const testimonial = await storage.updateTestimonial(id, updates);
+      if (!testimonial) {
+        return res.status(404).json({ error: "Testimonial not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Testimonial updated successfully',
+        testimonial: {
+          id: testimonial._id.toString(),
+          name: testimonial.name,
+          position: testimonial.position,
+          company: testimonial.company,
+          content: testimonial.content,
+          rating: testimonial.rating,
+          imageUrl: testimonial.imageUrl,
+          published: testimonial.published,
+          createdAt: testimonial.createdAt,
+          updatedAt: testimonial.updatedAt
+        }
+      });
+    } catch (error) {
+      console.error("Update testimonial error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to update testimonial"
+      });
+    }
+  });
+
+  app.delete("/api/admin/testimonials/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const deleted = await storage.deleteTestimonial(id);
+
+      if (!deleted) {
+        return res.status(404).json({ error: "Testimonial not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Testimonial deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete testimonial error:", error);
+      res.status(500).json({ error: "Failed to delete testimonial" });
+    }
+  });
+
+  // Content Management Routes - Team Members
+  app.get("/api/admin/team", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const members = await storage.getAllTeamMembers();
+      const membersWithIds = members.map(member => ({
+        id: member._id.toString(),
+        name: member.name,
+        position: member.position,
+        bio: member.bio,
+        imageUrl: member.imageUrl,
+        email: member.email,
+        linkedinUrl: member.linkedinUrl,
+        twitterUrl: member.twitterUrl,
+        facebookUrl: member.facebookUrl,
+        instagramUrl: member.instagramUrl,
+        websiteUrl: member.websiteUrl,
+        published: member.published,
+        order: member.order,
+        createdAt: member.createdAt,
+        updatedAt: member.updatedAt
+      }));
+
+      res.json({ members: membersWithIds });
+    } catch (error) {
+      console.error("Get team members error:", error);
+      res.status(500).json({ error: "Failed to get team members" });
+    }
+  });
+
+  app.post("/api/admin/team", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { name, position, bio, imageUrl, email, linkedinUrl, twitterUrl, facebookUrl, instagramUrl, websiteUrl, published, order } = req.body;
+
+      if (!name || !position) {
+        return res.status(400).json({
+          success: false,
+          message: "Name and position are required"
+        });
+      }
+
+      const member = await storage.createTeamMember({
+        name,
+        position,
+        bio: bio || null,
+        imageUrl: imageUrl || null,
+        email: email || null,
+        linkedinUrl: linkedinUrl || null,
+        twitterUrl: twitterUrl || null,
+        facebookUrl: facebookUrl || null,
+        instagramUrl: instagramUrl || null,
+        websiteUrl: websiteUrl || null,
+        published: published || false,
+        order: order || 0
+      });
+
+      res.json({
+        success: true,
+        message: 'Team member created successfully',
+        member: {
+          id: member._id.toString(),
+          name: member.name,
+          position: member.position,
+          bio: member.bio,
+          imageUrl: member.imageUrl,
+          email: member.email,
+          linkedinUrl: member.linkedinUrl,
+          twitterUrl: member.twitterUrl,
+          facebookUrl: member.facebookUrl,
+          instagramUrl: member.instagramUrl,
+          websiteUrl: member.websiteUrl,
+          published: member.published,
+          order: member.order,
+          createdAt: member.createdAt,
+          updatedAt: member.updatedAt
+        }
+      });
+    } catch (error) {
+      console.error("Create team member error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to create team member"
+      });
+    }
+  });
+
+  app.put("/api/admin/team/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const updates = req.body;
+
+      const member = await storage.updateTeamMember(id, updates);
+      if (!member) {
+        return res.status(404).json({ error: "Team member not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Team member updated successfully',
+        member: {
+          id: member._id.toString(),
+          name: member.name,
+          position: member.position,
+          bio: member.bio,
+          imageUrl: member.imageUrl,
+          email: member.email,
+          linkedinUrl: member.linkedinUrl,
+          twitterUrl: member.twitterUrl,
+          facebookUrl: member.facebookUrl,
+          instagramUrl: member.instagramUrl,
+          websiteUrl: member.websiteUrl,
+          published: member.published,
+          order: member.order,
+          createdAt: member.createdAt,
+          updatedAt: member.updatedAt
+        }
+      });
+    } catch (error) {
+      console.error("Update team member error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to update team member"
+      });
+    }
+  });
+
+  app.delete("/api/admin/team/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const deleted = await storage.deleteTeamMember(id);
+
+      if (!deleted) {
+        return res.status(404).json({ error: "Team member not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Team member deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete team member error:", error);
+      res.status(500).json({ error: "Failed to delete team member" });
+    }
+  });
+
+  // Content Management Routes - FAQ Items
+  app.get("/api/admin/faq", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const items = await storage.getAllFAQItems();
+      const itemsWithIds = items.map(item => ({
+        id: item._id.toString(),
+        question: item.question,
+        answer: item.answer,
+        category: item.category,
+        published: item.published,
+        order: item.order,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt
+      }));
+
+      res.json({ faq: itemsWithIds });
+    } catch (error) {
+      console.error("Get FAQ items error:", error);
+      res.status(500).json({ error: "Failed to get FAQ items" });
+    }
+  });
+
+  app.post("/api/admin/faq", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { question, answer, category, published, order } = req.body;
+
+      if (!question || !answer) {
+        return res.status(400).json({
+          success: false,
+          message: "Question and answer are required"
+        });
+      }
+
+      const item = await storage.createFAQItem({
+        question,
+        answer,
+        category: category || null,
+        published: published || false,
+        order: order || 0
+      });
+
+      res.json({
+        success: true,
+        message: 'FAQ item created successfully',
+        item: {
+          id: item._id.toString(),
+          question: item.question,
+          answer: item.answer,
+          category: item.category,
+          published: item.published,
+          order: item.order,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt
+        }
+      });
+    } catch (error) {
+      console.error("Create FAQ item error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to create FAQ item"
+      });
+    }
+  });
+
+  app.put("/api/admin/faq/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const updates = req.body;
+
+      const item = await storage.updateFAQItem(id, updates);
+      if (!item) {
+        return res.status(404).json({ error: "FAQ item not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'FAQ item updated successfully',
+        item: {
+          id: item._id.toString(),
+          question: item.question,
+          answer: item.answer,
+          category: item.category,
+          published: item.published,
+          order: item.order,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt
+        }
+      });
+    } catch (error) {
+      console.error("Update FAQ item error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to update FAQ item"
+      });
+    }
+  });
+
+  app.delete("/api/admin/faq/:id", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const deleted = await storage.deleteFAQItem(id);
+
+      if (!deleted) {
+        return res.status(404).json({ error: "FAQ item not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'FAQ item deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete FAQ item error:", error);
+      res.status(500).json({ error: "Failed to delete FAQ item" });
+    }
+  });
+
+  // Public API Routes for Frontend Components
+  // Get published testimonials (public)
+  app.get("/api/testimonials", async (req, res) => {
+    try {
+      const testimonials = await storage.getPublishedTestimonials();
+      const testimonialsWithIds = testimonials.map(testimonial => ({
+        id: testimonial._id.toString(),
+        name: testimonial.name,
+        position: testimonial.position,
+        company: testimonial.company,
+        content: testimonial.content,
+        rating: testimonial.rating,
+        imageUrl: testimonial.imageUrl,
+        published: testimonial.published,
+        createdAt: testimonial.createdAt,
+        updatedAt: testimonial.updatedAt
+      }));
+
+      res.json({ testimonials: testimonialsWithIds });
+    } catch (error) {
+      console.error("Get public testimonials error:", error);
+      res.status(500).json({ error: "Failed to get testimonials" });
+    }
+  });
+
+  // Get published team members (public)
+  app.get("/api/team", async (req, res) => {
+    try {
+      const members = await storage.getPublishedTeamMembers();
+      const membersWithIds = members.map(member => ({
+        id: member._id.toString(),
+        name: member.name,
+        position: member.position,
+        bio: member.bio,
+        imageUrl: member.imageUrl,
+        email: member.email,
+        linkedinUrl: member.linkedinUrl,
+        twitterUrl: member.twitterUrl,
+        facebookUrl: member.facebookUrl,
+        instagramUrl: member.instagramUrl,
+        websiteUrl: member.websiteUrl,
+        published: member.published,
+        order: member.order,
+        createdAt: member.createdAt,
+        updatedAt: member.updatedAt
+      }));
+
+      res.json({ members: membersWithIds });
+    } catch (error) {
+      console.error("Get public team members error:", error);
+      res.status(500).json({ error: "Failed to get team members" });
+    }
+  });
+
+  // Get published FAQ items (public)
+  app.get("/api/faq", async (req, res) => {
+    try {
+      const items = await storage.getPublishedFAQItems();
+      const itemsWithIds = items.map(item => ({
+        id: item._id.toString(),
+        question: item.question,
+        answer: item.answer,
+        category: item.category,
+        published: item.published,
+        order: item.order,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt
+      }));
+
+      res.json({ faq: itemsWithIds });
+    } catch (error) {
+      console.error("Get public FAQ items error:", error);
+      res.status(500).json({ error: "Failed to get FAQ items" });
+    }
+  });
+
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
@@ -682,6 +1336,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`[DEBUG] Successfully updated contact ${id} status to: ${contact.status}`);
 
+      // Send confirmation email if status is changed to "responded"
+      if (status === "responded") {
+        try {
+          await sendContactConfirmation({
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            email: contact.email,
+            company: contact.company,
+            service: contact.service,
+            message: contact.message,
+            newsletter: contact.newsletter,
+          });
+          console.log(`✅ Confirmation email sent to ${contact.email}`);
+        } catch (emailError) {
+          console.error(`❌ Failed to send confirmation email to ${contact.email}:`, emailError);
+          // Don't fail the status update if email fails
+        }
+      }
+
       res.json({
         success: true,
         message: `Contact submission status updated to ${status}`,
@@ -813,6 +1486,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const plainBooking = JSON.parse(JSON.stringify(booking));
 
       console.log(`[DEBUG] Successfully updated consultation ${id} status to: ${plainBooking.status}`);
+
+      // Send confirmation email if status is changed to "confirmed"
+      if (status === "confirmed") {
+        try {
+          await sendConsultationConfirmationEmail(plainBooking);
+          console.log(`✅ Confirmation email sent to ${plainBooking.email}`);
+        } catch (emailError) {
+          console.error(`❌ Failed to send confirmation email to ${plainBooking.email}:`, emailError);
+          // Don't fail the status update if email fails
+        }
+      }
 
       res.json({
         success: true,

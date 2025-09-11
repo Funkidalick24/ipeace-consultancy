@@ -19,28 +19,30 @@ export const emailConfig: EmailConfig = {
     user: process.env.SMTP_USER || '',
     pass: process.env.SMTP_PASS || '',
   },
-  from: process.env.FROM_EMAIL || 'IPEACE Legal Services <noreply@ipeace.co.zw>',
-  companyEmail: process.env.COMPANY_EMAIL || 'info@ipeace.co.zw',
+  from: process.env.FROM_EMAIL || 'IPEACE Consultancy <noreply@ipeace-consultancy.com>',
+  companyEmail: process.env.COMPANY_EMAIL || 'info@ipeace-consultancy.com',
 };
 
 // Email templates configuration
 export const emailTemplates = {
   contact: {
-    customerSubject: 'Thank you for contacting IPEACE Legal Services',
-    companySubject: 'New Contact Form Submission - IPEACE Legal Services',
+    customerSubject: 'Thank you for contacting IPEACE Consultancy',
+    companySubject: 'New Contact Form Submission - IPEACE Consultancy',
+    confirmationSubject: 'Contact Confirmed - IPEACE Consultancy',
   },
   consultation: {
-    customerSubject: 'Consultation Booking Confirmation - IPEACE Legal Services',
-    companySubject: 'New Consultation Booking - IPEACE Legal Services',
+    customerSubject: 'Consultation Booking Confirmation - IPEACE Consultancy',
+    companySubject: 'New Consultation Booking - IPEACE Consultancy',
+    confirmationSubject: 'Consultation Confirmed - IPEACE Consultancy',
   },
 };
 
 // Company information for emails
 export const companyInfo = {
-  name: 'IPEACE Legal Services',
+  name: 'IPEACE Consultancy',
   address: '135 Baines Avenue, Avenues, Harare, Zimbabwe',
   phone: '+263 4 123 4567',
-  email: 'info@ipeace.co.zw',
-  website: 'https://ipeace.co.zw',
-  logo: 'https://ipeace.co.zw/logo.png',
+  email: 'info@ipeace-consultancy.com',
+  website: 'https://ipeace-consultancy.com',
+  logo: 'https://ipeace-consultancy.com/logo.png',
 };

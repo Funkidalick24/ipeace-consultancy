@@ -1,8 +1,8 @@
 {
   "nav": {
     "home": "Home",
-    "about": "About Us",
     "services": "Services",
+    "about": "About Us",
     "faq": "FAQ",
     "blog": "Blog",
     "contact": "Contact",
@@ -10,7 +10,7 @@
   },
   "hero": {
     "title": "Expert Zimbabwe Business Compliance & Registration",
-    "subtitle": "Navigate Companies Act requirements with AI-powered precision. From registration to full compliance, we make Zimbabwe business law simple.",
+    "subtitle": "Navigate Companies Act requirements with expert precision. From registration to full compliance, we make Zimbabwe business law simple.",
     "startJourney": "Get Free Consultation",
     "watchDemo": "View Our Services",
     "stats": {
@@ -58,7 +58,7 @@
     "learnMore": "Learn More",
     "cta": {
       "title": "Need Help with Zimbabwe Business Compliance?",
-      "subtitle": "Get your free consultation today. Our AI-powered experts can answer: How to register a company in Zimbabwe? What are the compliance requirements? How to get a business license?",
+      "subtitle": "Get your free consultation today. Our experts can answer: How to register a company in Zimbabwe? What are the compliance requirements? How to get a business license?",
       "button": "Get Free Compliance Check"
     }
   },
@@ -72,7 +72,7 @@
   },
   "contact": {
     "title": "Contact IPEACE: Zimbabwe Business Compliance Experts",
-    "subtitle": "Have questions about company registration in Zimbabwe? Need help with compliance requirements? Our AI-powered consultants are here to help. Get expert answers to: How to register a business in Zimbabwe? What licenses do I need? How to stay compliant with Companies Act?",
+    "subtitle": "Have questions about company registration in Zimbabwe? Need help with compliance requirements? Our consultants are here to help. Get expert answers to: How to register a business in Zimbabwe? What licenses do I need? How to stay compliant with Companies Act?",
     "form": {
       "title": "Send Us a Message",
       "firstName": "First Name",
@@ -93,7 +93,7 @@
       "services": {
         "select": "Select a service",
         "regulatory": "Regulatory Compliance",
-        "ai": "AI-Powered Advisory",
+        "ai": "Expert Advisory",
         "strategy": "Business Strategy",
         "training": "Training & Development",
         "documents": "Document Services",
@@ -113,7 +113,7 @@
     }
   },
   "footer": {
-    "description": "Professional business consulting services powered by AI innovation, specializing in Zimbabwe's regulatory landscape and business growth strategies.",
+    "description": "Professional business consulting services specializing in Zimbabwe's regulatory landscape and business growth strategies.",
     "quickLinks": "Quick Links",
     "services": "Services",
     "copyright": "© 2025 IPEACE Professional Consulting. All rights reserved.",
@@ -263,11 +263,11 @@
     }
   },
   "chatbot": {
-    "title": "IPEACE AI Assistant",
+    "title": "IPEACE Assistant",
     "subtitle": "Ask about Zimbabwe business law",
-    "welcome": "Hello! I'm your AI assistant trained on Zimbabwe's Companies Act and Securities regulations. How can I help you today?",
+    "welcome": "Hello! I'm your assistant trained on Zimbabwe's Companies Act and Securities regulations. How can I help you today?",
     "placeholder": "Ask about business regulations...",
-    "powered": "Powered by AI • Trained on Zimbabwe legal frameworks",
+    "powered": "Trained on Zimbabwe legal frameworks",
     "suggestions": [
       "How do I register a company in Zimbabwe?",
       "What are the requirements for company compliance?",
@@ -309,7 +309,7 @@
       "serviceTypes": {
         "select": "Select a service",
         "regulatory": "Regulatory Compliance",
-        "ai": "AI-Powered Advisory",
+        "ai": "Expert Advisory",
         "strategy": "Business Strategy",
         "training": "Training & Development",
         "documents": "Document Services",
@@ -351,11 +351,11 @@
     "questions": [
       {
         "question": "How do I register a company in Zimbabwe?",
-        "answer": "To register a company in Zimbabwe, you need to: 1) Choose a unique company name, 2) Prepare Memorandum and Articles of Association, 3) File with the Companies Office, 4) Obtain a tax clearance certificate, and 5) Register for VAT if applicable. Our AI system can guide you through each step."
+        "answer": "To register a company in Zimbabwe, you need to: 1) Choose a unique company name, 2) Prepare Memorandum and Articles of Association, 3) File with the Companies Office, 4) Obtain a tax clearance certificate, and 5) Register for VAT if applicable. Our system can guide you through each step."
       },
       {
         "question": "What are the requirements for company compliance in Zimbabwe?",
-        "answer": "Zimbabwe companies must comply with: Companies Act Chapter 24:03, annual returns filing, director's reports, audited financial statements, tax compliance, and industry-specific regulations. We provide comprehensive compliance checklists and AI-powered monitoring."
+        "answer": "Zimbabwe companies must comply with: Companies Act Chapter 24:03, annual returns filing, director's reports, audited financial statements, tax compliance, and industry-specific regulations. We provide comprehensive compliance checklists and monitoring."
       },
       {
         "question": "How much does it cost to register a company in Zimbabwe?",
@@ -366,8 +366,8 @@
         "answer": "Required licenses depend on your business type: Trading License from local council, Tax Clearance Certificate, VAT registration (if turnover >$60,000), Specific industry licenses (mining, tourism, etc.). We help identify and obtain all necessary licenses."
       },
       {
-        "question": "How can AI help with Zimbabwe business compliance?",
-        "answer": "Our AI systems provide: 24/7 compliance monitoring, automated document analysis, regulatory updates, risk assessment, instant legal queries, and predictive compliance insights trained on Zimbabwe's legal framework."
+        "question": "How can we help with Zimbabwe business compliance?",
+        "answer": "We provide: 24/7 compliance monitoring, automated document analysis, regulatory updates, risk assessment, instant legal queries, and predictive compliance insights trained on Zimbabwe's legal framework."
       },
       {
         "question": "What are the penalties for non-compliance in Zimbabwe?",
