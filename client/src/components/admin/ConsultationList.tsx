@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Calendar, Clock, User, Mail, Phone, Building, FileText, CheckCircle, XCircle, AlertCircle, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from '@/hooks/use-toast';
+import { InlineLoader, ListSkeleton, ButtonLoader } from '@/components/ui/loading';
 
 interface Consultation {
   id: string;
@@ -31,6 +32,7 @@ interface Consultation {
 export default function ConsultationList() {
   const [consultations, setConsultations] = useState<Consultation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [serviceFilter, setServiceFilter] = useState<string>('all');
@@ -113,6 +115,8 @@ export default function ConsultationList() {
       return;
     }
 
+    setUpdatingStatus(consultationId);
+
     try {
       const token = localStorage.getItem('authToken');
       const response = await fetch(`/api/consultations/${consultationId}/status`, {
@@ -155,6 +159,8 @@ export default function ConsultationList() {
         description: 'Failed to update consultation status',
         variant: 'destructive'
       });
+    } finally {
+      setUpdatingStatus(null);
     }
   };
 
@@ -214,11 +220,14 @@ export default function ConsultationList() {
   if (loading) {
     return (
       <Card>
-        <CardContent className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading consultations...</p>
-          </div>
+        <CardHeader>
+          <CardTitle>Consultations</CardTitle>
+          <CardDescription>
+            Manage consultation bookings and client communications
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ListSkeleton count={8} />
         </CardContent>
       </Card>
     );
@@ -360,16 +369,26 @@ export default function ConsultationList() {
                           {consultation?.status === 'pending' && (
                             <DropdownMenuItem
                               onClick={() => handleStatusChange(consultation.id, 'confirmed')}
+                              disabled={updatingStatus === consultation.id}
                             >
-                              <CheckCircle className="w-4 h-4 mr-2" />
+                              {updatingStatus === consultation.id ? (
+                                <InlineLoader className="w-4 h-4 mr-2" />
+                              ) : (
+                                <CheckCircle className="w-4 h-4 mr-2" />
+                              )}
                               Confirm
                             </DropdownMenuItem>
                           )}
                           {consultation?.status === 'confirmed' && (
                             <DropdownMenuItem
                               onClick={() => handleStatusChange(consultation.id, 'completed')}
+                              disabled={updatingStatus === consultation.id}
                             >
-                              <CheckCircle className="w-4 h-4 mr-2" />
+                              {updatingStatus === consultation.id ? (
+                                <InlineLoader className="w-4 h-4 mr-2" />
+                              ) : (
+                                <CheckCircle className="w-4 h-4 mr-2" />
+                              )}
                               Mark Complete
                             </DropdownMenuItem>
                           )}
@@ -377,8 +396,13 @@ export default function ConsultationList() {
                             <DropdownMenuItem
                               onClick={() => handleStatusChange(consultation.id, 'cancelled')}
                               className="text-red-600"
+                              disabled={updatingStatus === consultation.id}
                             >
-                              <XCircle className="w-4 h-4 mr-2" />
+                              {updatingStatus === consultation.id ? (
+                                <InlineLoader className="w-4 h-4 mr-2" />
+                              ) : (
+                                <XCircle className="w-4 h-4 mr-2" />
+                              )}
                               Cancel
                             </DropdownMenuItem>
                           )}

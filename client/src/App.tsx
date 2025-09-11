@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { SEOTracker } from "./components/seo/seo-tracker";
+import { PageLoader } from "./components/ui/loading";
 import "./lib/i18n";
 
 // Lazy load components
@@ -41,7 +42,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<PageLoader />}>
           <SEOTracker />
           <Toaster />
           <Router />

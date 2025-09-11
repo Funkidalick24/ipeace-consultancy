@@ -366,7 +366,7 @@ export const ContactSection = memo(function ContactSection() {
                 
                 <div className="bg-gray-100 h-64 rounded-lg mb-4 overflow-hidden">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3798.418307777772!2d31.05320531540447!3d-17.82654097564207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a0e4a205515f%3A0x5b7e4a0a4e4b4a0!2sEastgate%20Shopping%20Centre!5e0!3m2!1sen!2szw!4v1650000000000!5m2!1sen!2szw"
+                    src="https://www.google.com/maps/place/135+Baines+Ave,+Harare/@-17.81937,31.0429761,17z/data=!3m1!4b1!4m6!3m5!1s0x1931a51cc8db7ee3:0x5b2f1b062c61ba60!8m2!3d-17.81937!4d31.045551!16s%2Fg%2F11szjsp96_?hl=en&entry=ttu&g_ep=EgoyMDI1MDkwOC4wIKXMDSoASAFQAw%3D%3D"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -380,7 +380,7 @@ export const ContactSection = memo(function ContactSection() {
                 <Button
                   className="w-full btn-accent py-3"
                   onClick={() => {
-                    window.open('https://www.google.com/maps/dir/?api=1&destination=Eastgate+Shopping+Centre,+Harare,+Zimbabwe', '_blank');
+                    window.open('https://www.google.com/maps/place/135+Baines+Ave,+Harare/@-17.81937,31.0429761,17z/data=!3m1!4b1!4m6!3m5!1s0x1931a51cc8db7ee3:0x5b2f1b062c61ba60!8m2!3d-17.81937!4d31.045551!16s%2Fg%2F11szjsp96_?hl=en&entry=ttu&g_ep=EgoyMDI1MDkwOC4wIKXMDSoASAFQAw%3D%3D', '_blank');
                   }}
                   aria-label={t('contact.office.directions')}
                 >

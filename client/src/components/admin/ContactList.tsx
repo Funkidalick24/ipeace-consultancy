@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Mail, User, Building, MessageSquare, Clock, CheckCircle, AlertCircle, MoreHorizontal, Send } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from '@/hooks/use-toast';
+import { InlineLoader, ListSkeleton, ButtonLoader } from '@/components/ui/loading';
 
 interface Contact {
   id: string;
@@ -243,11 +244,14 @@ export default function ContactList() {
   if (loading) {
     return (
       <Card>
-        <CardContent className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading contacts...</p>
-          </div>
+        <CardHeader>
+          <CardTitle>Contact Submissions</CardTitle>
+          <CardDescription>
+            Manage contact form submissions and responses
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ListSkeleton count={8} />
         </CardContent>
       </Card>
     );
@@ -505,22 +509,15 @@ export default function ContactList() {
               >
                 Cancel
               </Button>
-              <Button
+              <ButtonLoader
+                loading={sendingResponse}
+                loadingText="Sending..."
+                disabled={!responseMessage.trim()}
                 onClick={handleSendResponse}
-                disabled={!responseMessage.trim() || sendingResponse}
               >
-                {sendingResponse ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Response
-                  </>
-                )}
-              </Button>
+                <Send className="w-4 h-4 mr-2" />
+                Send Response
+              </ButtonLoader>
             </div>
           </div>
         </DialogContent>
