@@ -59,8 +59,8 @@ export const BacklinkTracker = () => {
       case 'linkedin':
         shareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
         break;
-      case 'twitter':
-        shareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      case 'x':
+        shareLink = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
         break;
       case 'facebook':
         shareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
@@ -104,9 +104,9 @@ export const BacklinkTracker = () => {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => shareOnSocial('twitter', content)}
+                    onClick={() => shareOnSocial('x', content)}
                   >
-                    Share on Twitter
+                    Share on X
                   </Button>
                   <Button
                     size="sm"

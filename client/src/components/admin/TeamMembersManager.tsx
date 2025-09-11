@@ -8,7 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash2, User, Mail, Linkedin, Twitter, Facebook, Instagram, Globe } from 'lucide-react';
+import { Plus, Edit, Trash2, User, Mail, Linkedin, Facebook, Instagram, Globe } from 'lucide-react';
+
+// Bootstrap X icon component
+const BootstrapXIcon = () => (
+  <i className="bi bi-twitter-x" style={{ fontSize: '1rem' }}></i>
+);
 
 interface TeamMember {
   id: string;
@@ -244,9 +249,9 @@ export default function TeamMembersManager({
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:text-blue-800"
-                            title="Twitter"
+                            title="X"
                           >
-                            <Twitter className="w-4 h-4" />
+                            <BootstrapXIcon />
                           </a>
                         )}
                         {member.facebookUrl && (
@@ -396,12 +401,12 @@ export default function TeamMembersManager({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="twitterUrl">Twitter URL</Label>
+                <Label htmlFor="twitterUrl">X URL</Label>
                 <Input
                   id="twitterUrl"
                   value={formData.twitterUrl}
                   onChange={(e) => setFormData(prev => ({ ...prev, twitterUrl: e.target.value }))}
-                  placeholder="https://twitter.com/username"
+                  placeholder="https://x.com/username"
                 />
               </div>
               <div>

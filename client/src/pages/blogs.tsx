@@ -29,8 +29,8 @@ export default function Blogs() {
 
     let shareUrl = '';
     switch (platform) {
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+      case 'x':
+        shareUrl = `https://x.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
         break;
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
@@ -182,10 +182,10 @@ export default function Blogs() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            shareOnSocial('twitter', blog.title, `${window.location.origin}/blog/${blog.slug}`);
+                            shareOnSocial('x', blog.title, `${window.location.origin}/blog/${blog.slug}`);
                           }}
                           className="w-6 h-6 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors text-xs"
-                          title="Share on Twitter"
+                          title="Share on X"
                         >
                           𝕏
                         </button>

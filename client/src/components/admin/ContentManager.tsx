@@ -4,22 +4,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FileText, Users, UserCheck, HelpCircle, RefreshCw } from 'lucide-react';
-import PageEditor from './PageEditor';
+import AddBlogPostForm from '@/components/blog/AddBlogPostForm';
+import { ContentBlock } from '@/components/blog/BlogContentEditor';
 import TestimonialsManager from './TestimonialsManager';
 import TeamMembersManager from './TeamMembersManager';
 import FAQManager from './FAQManager';
 
-interface StaticPage {
+interface BlogPost {
   id: string;
   title: string;
   slug: string;
-  content: string;
-  excerpt?: string;
+  excerpt: string | null;
+  content: ContentBlock[];
   published: boolean;
-  publishedAt?: string;
+  publishedAt: string | null;
   createdAt: string;
-  updatedAt: string;
-  authorId?: string;
+  displayImage?: string;
 }
 
 interface Testimonial {
@@ -65,14 +65,14 @@ interface FAQItem {
 }
 
 export default function ContentManager() {
-  const [pages, setPages] = useState<StaticPage[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [faq, setFaq] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
-  const [showPageEditor, setShowPageEditor] = useState(false);
-  const [editingPage, setEditingPage] = useState<StaticPage | undefined>();
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editingBlog, setEditingBlog] = useState<BlogPost | undefined>();
 
   useEffect(() => {
     fetchAllContent();
@@ -86,16 +86,16 @@ export default function ContentManager() {
         'Authorization': `Bearer ${token}`
       };
 
-      const [pagesRes, testimonialsRes, teamRes, faqRes] = await Promise.all([
-        fetch('/api/admin/content/pages', { headers }),
+      const [blogsRes, testimonialsRes, teamRes, faqRes] = await Promise.all([
+        fetch('/api/admin/blogs', { headers }),
         fetch('/api/admin/testimonials', { headers }),
         fetch('/api/admin/team', { headers }),
         fetch('/api/admin/faq', { headers })
       ]);
 
-      if (pagesRes.ok) {
-        const pagesData = await pagesRes.json();
-        setPages(pagesData.pages || []);
+      if (blogsRes.ok) {
+        const blogsData = await blogsRes.json();
+        setBlogPosts(blogsData.blogs || []);
       }
 
       if (testimonialsRes.ok) {
@@ -119,56 +119,73 @@ export default function ContentManager() {
     }
   };
 
-  const handleCreatePage = async (pageData: Omit<StaticPage, 'id' | 'createdAt' | 'updatedAt' | 'publishedAt'>) => {
+  const handleCreateBlogPost = async (blogData: {
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: ContentBlock[];
+    published: boolean;
+    displayImage?: string;
+  }) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/admin/content/pages', {
+      const response = await fetch('/api/blogs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(pageData)
+        body: JSON.stringify(blogData)
       });
 
       if (response.ok) {
         await fetchAllContent();
       } else {
-        throw new Error('Failed to create page');
+        throw new Error('Failed to create blog post');
       }
     } catch (error) {
-      console.error('Failed to create page:', error);
+      console.error('Failed to create blog post:', error);
       throw error;
     }
   };
 
-  const handleUpdatePage = async (id: string, pageData: Partial<StaticPage>) => {
+  const handleUpdateBlogPost = async (blogData: {
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: ContentBlock[];
+    published: boolean;
+    displayImage?: string;
+  }) => {
+    if (!editingBlog) return;
+
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/admin/content/pages/${id}`, {
+      const response = await fetch(`/api/blogs/${editingBlog.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(pageData)
+        body: JSON.stringify(blogData)
       });
 
       if (response.ok) {
         await fetchAllContent();
+        setEditingBlog(undefined);
       } else {
-        throw new Error('Failed to update page');
+        throw new Error('Failed to update blog post');
       }
     } catch (error) {
-      console.error('Failed to update page:', error);
+      console.error('Failed to update blog post:', error);
       throw error;
     }
   };
 
-  const handleDeletePage = async (id: string) => {
+  const handleDeleteBlogPost = async (id: string) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/admin/content/pages/${id}`, {
+      const response = await fetch(`/api/blogs/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -178,10 +195,10 @@ export default function ContentManager() {
       if (response.ok) {
         await fetchAllContent();
       } else {
-        throw new Error('Failed to delete page');
+        throw new Error('Failed to delete blog post');
       }
     } catch (error) {
-      console.error('Failed to delete page:', error);
+      console.error('Failed to delete blog post:', error);
       throw error;
     }
   };
@@ -426,9 +443,9 @@ export default function ContentManager() {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{pages.length}</div>
+                <div className="text-2xl font-bold">{blogPosts.length}</div>
                 <p className="text-xs text-muted-foreground">
-                  {pages.filter(p => p.published).length} published
+                  {blogPosts.filter(p => p.published).length} published
                 </p>
               </CardContent>
             </Card>
@@ -480,11 +497,11 @@ export default function ContentManager() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[...pages, ...testimonials, ...teamMembers, ...faq]
-                  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+                {[...blogPosts, ...testimonials, ...teamMembers, ...faq]
+                  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                   .slice(0, 5)
                   .map((item) => (
-                    <div key={`${item.id}-${'title' in item ? 'page' : 'name' in item ? 'testimonial' : 'position' in item ? 'team' : 'question' in item ? 'faq' : 'unknown'}`}
+                    <div key={`${item.id}-${'title' in item ? 'blog' : 'name' in item ? 'testimonial' : 'position' in item ? 'team' : 'question' in item ? 'faq' : 'unknown'}`.toString()}
                          className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">
@@ -498,7 +515,7 @@ export default function ContentManager() {
                            'name' in item ? 'Testimonial' :
                            'position' in item ? 'Team Member' :
                            'question' in item ? 'FAQ' :
-                           'Unknown'} • Updated {new Date(item.updatedAt).toLocaleDateString()}
+                           'Unknown'} • Updated {new Date(item.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <Badge variant={item.published ? 'default' : 'secondary'}>
@@ -506,7 +523,7 @@ export default function ContentManager() {
                       </Badge>
                     </div>
                   ))}
-                {[...pages, ...testimonials, ...teamMembers, ...faq].length === 0 && (
+                {[...blogPosts, ...testimonials, ...teamMembers, ...faq].length === 0 && (
                   <p className="text-center text-muted-foreground py-4">No content yet</p>
                 )}
               </div>
@@ -518,45 +535,62 @@ export default function ContentManager() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Blog Posts</h3>
-              <Button onClick={() => setShowPageEditor(true)}>
+              <Button onClick={() => setShowBlogForm(true)}>
                 <FileText className="w-4 h-4 mr-2" />
                 Add Blog Post
               </Button>
             </div>
             <div className="grid gap-4">
-              {pages.map((page) => (
-                <Card key={page.id}>
+              {blogPosts.map((blog) => (
+                <Card key={blog.id}>
                   <CardHeader>
                     <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">{page.title}</CardTitle>
-                        <CardDescription>/{page.slug}</CardDescription>
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{blog.title}</CardTitle>
+                        <CardDescription>/{blog.slug}</CardDescription>
+                        {blog.excerpt && (
+                          <p className="text-sm text-muted-foreground mt-2">{blog.excerpt}</p>
+                        )}
                       </div>
-                      <div className="flex gap-2">
-                        <Badge variant={page.published ? 'default' : 'secondary'}>
-                          {page.published ? 'Published' : 'Draft'}
+                      <div className="flex gap-2 ml-4">
+                        <Badge variant={blog.published ? 'default' : 'secondary'}>
+                          {blog.published ? 'Published' : 'Draft'}
                         </Badge>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setEditingPage(page);
-                            setShowPageEditor(true);
+                            setEditingBlog(blog);
+                            setShowBlogForm(true);
                           }}
                         >
                           Edit
                         </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            if (window.confirm('Are you sure you want to delete this blog post?')) {
+                              handleDeleteBlogPost(blog.id);
+                            }
+                          }}
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </div>
                   </CardHeader>
-                  {page.excerpt && (
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">{page.excerpt}</p>
-                    </CardContent>
-                  )}
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>Created: {new Date(blog.createdAt).toLocaleDateString()}</span>
+                      {blog.publishedAt && (
+                        <span>Published: {new Date(blog.publishedAt).toLocaleDateString()}</span>
+                      )}
+                    </div>
+                  </CardContent>
                 </Card>
               ))}
-              {pages.length === 0 && (
+              {blogPosts.length === 0 && (
                 <Card>
                   <CardContent className="text-center py-8">
                     <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -596,14 +630,23 @@ export default function ContentManager() {
         </TabsContent>
       </Tabs>
 
-      <PageEditor
-        page={editingPage}
-        onSave={editingPage ? (data) => handleUpdatePage(editingPage.id, data) : handleCreatePage}
+      <AddBlogPostForm
+        isOpen={showBlogForm}
         onClose={() => {
-          setShowPageEditor(false);
-          setEditingPage(undefined);
+          setShowBlogForm(false);
+          setEditingBlog(undefined);
         }}
-        isOpen={showPageEditor}
+        onSubmit={editingBlog ? handleUpdateBlogPost : handleCreateBlogPost}
+        initialData={editingBlog ? {
+          title: editingBlog.title,
+          slug: editingBlog.slug,
+          excerpt: editingBlog.excerpt || '',
+          content: editingBlog.content,
+          published: editingBlog.published,
+          displayImage: editingBlog.displayImage || ''
+        } : undefined}
+        key={editingBlog?.id || 'new'}
+        isEditing={!!editingBlog}
       />
     </div>
   );

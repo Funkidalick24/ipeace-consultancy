@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Linkedin, User, Mail, Twitter, Facebook, Instagram, Globe } from 'lucide-react';
+import { Linkedin, User, Mail, Facebook, Instagram, Globe } from 'lucide-react';
 
 // Bootstrap X icon component
 const BootstrapXIcon = () => (
@@ -159,9 +159,9 @@ export const TeamSection = memo(function TeamSection() {
                       size="icon"
                       className="text-gray-400 hover:text-primary-blue transition-colors duration-200 h-8 w-8"
                       onClick={() => window.open(member.twitterUrl, '_blank')}
-                      aria-label="Twitter"
+                      aria-label="X"
                     >
-                      <Twitter className="h-4 w-4" />
+                      <BootstrapXIcon />
                     </Button>
                   )}
                   {member.facebookUrl && (

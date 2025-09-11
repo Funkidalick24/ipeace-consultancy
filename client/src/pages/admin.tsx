@@ -66,6 +66,7 @@ export default function Admin() {
   const [loginError, setLoginError] = useState('');
   const [showAddBlogForm, setShowAddBlogForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null);
+  const [activeTab, setActiveTab] = useState('overview');
   const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
     totalUsers: 0,
     totalConsultations: 0,
@@ -414,8 +415,8 @@ export default function Admin() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10 mb-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-11 mb-8">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
@@ -423,6 +424,10 @@ export default function Admin() {
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Users</span>
+            </TabsTrigger>
+            <TabsTrigger value="blogs" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Blogs</span>
             </TabsTrigger>
             <TabsTrigger value="consultations" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
@@ -539,19 +544,35 @@ export default function Admin() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
-                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                    <Button
+                      variant="outline"
+                      className="h-20 flex flex-col items-center justify-center"
+                      onClick={() => setActiveTab('users')}
+                    >
                       <Users className="w-6 h-6 mb-2" />
                       <span className="text-sm">Add User</span>
                     </Button>
-                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                    <Button
+                      variant="outline"
+                      className="h-20 flex flex-col items-center justify-center"
+                      onClick={() => setShowAddBlogForm(true)}
+                    >
                       <FileText className="w-6 h-6 mb-2" />
                       <span className="text-sm">New Blog Post</span>
                     </Button>
-                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                    <Button
+                      variant="outline"
+                      className="h-20 flex flex-col items-center justify-center"
+                      onClick={() => setActiveTab('communication')}
+                    >
                       <Mail className="w-6 h-6 mb-2" />
                       <span className="text-sm">Send Email</span>
                     </Button>
-                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                    <Button
+                      variant="outline"
+                      className="h-20 flex flex-col items-center justify-center"
+                      onClick={() => setActiveTab('analytics')}
+                    >
                       <BarChart3 className="w-6 h-6 mb-2" />
                       <span className="text-sm">View Reports</span>
                     </Button>
@@ -564,6 +585,80 @@ export default function Admin() {
           {/* Users Tab */}
           <TabsContent value="users">
             <UserList />
+          </TabsContent>
+
+          {/* Blogs Tab */}
+          <TabsContent value="blogs">
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-2xl font-bold">Blog Management</h2>
+                  <p className="text-muted-foreground">Create, edit, and manage your blog posts</p>
+                </div>
+                <Button onClick={() => setShowAddBlogForm(true)}>
+                  <FileText className="w-4 h-4 mr-2" />
+                  Add Blog Post
+                </Button>
+              </div>
+
+              <div className="grid gap-4">
+                {blogs.map((blog) => (
+                  <Card key={blog.id}>
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{blog.title}</CardTitle>
+                          <CardDescription>/{blog.slug}</CardDescription>
+                          {blog.excerpt && (
+                            <p className="text-sm text-muted-foreground mt-2">{blog.excerpt}</p>
+                          )}
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                          <Badge variant={blog.published ? 'default' : 'secondary'}>
+                            {blog.published ? 'Published' : 'Draft'}
+                          </Badge>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditBlog(blog)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteBlog(blog.id)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <span>Created: {new Date(blog.createdAt).toLocaleDateString()}</span>
+                        {blog.publishedAt && (
+                          <span>Published: {new Date(blog.publishedAt).toLocaleDateString()}</span>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {blogs.length === 0 && (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-lg font-medium mb-2">No blog posts yet</h3>
+                      <p className="text-muted-foreground mb-4">Create your first blog post to get started.</p>
+                      <Button onClick={() => setShowAddBlogForm(true)}>
+                        <FileText className="w-4 h-4 mr-2" />
+                        Add Blog Post
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </div>
           </TabsContent>
 
           {/* Consultations Tab */}
