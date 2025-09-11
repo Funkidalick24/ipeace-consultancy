@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { IPEACEValuesSection } from '@/components/sections/ipeace-values';
 import { TeamSection } from '@/components/sections/team';
+import { SEOHead, pageSEO } from '@/components/seo/SEOHead';
 
 // Lazy load chatbot widget
 const ChatbotWidget = lazy(() => import('@/components/chatbot/chatbot-widget').then(module => ({ default: module.ChatbotWidget })));
@@ -10,6 +11,7 @@ const ChatbotWidget = lazy(() => import('@/components/chatbot/chatbot-widget').t
 export default function About() {
   return (
     <div className="min-h-screen">
+      <SEOHead {...pageSEO.about} />
       <Header />
       <main className="pt-16">
         <IPEACEValuesSection />

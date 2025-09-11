@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { Grid, List } from 'lucide-react';
+import { SEOHead, pageSEO } from '@/components/seo/SEOHead';
 
 interface BlogPost {
   id: string;
@@ -89,6 +90,7 @@ export default function Blogs() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead {...pageSEO.blogs} />
       <Header />
 
       <main className="pt-16">
