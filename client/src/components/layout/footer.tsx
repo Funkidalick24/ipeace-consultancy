@@ -1,13 +1,9 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Instagram } from 'lucide-react';
+import { Linkedin, Instagram, Facebook } from 'lucide-react';
 import { LegalPopup } from '@/components/legal/legal-popup';
 
-// Bootstrap X icon component
-const BootstrapXIcon = () => (
-  <i className="bi bi-twitter-x" style={{ fontSize: '1.25rem' }}></i>
-);
 
 export const Footer = memo(function Footer() {
   const { t } = useTranslation();
@@ -31,7 +27,7 @@ export const Footer = memo(function Footer() {
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
-                onClick={() => window.open('https://www.linkedin.com/in/ipeace-consulting-63b899329?originalSubdomain=zw', '_blank')}
+                onClick={() => window.open('https://www.linkedin.com/company/ipeace-consultancy/', '_blank')}
                 aria-label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
@@ -40,16 +36,16 @@ export const Footer = memo(function Footer() {
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
-                onClick={() => window.open('https://x.com/ipeace', '_blank')}
-                aria-label="X (Twitter)"
+                onClick={() => window.open('https://www.facebook.com/share/17BxG8keoB/?mibextid=wwXIfr', '_blank')}
+                aria-label="Facebook"
               >
-                <BootstrapXIcon />
+                <Facebook className="h-5 w-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="w-10 h-10 bg-blue-700 rounded-lg hover:bg-accent-yellow hover:text-primary-blue transition-all duration-200"
-                onClick={() => window.open('https://instagram.com/ipeace', '_blank')}
+                onClick={() => window.open('https://www.instagram.com/ipeace_consultancy?igsh=MWJpc2VxY2d4MDYxaQ%3D%3D&utm_source=qr', '_blank')}
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />

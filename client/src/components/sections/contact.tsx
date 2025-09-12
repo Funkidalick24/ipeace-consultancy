@@ -13,13 +13,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { insertContactSchema } from '@shared/schema';
-import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, Instagram, Facebook } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
-// Bootstrap X icon component
-const BootstrapXIcon = () => (
-  <i className="bi bi-twitter-x" style={{ fontSize: '1.5rem' }}></i>
-);
 
 type ContactFormData = {
   firstName: string;
@@ -365,28 +361,35 @@ export const ContactSection = memo(function ContactSection() {
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">Find Us</h3>
                 
                 <div className="bg-gray-100 h-64 rounded-lg mb-4 overflow-hidden">
-                  <iframe
-                    src="https://www.google.com/maps/place/135+Baines+Ave,+Harare/@-17.81937,31.0429761,17z/data=!3m1!4b1!4m6!3m5!1s0x1931a51cc8db7ee3:0x5b2f1b062c61ba60!8m2!3d-17.81937!4d31.045551!16s%2Fg%2F11szjsp96_?hl=en&entry=ttu&g_ep=EgoyMDI1MDkwOC4wIKXMDSoASAFQAw%3D%3D"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Google Maps location of IPEACE office"
-                  ></iframe>
+                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 text-gray-700 text-center p-6">
+                    <div className="text-center">
+                      <MapPin className="h-12 w-12 mx-auto mb-4 text-primary-blue" />
+                      <h4 className="text-lg font-semibold mb-2">IPEACE Office Location</h4>
+                      <p className="text-sm mb-4">135 Baines Avenue<br />Avenues, Harare<br />Zimbabwe</p>
+                      <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open('https://maps.google.com/?q=135+Baines+Avenue,+Harare,+Zimbabwe', '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <Navigation className="h-4 w-4" />
+                          View on Google Maps
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=-17.81937,31.0429761', '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <Navigation className="h-4 w-4" />
+                          Get Directions
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <Button
-                  className="w-full btn-accent py-3"
-                  onClick={() => {
-                    window.open('https://www.google.com/maps/place/135+Baines+Ave,+Harare/@-17.81937,31.0429761,17z/data=!3m1!4b1!4m6!3m5!1s0x1931a51cc8db7ee3:0x5b2f1b062c61ba60!8m2!3d-17.81937!4d31.045551!16s%2Fg%2F11szjsp96_?hl=en&entry=ttu&g_ep=EgoyMDI1MDkwOC4wIKXMDSoASAFQAw%3D%3D', '_blank');
-                  }}
-                  aria-label={t('contact.office.directions')}
-                >
-                  <Navigation className="mr-2 h-4 w-4" />
-                  {t('contact.office.directions')}
-                </Button>
+               
               </CardContent>
             </Card>
 
@@ -401,7 +404,7 @@ export const ContactSection = memo(function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://linkedin.com/company/ipeace', '_blank')}
+                    onClick={() => window.open('https://www.linkedin.com/company/ipeace-consultancy/', '_blank')}
                     aria-label="LinkedIn"
                   >
                     <Linkedin className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
@@ -410,16 +413,16 @@ export const ContactSection = memo(function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://x.com/ipeace', '_blank')}
-                    aria-label="X (Twitter)"
+                    onClick={() => window.open('https://www.facebook.com/share/17BxG8keoB/?mibextid=wwXIfr', '_blank')}
+                    aria-label="Facebook"
                   >
-                    <BootstrapXIcon />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">X</span>
+                    <Facebook className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">Facebook</span>
                   </Button>
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://instagram.com/ipeace', '_blank')}
+                    onClick={() => window.open('https://www.instagram.com/ipeace_consultancy?igsh=MWJpc2VxY2d4MDYxaQ%3D%3D&utm_source=qr', '_blank')}
                     aria-label="Instagram"
                   >
                     <Instagram className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
