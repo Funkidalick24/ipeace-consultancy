@@ -14,7 +14,7 @@ export const HeroSection = memo(function HeroSection() {
           <div className="order-2 lg:order-1">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               {t('hero.title').split('IPEACE')[0]}
-              <span className="text-accent-yellow">IPEACE</span>
+              
               {t('hero.title').split('IPEACE')[1]}
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
@@ -72,7 +72,7 @@ export const HeroSection = memo(function HeroSection() {
           
           <div className="order-1 lg:order-2">
             <img
-              src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=533"
+              src="/hero.jpg"
               alt="Professional business consulting team collaborating"
 width="800"
               height="533"
