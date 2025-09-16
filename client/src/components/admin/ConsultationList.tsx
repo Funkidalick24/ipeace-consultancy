@@ -419,7 +419,7 @@ export default function ConsultationList() {
 
       {/* Consultation Detail Dialog */}
       <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Consultation Details</DialogTitle>
             <DialogDescription>
