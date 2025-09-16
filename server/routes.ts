@@ -12,6 +12,7 @@ import { upload, saveFileMetadata } from "./upload";
 import { textExtractionService } from "./services/text-extraction";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { PassThrough } from 'stream';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -1659,11 +1660,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.set({
         'Content-Type': file.mimetype,
         'Content-Length': file.size,
-        'Content-Disposition': `inline; filename="${file.originalName}"`
+        'Content-Disposition': `inline; filename="${file.originalName}"`,
+        'Cache-Control': 'public, max-age=31536000' // Cache for 1 year
       });
 
-      // Send the binary data
-      res.send(file.data);
+      // Use streaming for better performance with large files
+      const buffer = file.data;
+      const bufferStream = new PassThrough();
+      bufferStream.end(buffer);
+      bufferStream.pipe(res);
     } catch (error) {
       console.error('File serving error:', error);
       res.status(500).json({ error: 'Failed to serve file' });

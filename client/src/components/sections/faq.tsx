@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle, Share2, Copy, Facebook, Twitter, Linkedin } from 'lucide-react';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 
 interface FAQItem {
@@ -21,6 +21,8 @@ export const FAQSection = memo(function FAQSection() {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [openItems, setOpenItems] = useState<number[]>([0]); // First FAQ open by default
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -50,6 +52,35 @@ export const FAQSection = memo(function FAQSection() {
         ? prev.filter(i => i !== index)
         : [...prev, index]
     );
+  };
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareTitle = 'FAQ - Business Consulting Questions Answered | IPEACE';
+  const shareText = 'Check out these frequently asked questions about business consulting and compliance in Zimbabwe.';
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+
+  const shareOnFacebook = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareOnTwitter = () => {
+    const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareOnLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
   };
 
   if (loading) {
@@ -84,9 +115,62 @@ export const FAQSection = memo(function FAQSection() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t('faq.title')}
             </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               {t('faq.subtitle')}
             </p>
+  
+            {/* Share Section */}
+            <div className="flex flex-col items-center space-y-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowShareOptions(!showShareOptions)}
+                className="flex items-center gap-2"
+              >
+                <Share2 className="w-4 h-4" />
+                Share FAQ
+              </Button>
+  
+              {showShareOptions && (
+                <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-md border">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={copyToClipboard}
+                    className="flex items-center gap-2"
+                  >
+                    <Copy className="w-4 h-4" />
+                    {copySuccess ? 'Copied!' : 'Copy Link'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={shareOnFacebook}
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                  >
+                    <Facebook className="w-4 h-4" />
+                    Facebook
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={shareOnTwitter}
+                    className="flex items-center gap-2 text-blue-400 hover:text-blue-500"
+                  >
+                    <Twitter className="w-4 h-4" />
+                    Twitter
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={shareOnLinkedIn}
+                    className="flex items-center gap-2 text-blue-700 hover:text-blue-800"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                    LinkedIn
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
           <div className="text-center text-gray-600">
             No FAQs available at the moment.

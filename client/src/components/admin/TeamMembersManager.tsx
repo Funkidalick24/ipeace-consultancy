@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash2, User, Mail, Linkedin, Facebook, Instagram, Globe } from 'lucide-react';
+import { Plus, Edit, Trash2, User, Mail, Linkedin, Facebook, Instagram, Globe, Upload, X } from 'lucide-react';
+import { uploadFile } from '@/lib/fileUpload';
 
 // Bootstrap X icon component
 const BootstrapXIcon = () => (
@@ -63,6 +64,9 @@ export default function TeamMembersManager({
     order: 0
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const resetForm = () => {
     setFormData({
@@ -80,6 +84,58 @@ export default function TeamMembersManager({
       order: 0
     });
     setEditingMember(null);
+    setSelectedFile(null);
+    setImagePreview(null);
+    setUploadingImage(false);
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+
+      setSelectedFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedFile) return;
+
+    setUploadingImage(true);
+    try {
+      const uploadedFile = await uploadFile(selectedFile);
+      setFormData(prev => ({ ...prev, imageUrl: uploadedFile.url }));
+      setSelectedFile(null);
+      setImagePreview(null);
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedFile(null);
+    setImagePreview(null);
+    setFormData(prev => ({ ...prev, imageUrl: '' }));
   };
 
   const handleOpenDialog = (member?: TeamMember) => {
@@ -99,6 +155,10 @@ export default function TeamMembersManager({
         published: member.published,
         order: member.order
       });
+      // Set image preview if there's an existing image
+      if (member.imageUrl) {
+        setImagePreview(member.imageUrl);
+      }
     } else {
       resetForm();
     }
@@ -322,7 +382,7 @@ export default function TeamMembersManager({
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingMember ? 'Edit Team Member' : 'Add New Team Member'}
@@ -368,13 +428,68 @@ export default function TeamMembersManager({
             </div>
 
             <div>
-              <Label htmlFor="imageUrl">Profile Image URL</Label>
-              <Input
-                id="imageUrl"
-                value={formData.imageUrl}
-                onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
-                placeholder="https://example.com/profile.jpg"
-              />
+              <Label>Profile Image</Label>
+              <div className="space-y-4">
+                {/* Current Image Preview */}
+                {(imagePreview || (formData.imageUrl && formData.imageUrl.trim())) && (
+                  <div className="relative inline-block">
+                    <img
+                      src={imagePreview || formData.imageUrl}
+                      alt="Profile preview"
+                      className="w-32 h-32 object-cover rounded-lg border"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={removeImage}
+                      className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* File Input */}
+                <div className="flex items-center gap-4">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="flex-1"
+                  />
+                  {selectedFile && (
+                    <Button
+                      type="button"
+                      onClick={handleImageUpload}
+                      disabled={uploadingImage}
+                      className="flex items-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {uploadingImage ? 'Uploading...' : 'Upload'}
+                    </Button>
+                  )}
+                </div>
+
+                {/* URL Input (fallback) */}
+                <div>
+                  <Label htmlFor="imageUrl" className="text-sm text-muted-foreground">
+                    Or enter image URL directly
+                  </Label>
+                  <Input
+                    id="imageUrl"
+                    value={formData.imageUrl}
+                    onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                    placeholder="https://example.com/profile.jpg"
+                  />
+                </div>
+
+                {selectedFile && (
+                  <p className="text-sm text-muted-foreground">
+                    Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
