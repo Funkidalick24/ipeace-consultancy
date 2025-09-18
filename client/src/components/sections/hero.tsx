@@ -72,7 +72,7 @@ export const HeroSection = memo(function HeroSection() {
           
           <div className="order-1 lg:order-2">
             <img
-              src="/hero.jpg"
+              src="/hero.JPG"
               alt="Professional business consulting team collaborating"
               width="800"
               height="533"
