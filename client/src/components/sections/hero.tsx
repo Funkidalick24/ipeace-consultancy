@@ -8,14 +8,13 @@ export const HeroSection = memo(function HeroSection() {
   const { t } = useTranslation();
 
   return (
-    <section id="home" className="gradient-hero text-white py-20 lg:py-32">
+    <section id="home" className="gradient-hero text-white pt-18 pb-20 lg:pt-26 lg:pb-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              {t('hero.title').split('IPEACE')[0]}
-              
-              {t('hero.title').split('IPEACE')[1]}
+              <div>{t('hero.title').split('.')[0]}.</div>
+              <div className="mt-2">{t('hero.title').split('.')[1]}</div>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
               {t('hero.subtitle')}
@@ -40,7 +39,7 @@ export const HeroSection = memo(function HeroSection() {
                 }
               />
             </div>
-            
+
             {/* Key Stats */}
             <div className="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-blue-400">
               <div className="text-center">
@@ -69,8 +68,8 @@ export const HeroSection = memo(function HeroSection() {
               </div>
             </div>
           </div>
-          
-          <div className="order-1 lg:order-2">
+
+          <div className="order-1 lg:order-2 mt-10 lg:mt-2.5">
             <img
               src="/hero.JPG"
               alt="Professional business consulting team collaborating"
