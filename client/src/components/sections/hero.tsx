@@ -74,7 +74,7 @@ export const HeroSection = memo(function HeroSection() {
             <img
               src="/hero.jpg"
               alt="Professional business consulting team collaborating"
-width="800"
+              width="800"
               height="533"
               className="rounded-xl shadow-2xl w-full h-auto"
             />
