@@ -13,9 +13,9 @@ export const HeroSection = memo(function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              <div>{t('hero.title').split('.')[0]}.</div>
+              <div>{t('hero.title').split(',')[0]}</div>
               <div className="mt-2">
-                Foundation for <span className="text-accent-yellow">Legacy</span>.
+                Foundation for <span className="text-accent-yellow">Legacy</span>
               </div>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
