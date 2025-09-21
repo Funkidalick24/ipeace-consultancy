@@ -14,7 +14,9 @@ export const HeroSection = memo(function HeroSection() {
           <div className="order-2 lg:order-1">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               <div>{t('hero.title').split('.')[0]}.</div>
-              <div className="mt-2">{t('hero.title').split('.')[1]}</div>
+              <div className="mt-2">
+                Foundation for <span className="text-accent-yellow">Legacy</span>.
+              </div>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
               {t('hero.subtitle')}

@@ -76,7 +76,9 @@ export interface IConsultationBooking extends Document {
   consultationType: 'in-person' | 'video-call' | 'phone-call';
   description: string;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  calendarEventId?: string;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 const ConsultationBookingSchema = new Schema<IConsultationBooking>({
@@ -98,7 +100,8 @@ const ConsultationBookingSchema = new Schema<IConsultationBooking>({
     type: String,
     enum: ['pending', 'confirmed', 'cancelled', 'completed'],
     default: 'pending'
-  }
+  },
+  calendarEventId: { type: String }
 }, { timestamps: true });
 
 // Blog post interface and schema

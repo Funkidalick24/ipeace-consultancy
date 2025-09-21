@@ -105,6 +105,7 @@ export const consultationBookingResponseSchema = z.object({
   consultationType: z.string(),
   description: z.string(),
   status: z.enum(["pending", "confirmed", "cancelled", "completed"]),
+  calendarEventId: z.string().optional(),
   createdAt: z.date(),
 });
 

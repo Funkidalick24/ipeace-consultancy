@@ -18,6 +18,7 @@ export interface IStorage {
   getAllConsultationBookings(): Promise<IConsultationBooking[]>;
   getConsultationBooking(id: string): Promise<IConsultationBooking | null>;
   updateConsultationBookingStatus(id: string, status: string): Promise<IConsultationBooking | null>;
+  updateConsultationBooking(id: string, updates: Partial<IConsultationBooking>): Promise<IConsultationBooking | null>;
   // Blog methods
   createBlogPost(blogPost: InsertBlogPost): Promise<IBlogPost>;
   getBlogPost(id: string): Promise<IBlogPost | null>;
@@ -240,6 +241,19 @@ export class MongoStorage implements IStorage {
       ).lean();
     } catch (error) {
       console.error('Error updating consultation booking status:', error);
+      return null;
+    }
+  }
+
+  async updateConsultationBooking(id: string, updates: Partial<IConsultationBooking>): Promise<IConsultationBooking | null> {
+    try {
+      return await ConsultationBooking.findByIdAndUpdate(
+        id,
+        { ...updates, updatedAt: new Date() },
+        { new: true }
+      ).lean();
+    } catch (error) {
+      console.error('Error updating consultation booking:', error);
       return null;
     }
   }

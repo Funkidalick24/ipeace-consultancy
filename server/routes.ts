@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 import sanitizeHtml from 'sanitize-html';
 import { upload, saveFileMetadata } from "./upload";
 import { textExtractionService } from "./services/text-extraction";
+import { microsoftCalendar } from "./services/microsoft-calendar";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PassThrough } from 'stream';
@@ -1260,6 +1261,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         throw new Error('Invalid preferred date format');
       }
 
+      // Check calendar availability before booking
+      const startTime = new Date(preferredDateObj);
+      const timeSlot = sanitizedData.preferredTime;
+
+      // Parse time slot to set hours and minutes
+      if (timeSlot.includes('morning-9')) startTime.setHours(9, 0, 0, 0);
+      else if (timeSlot.includes('morning-10')) startTime.setHours(10, 0, 0, 0);
+      else if (timeSlot.includes('morning-11')) startTime.setHours(11, 0, 0, 0);
+      else if (timeSlot.includes('afternoon-2')) startTime.setHours(14, 0, 0, 0);
+      else if (timeSlot.includes('afternoon-3')) startTime.setHours(15, 0, 0, 0);
+      else if (timeSlot.includes('afternoon-4')) startTime.setHours(16, 0, 0, 0);
+
+      const endTime = new Date(startTime.getTime() + (60 * 60 * 1000)); // 1 hour duration
+
+      console.log(`🔍 Checking calendar availability for ${startTime.toISOString()} to ${endTime.toISOString()}`);
+
+      // Check if the time slot is available
+      const isAvailable = await microsoftCalendar.checkAvailability(startTime, endTime);
+
+      if (!isAvailable) {
+        return res.status(409).json({
+          success: false,
+          message: "Selected time slot is not available. Please choose a different time."
+        });
+      }
+
       // Store the consultation booking
       const booking = await storage.createConsultationBooking({
         firstName: sanitizedData.firstName,
@@ -1273,6 +1300,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
         consultationType: sanitizedData.consultationType,
         description: sanitizedData.description
       });
+
+      // Create calendar event
+      let calendarEventId: string | null = null;
+      try {
+        const bookingData = {
+          _id: booking._id?.toString() || '',
+          firstName: sanitizedData.firstName,
+          lastName: sanitizedData.lastName,
+          email: sanitizedData.email,
+          phone: sanitizedData.phone,
+          company: sanitizedData.company,
+          serviceType: sanitizedData.serviceType,
+          preferredDate: preferredDateObj,
+          preferredTime: sanitizedData.preferredTime,
+          consultationType: sanitizedData.consultationType,
+          description: sanitizedData.description,
+          status: 'pending' as const,
+          createdAt: new Date()
+        };
+
+        calendarEventId = await microsoftCalendar.createEvent(bookingData);
+
+        if (calendarEventId) {
+          // Update booking with calendar event ID
+          await storage.updateConsultationBooking(booking._id?.toString() || '', {
+            calendarEventId: calendarEventId
+          });
+          console.log(`✅ Calendar event created and linked: ${calendarEventId}`);
+        }
+      } catch (calendarError) {
+        console.error('❌ Calendar integration error:', calendarError);
+        // Don't fail the booking if calendar creation fails
+        console.log('⚠️ Booking created successfully, but calendar event creation failed');
+      }
       
       // Send notifications
       await sendConsultationBookingNotification({
@@ -1496,6 +1557,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (emailError) {
           console.error(`❌ Failed to send confirmation email to ${plainBooking.email}:`, emailError);
           // Don't fail the status update if email fails
+        }
+      }
+
+      // Update calendar event if booking has calendar event ID
+      if (plainBooking.calendarEventId) {
+        try {
+          if (status === "cancelled") {
+            // Delete calendar event for cancelled bookings
+            await microsoftCalendar.deleteEvent(plainBooking.calendarEventId);
+            console.log(`✅ Calendar event deleted: ${plainBooking.calendarEventId}`);
+          } else {
+            // Update calendar event for other status changes
+            await microsoftCalendar.updateEvent(plainBooking.calendarEventId, {
+              ...plainBooking,
+              status: status as "pending" | "confirmed" | "cancelled" | "completed"
+            });
+            console.log(`✅ Calendar event updated: ${plainBooking.calendarEventId}`);
+          }
+        } catch (calendarError) {
+          console.error(`❌ Failed to update calendar event ${plainBooking.calendarEventId}:`, calendarError);
+          // Don't fail the status update if calendar update fails
         }
       }
 
