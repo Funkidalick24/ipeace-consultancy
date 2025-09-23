@@ -49,13 +49,15 @@ export class MicrosoftCalendarService {
       try {
         const graphClient = await import('@microsoft/microsoft-graph-client');
         const azureIdentity = await import('@azure/identity');
-        const authProviders = await import('@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials');
+        const authProviders = await import('@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js');
 
         this.Client = graphClient.Client;
         this.ClientSecretCredential = azureIdentity.ClientSecretCredential;
         this.TokenCredentialAuthenticationProvider = authProviders.TokenCredentialAuthenticationProvider;
       } catch (importError) {
         console.log('⚠️ Microsoft Graph packages not installed. Calendar integration will be disabled.');
+        console.log('Import error details:', importError);
+        console.log('Error message:', importError instanceof Error ? importError.message : 'Unknown error');
         console.log('To enable calendar integration, run: npm install @microsoft/microsoft-graph-client @azure/identity');
         return;
       }
@@ -82,7 +84,7 @@ export class MicrosoftCalendarService {
         scopes: ['https://graph.microsoft.com/.default']
       });
 
-      this.client = this.Client.initWithMiddleware({
+      this.client = this.Client.init({
         authProvider: authProvider
       });
 
