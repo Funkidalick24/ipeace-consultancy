@@ -1,11 +1,22 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// User interface and schema
 export interface IUser extends Document {
   _id: string;
   username: string;
   password: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'client' | 'employee';
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  company?: string;
+  isEmailVerified: boolean;
+  emailVerificationToken?: string;
+  emailVerificationCode?: string;
+  emailVerificationCodeExpires?: Date;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+  lastLogin?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -13,7 +24,19 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'user'], default: 'user' }
+  role: { type: String, enum: ['admin', 'client', 'employee'], default: 'client' },
+  email: { type: String },
+  firstName: { type: String },
+  lastName: { type: String },
+  phone: { type: String },
+  company: { type: String },
+  isEmailVerified: { type: Boolean, default: false },
+  emailVerificationToken: { type: String },
+  emailVerificationCode: { type: String },
+  emailVerificationCodeExpires: { type: Date },
+  passwordResetToken: { type: String },
+  passwordResetExpires: { type: Date },
+  lastLogin: { type: Date }
 }, { timestamps: true });
 
 // Contact submission interface and schema
@@ -244,6 +267,10 @@ export interface IFile extends Document {
   isTrainingData?: boolean;
   extractedText?: string;
   trainingEnabled?: boolean;
+  // Client Portal fields
+  isClientDocument?: boolean;
+  consultationId?: mongoose.Types.ObjectId;
+  sharedWithClients?: mongoose.Types.ObjectId[];
   createdAt: Date;
 }
 
@@ -258,7 +285,229 @@ const FileSchema = new Schema<IFile>({
   // AI Training Data fields
   isTrainingData: { type: Boolean, default: false },
   extractedText: { type: String },
-  trainingEnabled: { type: Boolean, default: false }
+  trainingEnabled: { type: Boolean, default: false },
+  // Client Portal fields
+  isClientDocument: { type: Boolean, default: false },
+  consultationId: { type: Schema.Types.ObjectId, ref: 'ConsultationBooking' },
+  sharedWithClients: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+}, { timestamps: true });
+
+// Client Profile interface and schema
+export interface IClientProfile extends Document {
+  _id: string;
+  userId: mongoose.Types.ObjectId;
+  businessType?: string;
+  industry?: string;
+  companySize?: string;
+  legalNeeds?: string[];
+  preferredContactMethod: 'email' | 'phone' | 'both';
+  timezone?: string;
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    postalCode: string;
+  };
+  taxId?: string;
+  billingAddress?: {
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    postalCode: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const ClientProfileSchema = new Schema<IClientProfile>({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+  businessType: { type: String },
+  industry: { type: String },
+  companySize: { type: String, enum: ['1-10', '11-50', '51-200', '201-1000', '1000+'] },
+  legalNeeds: [{ type: String }],
+  preferredContactMethod: {
+    type: String,
+    enum: ['email', 'phone', 'both'],
+    default: 'email'
+  },
+  timezone: { type: String, default: 'Africa/Harare' },
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    country: String,
+    postalCode: String
+  },
+  taxId: { type: String },
+  billingAddress: {
+    street: String,
+    city: String,
+    state: String,
+    country: String,
+    postalCode: String
+  }
+}, { timestamps: true });
+
+// Message interface and schema for client communications
+export interface IMessage extends Document {
+  _id: string;
+  fromUserId: mongoose.Types.ObjectId;
+  toUserId: mongoose.Types.ObjectId;
+  subject: string;
+  content: string;
+  messageType: 'general' | 'consultation' | 'invoice' | 'document' | 'system';
+  relatedConsultationId?: mongoose.Types.ObjectId;
+  relatedInvoiceId?: mongoose.Types.ObjectId;
+  relatedFileId?: mongoose.Types.ObjectId;
+  isRead: boolean;
+  readAt?: Date;
+  attachments?: mongoose.Types.ObjectId[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const MessageSchema = new Schema<IMessage>({
+  fromUserId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  toUserId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  subject: { type: String, required: true },
+  content: { type: String, required: true },
+  messageType: {
+    type: String,
+    enum: ['general', 'consultation', 'invoice', 'document', 'system'],
+    default: 'general'
+  },
+  relatedConsultationId: { type: Schema.Types.ObjectId, ref: 'ConsultationBooking' },
+  relatedInvoiceId: { type: Schema.Types.ObjectId, ref: 'Invoice' },
+  relatedFileId: { type: Schema.Types.ObjectId, ref: 'File' },
+  isRead: { type: Boolean, default: false },
+  readAt: { type: Date },
+  attachments: [{ type: Schema.Types.ObjectId, ref: 'File' }]
+}, { timestamps: true });
+
+// Invoice interface and schema
+export interface IInvoice extends Document {
+  _id: string;
+  invoiceNumber: string;
+  clientId: mongoose.Types.ObjectId;
+  consultationId?: mongoose.Types.ObjectId;
+  items: {
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    total: number;
+  }[];
+  subtotal: number;
+  taxRate: number;
+  taxAmount: number;
+  total: number;
+  currency: string;
+  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
+  dueDate: Date;
+  paidAt?: Date;
+  paymentMethod?: string;
+  notes?: string;
+  createdBy: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const InvoiceSchema = new Schema<IInvoice>({
+  invoiceNumber: { type: String, required: true, unique: true },
+  clientId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  consultationId: { type: Schema.Types.ObjectId, ref: 'ConsultationBooking' },
+  items: [{
+    description: { type: String, required: true },
+    quantity: { type: Number, required: true, min: 1 },
+    unitPrice: { type: Number, required: true, min: 0 },
+    total: { type: Number, required: true, min: 0 }
+  }],
+  subtotal: { type: Number, required: true, min: 0 },
+  taxRate: { type: Number, required: true, min: 0, default: 0 },
+  taxAmount: { type: Number, required: true, min: 0, default: 0 },
+  total: { type: Number, required: true, min: 0 },
+  currency: { type: String, required: true, default: 'USD' },
+  status: {
+    type: String,
+    enum: ['draft', 'sent', 'paid', 'overdue', 'cancelled'],
+    default: 'draft'
+  },
+  dueDate: { type: Date, required: true },
+  paidAt: { type: Date },
+  paymentMethod: { type: String },
+  notes: { type: String },
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
+
+// Newsletter Subscriber interface and schema
+export interface INewsletterSubscriber extends Document {
+  _id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  source: 'contact-form' | 'website-signup' | 'admin-added';
+  isActive: boolean;
+  subscribedAt: Date;
+  unsubscribedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const NewsletterSubscriberSchema = new Schema<INewsletterSubscriber>({
+  email: { type: String, required: true, unique: true },
+  firstName: { type: String },
+  lastName: { type: String },
+  source: {
+    type: String,
+    enum: ['contact-form', 'website-signup', 'admin-added'],
+    default: 'contact-form'
+  },
+  isActive: { type: Boolean, default: true },
+  subscribedAt: { type: Date, default: Date.now },
+  unsubscribedAt: { type: Date }
+}, { timestamps: true });
+
+// Resource interface and schema for legal resources
+export interface IResource extends Document {
+  _id: string;
+  title: string;
+  description: string;
+  content: string;
+  category: 'template' | 'guide' | 'article' | 'checklist' | 'regulation';
+  serviceType?: string;
+  tags: string[];
+  fileUrl?: string;
+  isPublished: boolean;
+  isPremium: boolean;
+  accessLevel: 'all' | 'client' | 'consultation-clients';
+  downloadCount: number;
+  createdBy: mongoose.Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const ResourceSchema = new Schema<IResource>({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  content: { type: String },
+  category: {
+    type: String,
+    enum: ['template', 'guide', 'article', 'checklist', 'regulation'],
+    required: true
+  },
+  serviceType: { type: String },
+  tags: [{ type: String }],
+  fileUrl: { type: String },
+  isPublished: { type: Boolean, default: false },
+  isPremium: { type: Boolean, default: false },
+  accessLevel: {
+    type: String,
+    enum: ['all', 'client', 'consultation-clients'],
+    default: 'client'
+  },
+  downloadCount: { type: Number, default: 0 },
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
 // Create models
@@ -272,3 +521,8 @@ export const Testimonial = mongoose.model<ITestimonial>('Testimonial', Testimoni
 export const TeamMember = mongoose.model<ITeamMember>('TeamMember', TeamMemberSchema);
 export const FAQItem = mongoose.model<IFAQItem>('FAQItem', FAQItemSchema);
 export const File = mongoose.model<IFile>('File', FileSchema);
+export const ClientProfile = mongoose.model<IClientProfile>('ClientProfile', ClientProfileSchema);
+export const Message = mongoose.model<IMessage>('Message', MessageSchema);
+export const Invoice = mongoose.model<IInvoice>('Invoice', InvoiceSchema);
+export const Resource = mongoose.model<IResource>('Resource', ResourceSchema);
+export const NewsletterSubscriber = mongoose.model<INewsletterSubscriber>('NewsletterSubscriber', NewsletterSubscriberSchema);

@@ -11,7 +11,20 @@ export interface EmailConfig {
   companyEmail: string;
 }
 
-export const emailConfig: EmailConfig = {
+// Brevo (Sendinblue) SMTP configuration
+const useBrevo = process.env.USE_BREVO === 'true' || process.env.BREVO_API_KEY;
+
+export const emailConfig: EmailConfig = useBrevo ? {
+  host: 'smtp-relay.brevo.com',
+  port: 587,
+  secure: false, // STARTTLS
+  auth: {
+    user: process.env.BREVO_EMAIL || process.env.SMTP_USER || '',
+    pass: process.env.BREVO_API_KEY || process.env.SMTP_PASS || '',
+  },
+  from: process.env.FROM_EMAIL || `IPEACE Consultancy <${process.env.BREVO_EMAIL || 'noreply@ipeace-consultancy.com'}>`,
+  companyEmail: process.env.COMPANY_EMAIL || 'info@ipeace-consultancy.com',
+} : {
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '587'),
   secure: process.env.SMTP_SECURE === 'true',
@@ -29,6 +42,7 @@ export const emailTemplates = {
     customerSubject: 'Thank you for contacting IPEACE Consultancy',
     companySubject: 'New Contact Form Submission - IPEACE Consultancy',
     confirmationSubject: 'Contact Confirmed - IPEACE Consultancy',
+    responseSubject: 'Personal Response to Your Inquiry - IPEACE Consultancy',
   },
   consultation: {
     customerSubject: 'Consultation Booking Confirmation - IPEACE Consultancy',

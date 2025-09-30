@@ -43,7 +43,7 @@ export default function ContactList() {
 
   const fetchContacts = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/contacts', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -101,7 +101,7 @@ export default function ContactList() {
     console.log(`[DEBUG] Frontend: Attempting to update contact ${contactId} status to: ${newStatus}`);
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/contacts/${contactId}/status`, {
         method: 'PATCH',
         headers: {
@@ -149,33 +149,34 @@ export default function ContactList() {
     if (!selectedContact || !responseMessage.trim()) return;
 
     setSendingResponse(true);
-    try {
-      console.log(`[DEBUG] Frontend: Sending response to contact ${selectedContact.id}`);
+    console.log(`[DEBUG] Sending personalized response to contact ${selectedContact.id}`);
+    console.log(`[DEBUG] Response message: "${responseMessage.substring(0, 100)}..."`);
 
-      // First update the status to responded
-      const token = localStorage.getItem('authToken');
-      const statusResponse = await fetch(`/api/admin/contacts/${selectedContact.id}/status`, {
-        method: 'PATCH',
+    try {
+      const token = localStorage.getItem('adminToken');
+
+      // Send personalized response via new API endpoint
+      const response = await fetch(`/api/admin/contacts/${selectedContact.id}/response`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ status: 'responded' })
+        body: JSON.stringify({ responseMessage: responseMessage.trim() })
       });
 
-      if (!statusResponse.ok) {
-        throw new Error('Failed to update contact status');
+      if (!response.ok) {
+        const error = await response.json();
+        console.log(`[DEBUG] Failed to send personalized response: ${error.error}`);
+        throw new Error(error.error || 'Failed to send response');
       }
 
-      const statusData = await statusResponse.json();
-      console.log(`[DEBUG] Frontend: Contact status updated to responded`);
+      const data = await response.json();
+      console.log(`[DEBUG] Successfully sent personalized response and updated contact status`);
 
       // Clean the updated contact data
-      const updatedContact = statusData.contact._doc || statusData.contact;
+      const updatedContact = data.contact._doc || data.contact;
       const { $__, _doc, ...cleanUpdatedContact } = updatedContact;
-
-      // In a real implementation, this would call an API endpoint to send email
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
 
       setContacts(contacts.map(contact =>
         contact.id === selectedContact.id
@@ -185,7 +186,7 @@ export default function ContactList() {
 
       toast({
         title: 'Success',
-        description: 'Response sent successfully'
+        description: 'Personalized response sent successfully'
       });
 
       setShowResponseDialog(false);

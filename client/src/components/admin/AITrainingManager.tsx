@@ -29,7 +29,7 @@ export default function AITrainingManager() {
 
   const fetchTrainingFiles = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/training/files', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -66,7 +66,7 @@ export default function AITrainingManager() {
     setSuccess('');
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const formData = new FormData();
       formData.append('file', file);
 
@@ -100,7 +100,7 @@ export default function AITrainingManager() {
 
   const toggleTrainingStatus = async (fileId: string, currentStatus: boolean) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/training/files/${fileId}/status`, {
         method: 'PATCH',
         headers: {

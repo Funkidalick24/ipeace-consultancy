@@ -81,7 +81,7 @@ export default function ContentManager() {
   const fetchAllContent = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const headers = {
         'Authorization': `Bearer ${token}`
       };
@@ -128,7 +128,7 @@ export default function ContentManager() {
     displayImage?: string;
   }) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/blogs', {
         method: 'POST',
         headers: {
@@ -160,7 +160,7 @@ export default function ContentManager() {
     if (!editingBlog) return;
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/blogs/${editingBlog.id}`, {
         method: 'PUT',
         headers: {
@@ -184,7 +184,7 @@ export default function ContentManager() {
 
   const handleDeleteBlogPost = async (id: string) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/blogs/${id}`, {
         method: 'DELETE',
         headers: {
@@ -205,7 +205,7 @@ export default function ContentManager() {
 
   const handleCreateTestimonial = async (testimonialData: Omit<Testimonial, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/testimonials', {
         method: 'POST',
         headers: {
@@ -228,7 +228,7 @@ export default function ContentManager() {
 
   const handleUpdateTestimonial = async (id: string, testimonialData: Partial<Testimonial>) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/testimonials/${id}`, {
         method: 'PUT',
         headers: {
@@ -251,7 +251,7 @@ export default function ContentManager() {
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/testimonials/${id}`, {
         method: 'DELETE',
         headers: {
@@ -272,7 +272,7 @@ export default function ContentManager() {
 
   const handleCreateTeamMember = async (memberData: Omit<TeamMember, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/team', {
         method: 'POST',
         headers: {
@@ -295,7 +295,7 @@ export default function ContentManager() {
 
   const handleUpdateTeamMember = async (id: string, memberData: Partial<TeamMember>) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/team/${id}`, {
         method: 'PUT',
         headers: {
@@ -318,7 +318,7 @@ export default function ContentManager() {
 
   const handleDeleteTeamMember = async (id: string) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/team/${id}`, {
         method: 'DELETE',
         headers: {
@@ -339,7 +339,7 @@ export default function ContentManager() {
 
   const handleCreateFAQ = async (faqData: Omit<FAQItem, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/faq', {
         method: 'POST',
         headers: {
@@ -362,7 +362,7 @@ export default function ContentManager() {
 
   const handleUpdateFAQ = async (id: string, faqData: Partial<FAQItem>) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/faq/${id}`, {
         method: 'PUT',
         headers: {
@@ -385,7 +385,7 @@ export default function ContentManager() {
 
   const handleDeleteFAQ = async (id: string) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/faq/${id}`, {
         method: 'DELETE',
         headers: {

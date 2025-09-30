@@ -193,8 +193,152 @@ export async function sendConsultationConfirmationEmail(booking: any): Promise<v
   }
 }
 
+export async function sendContactResponse(contact: ContactNotification & { responseMessage: string }): Promise<void> {
+  try {
+    const timestamp = new Date().toISOString();
+
+    // Prepare data for response template
+    const templateData = {
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      email: contact.email,
+      company: contact.company || 'Not specified',
+      service: contact.service || 'General inquiry',
+      originalMessage: contact.message,
+      responseMessage: contact.responseMessage,
+      timestamp: formatEmailDate(new Date()),
+    };
+
+    // Send personalized response email to customer
+    const responseTemplatePath = path.join(projectRoot, 'server/templates/contact-response.html');
+    const responseHtml = await loadAndRenderTemplate(responseTemplatePath, templateData);
+
+    await transporter.sendMail({
+      to: contact.email,
+      subject: emailTemplates.contact.responseSubject || 'Personal Response to Your Inquiry - IPEACE Consultancy',
+      html: responseHtml,
+      text: `Dear ${contact.firstName} ${contact.lastName},\n\nOur Response:\n\n${contact.responseMessage}\n\nYour original message: ${contact.message}\n\nBest regards,\nThe IPEACE Consultancy Team`,
+    });
+
+    console.log('✅ Personalized contact response email sent successfully');
+  } catch (error) {
+    console.error('❌ Error sending personalized contact response email:', error);
+    throw error;
+  }
+}
+
 export async function sendAutoReply(email: string, firstName: string): Promise<void> {
   // This function is now handled by sendContactNotification
   // Keeping for backward compatibility
   console.log(`ℹ️ Auto-reply handled by sendContactNotification for ${firstName} at ${email}`);
+}
+
+export async function sendNewsletter(subject: string, content: string, subscriberEmails: string[]): Promise<{ success: number; failed: number }> {
+  let successCount = 0;
+  let failedCount = 0;
+
+  console.log(`📧 Sending newsletter "${subject}" to ${subscriberEmails.length} subscribers`);
+
+  for (const email of subscriberEmails) {
+    try {
+      const templateData = {
+        subject: subject,
+        content: content,
+        unsubscribeUrl: `${process.env.FRONTEND_URL || 'https://ipeace-consultancy.com'}/unsubscribe?email=${encodeURIComponent(email)}`
+      };
+
+      // Send newsletter email
+      const newsletterTemplatePath = path.join(projectRoot, 'server/templates/newsletter.html');
+      const newsletterHtml = await loadAndRenderTemplate(newsletterTemplatePath, templateData);
+
+      await transporter.sendMail({
+        to: email,
+        subject: subject,
+        html: newsletterHtml,
+        text: content.replace(/<[^>]*>/g, ''), // Strip HTML for text version
+      });
+
+      successCount++;
+      console.log(`✅ Newsletter sent to ${email}`);
+    } catch (error) {
+      console.error(`❌ Failed to send newsletter to ${email}:`, error);
+      failedCount++;
+    }
+  }
+
+  console.log(`📧 Newsletter sending complete. Success: ${successCount}, Failed: ${failedCount}`);
+  return { success: successCount, failed: failedCount };
+}
+
+export async function sendEmailVerificationCode(email: string, firstName: string, verificationCode: string): Promise<boolean> {
+  try {
+    const templateData = {
+      firstName: firstName,
+      verificationCode: verificationCode,
+      timestamp: formatEmailDate(new Date()),
+    };
+
+    // Create a simple HTML template for verification email
+    const verificationHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Email Verification - IPEACE Consultancy</title>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: white; padding: 30px; border: 1px solid #e5e7eb; border-radius: 0 0 8px 8px; }
+            .code { font-size: 32px; font-weight: bold; color: #1e40af; text-align: center; margin: 20px 0; letter-spacing: 4px; }
+            .footer { text-align: center; margin-top: 30px; color: #6b7280; font-size: 14px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>IPEACE Consultancy</h1>
+              <p>Email Verification</p>
+            </div>
+            <div class="content">
+              <h2>Hello ${firstName},</h2>
+              <p>Welcome to IPEACE Consultancy! To complete your account setup and ensure the security of your account, please verify your email address.</p>
+
+              <p>Your verification code is:</p>
+
+              <div class="code">${verificationCode}</div>
+
+              <p>This code will expire in 15 minutes for security reasons. If you didn't request this verification, please ignore this email.</p>
+
+              <p>If you're having trouble copying the code, you can also verify your account by clicking the button below:</p>
+
+              <p style="text-align: center; margin: 30px 0;">
+                <a href="#" style="background-color: #1e40af; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Verify Email Address</a>
+              </p>
+
+              <p>Thank you for choosing IPEACE Consultancy. We're excited to help you with your legal needs!</p>
+
+              <div class="footer">
+                <p>This verification code was sent on ${templateData.timestamp}</p>
+                <p>If you have any questions, please contact our support team.</p>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    await transporter.sendMail({
+      to: email,
+      subject: 'Verify Your Email - IPEACE Consultancy',
+      html: verificationHtml,
+      text: `Hello ${firstName},\n\nYour email verification code is: ${verificationCode}\n\nThis code will expire in 15 minutes.\n\nWelcome to IPEACE Consultancy!`,
+    });
+
+    console.log(`✅ Email verification code sent to ${email}`);
+    return true;
+  } catch (error) {
+    console.error('❌ Error sending email verification code:', error);
+    return false;
+  }
 }

@@ -12,6 +12,23 @@ export const Footer = memo(function Footer() {
     window.location.href = path;
   };
 
+  const navigateToPortal = () => {
+    // Check if user is authenticated
+    const adminToken = localStorage.getItem('adminToken');
+    const clientToken = localStorage.getItem('clientToken');
+
+    if (adminToken) {
+      // Admin is logged in, go to admin dashboard
+      window.location.href = '/admin';
+    } else if (clientToken) {
+      // Client is logged in, go to client dashboard
+      window.location.href = '/client/dashboard';
+    } else {
+      // No one is logged in, go to unified portal for authentication
+      window.location.href = '/client-portal';
+    }
+  };
+
   return (
     <footer className="bg-primary-blue text-white py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -182,9 +199,9 @@ export const Footer = memo(function Footer() {
               </button>
             </LegalPopup>
             <button
-              onClick={() => navigateToPage('/admin')}
+              onClick={navigateToPortal}
               className="text-blue-100 hover:text-white text-sm transition-colors duration-200"
-              aria-label="Admin Portal"
+              aria-label="Client Portal"
             >
               Portal
             </button>

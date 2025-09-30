@@ -14,11 +14,23 @@ export function renderTemplate(template: string, data: Record<string, any>): str
 // Load and render HTML template from file
 export async function loadAndRenderTemplate(templatePath: string, data: Record<string, any>): Promise<string> {
   try {
+    console.log(`📖 Attempting to read template file: ${templatePath}`);
     const fs = await import('fs/promises');
     const template = await fs.readFile(templatePath, 'utf-8');
-    return renderTemplate(template, data);
+    console.log(`📄 Template file read successfully, raw length: ${template.length} characters`);
+    const rendered = renderTemplate(template, data);
+    console.log(`🎨 Template rendered successfully, final length: ${rendered.length} characters`);
+    return rendered;
   } catch (error) {
-    console.error('Error loading template:', error);
+    console.error(`❌ Error loading template from ${templatePath}:`, error);
+    if (error instanceof Error) {
+      console.error(`❌ Error details:`, {
+        message: error.message,
+        code: (error as any).code,
+        errno: (error as any).errno,
+        path: (error as any).path
+      });
+    }
     throw new Error(`Failed to load template: ${templatePath}`);
   }
 }

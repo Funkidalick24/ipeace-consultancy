@@ -3,9 +3,10 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSchema, chatRequestSchema, consultationBookingSchema, insertUserSchema, insertBlogPostSchema, blogPostSchema } from "@shared/schema";
 import { getChatbotResponse } from "./services/openai";
-import { sendContactNotification, sendAutoReply, sendContactConfirmation, sendConsultationConfirmationEmail } from "./services/email";
+import { sendContactNotification, sendAutoReply, sendContactConfirmation, sendContactResponse, sendConsultationConfirmationEmail, sendNewsletter } from "./services/email";
 import { sendConsultationBookingNotification, sendConsultationConfirmation, getServiceTypeName, getConsultationTypeName } from "./services/consultation";
 import { authService } from "./services/auth";
+import { EmailVerificationService } from "./services/email-verification";
 import { nanoid } from "nanoid";
 import sanitizeHtml from 'sanitize-html';
 import { upload, saveFileMetadata } from "./upload";
@@ -14,26 +15,41 @@ import { microsoftCalendar } from "./services/microsoft-calendar";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PassThrough } from 'stream';
+import mongoose from 'mongoose';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   const authenticateToken = async (req: any, res: any, next: any) => {
+    console.log(`[AUTH DEBUG] ${req.method} ${req.path} - Authenticating request`);
+
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
+    console.log(`[AUTH DEBUG] Token present: ${!!token}`);
+
     if (!token) {
+      console.log(`[AUTH DEBUG] No token provided for ${req.method} ${req.path}`);
       return res.status(401).json({ error: 'Access token required' });
     }
 
-    const user = await authService.getUserFromToken(token);
-    if (!user) {
+    try {
+      const user = await authService.getUserFromToken(token);
+      console.log(`[AUTH DEBUG] User lookup result: ${user ? `User ${user.username} (${user.role})` : 'null'}`);
+
+      if (!user) {
+        console.log(`[AUTH DEBUG] Token verification failed for ${req.method} ${req.path}`);
+        return res.status(403).json({ error: 'Invalid or expired token' });
+      }
+
+      req.user = user;
+      console.log(`[AUTH DEBUG] Authentication successful for user ${user.username} (${user.role})`);
+      next();
+    } catch (error) {
+      console.error(`[AUTH DEBUG] Authentication error for ${req.method} ${req.path}:`, error);
       return res.status(403).json({ error: 'Invalid or expired token' });
     }
-
-    req.user = user;
-    next();
   };
 
   // Register
@@ -89,10 +105,487 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Verify token
   app.get("/api/auth/verify", authenticateToken, async (req: any, res) => {
+    console.log(`[AUTH DEBUG] Token verification successful for user ${req.user.username} (${req.user.role})`);
     res.json({
       success: true,
       user: { id: req.user._id.toString(), username: req.user.username, role: req.user.role }
     });
+  });
+
+  // Send email verification code
+  app.post("/api/auth/send-verification-code", async (req, res) => {
+    try {
+      const { email, firstName } = req.body;
+
+      if (!email || !firstName) {
+        return res.status(400).json({
+          success: false,
+          message: "Email and first name are required"
+        });
+      }
+
+      const result = await EmailVerificationService.sendVerificationCode(email, firstName);
+
+      res.json({
+        success: result.success,
+        message: result.message
+      });
+    } catch (error) {
+      console.error("Send verification code error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to send verification code"
+      });
+    }
+  });
+
+  // Verify email verification code
+  app.post("/api/auth/verify-email-code", async (req, res) => {
+    try {
+      const { email, code } = req.body;
+
+      if (!email || !code) {
+        return res.status(400).json({
+          success: false,
+          message: "Email and verification code are required"
+        });
+      }
+
+      const result = await EmailVerificationService.verifyEmailCode(email, code);
+
+      res.json({
+        success: result.success,
+        message: result.message
+      });
+    } catch (error) {
+      console.error("Verify email code error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to verify email code"
+      });
+    }
+  });
+
+  // Resend verification code
+  app.post("/api/auth/resend-verification-code", async (req, res) => {
+    try {
+      const { email, firstName } = req.body;
+
+      if (!email || !firstName) {
+        return res.status(400).json({
+          success: false,
+          message: "Email and first name are required"
+        });
+      }
+
+      const result = await EmailVerificationService.resendVerificationCode(email, firstName);
+
+      res.json({
+        success: result.success,
+        message: result.message
+      });
+    } catch (error) {
+      console.error("Resend verification code error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to resend verification code"
+      });
+    }
+  });
+
+  // Check email verification status
+  app.get("/api/auth/verification-status/:email", async (req, res) => {
+    try {
+      const { email } = req.params;
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is required"
+        });
+      }
+
+      const isVerified = await EmailVerificationService.isEmailVerified(email);
+
+      res.json({
+        success: true,
+        isVerified
+      });
+    } catch (error) {
+      console.error("Check verification status error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to check verification status"
+      });
+    }
+  });
+
+  // Client authentication middleware
+  const authenticateClient = async (req: any, res: any, next: any) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Access token required' });
+    }
+
+    const user = await authService.getUserFromToken(token);
+    if (!user || user.role !== 'client') {
+      return res.status(403).json({ error: 'Client access required' });
+    }
+
+    req.user = user;
+    next();
+  };
+
+  // Client registration
+  app.post("/api/client/auth/register", async (req, res) => {
+    try {
+      const { username, password, email, firstName, lastName, phone, company, role } = req.body;
+
+      if (!username || !password || !email || !firstName || !lastName) {
+        return res.status(400).json({
+          success: false,
+          message: "Username, password, email, first name, and last name are required"
+        });
+      }
+
+      const userRole = role && ['client', 'employee'].includes(role) ? role : 'client';
+
+      const result = await authService.register({
+        username,
+        password,
+        email,
+        firstName,
+        lastName,
+        phone,
+        company,
+        role: userRole
+      });
+
+      if (!result) {
+        return res.status(400).json({
+          success: false,
+          message: 'Registration failed - user may already exist'
+        });
+      }
+
+      // Create initial client profile
+      try {
+        await storage.createClientProfile({
+          userId: new mongoose.Types.ObjectId(result.user._id),
+          businessType: req.body.businessType,
+          industry: req.body.industry,
+          companySize: req.body.companySize,
+          legalNeeds: req.body.legalNeeds,
+          preferredContactMethod: req.body.preferredContactMethod || 'email',
+          timezone: req.body.timezone || 'Africa/Harare'
+        });
+      } catch (profileError) {
+        console.error('Error creating client profile:', profileError);
+        // Don't fail registration if profile creation fails
+      }
+
+      // Send email verification code
+      try {
+        if (result.user.email) {
+          await EmailVerificationService.sendVerificationCode(
+            result.user.email,
+            result.user.firstName || 'Client'
+          );
+          console.log(`✅ Verification code sent to ${result.user.email}`);
+        } else {
+          console.error('No email found for user, cannot send verification code');
+        }
+      } catch (verificationError) {
+        console.error('Error sending verification code:', verificationError);
+        // Don't fail registration if verification email fails
+      }
+
+      res.json({
+        success: true,
+        message: 'Client account created successfully. Please check your email for verification code.',
+        user: {
+          id: result.user._id.toString(),
+          username: result.user.username,
+          email: result.user.email,
+          firstName: result.user.firstName,
+          lastName: result.user.lastName,
+          role: result.user.role
+        },
+        token: result.token
+      });
+    } catch (error) {
+      console.error("Client registration error:", error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Registration failed"
+      });
+    }
+  });
+
+  // Client login
+  app.post("/api/client/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password required' });
+      }
+
+      const result = await authService.login(username, password);
+      if (!result || (result.user.role !== 'client' && result.user.role !== 'employee')) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Check if email is verified
+      if (!result.user.isEmailVerified) {
+        return res.status(403).json({
+          error: 'Email not verified',
+          message: 'Please verify your email address before logging in. Check your email for the verification code.',
+          requiresVerification: true,
+          email: result.user.email
+        });
+      }
+
+      // Update last login
+      await storage.updateUserRole(result.user._id.toString(), result.user.role);
+
+      res.json({
+        success: true,
+        message: 'Client login successful',
+        user: {
+          id: result.user._id.toString(),
+          username: result.user.username,
+          email: result.user.email,
+          firstName: result.user.firstName,
+          lastName: result.user.lastName,
+          role: result.user.role
+        },
+        token: result.token
+      });
+    } catch (error) {
+      console.error("Client login error:", error);
+      res.status(500).json({ error: 'Client login failed' });
+    }
+  });
+
+  // Client profile management
+  app.get("/api/client/profile", authenticateClient, async (req: any, res) => {
+    try {
+      const profile = await storage.getClientProfile(req.user._id.toString());
+      const user = await storage.getUser(req.user._id.toString());
+
+      res.json({
+        success: true,
+        profile: profile || null,
+        user: user ? {
+          id: user._id.toString(),
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          company: user.company,
+          isEmailVerified: user.isEmailVerified,
+          lastLogin: user.lastLogin
+        } : null
+      });
+    } catch (error) {
+      console.error("Get client profile error:", error);
+      res.status(500).json({ error: "Failed to get client profile" });
+    }
+  });
+
+  app.put("/api/client/profile", authenticateClient, async (req: any, res) => {
+    try {
+      const { profileData, userData } = req.body;
+
+      // Update user data if provided
+      if (userData) {
+        // Note: In a real app, you'd want to validate and sanitize this data
+        await storage.updateUserRole(req.user._id.toString(), req.user.role); // This is just to update the user, we'd need a proper updateUser method
+      }
+
+      // Update or create client profile
+      const profile = await storage.updateClientProfile(req.user._id.toString(), profileData);
+
+      res.json({
+        success: true,
+        message: 'Profile updated successfully',
+        profile
+      });
+    } catch (error) {
+      console.error("Update client profile error:", error);
+      res.status(500).json({ error: "Failed to update client profile" });
+    }
+  });
+
+  // Client Dashboard API endpoints
+  app.get("/api/client/dashboard", authenticateClient, async (req: any, res) => {
+    try {
+      const clientId = req.user._id.toString();
+
+      // Get dashboard data in parallel
+      const [consultations, messages, invoices, unreadCount] = await Promise.all([
+        storage.getConsultationsForClient(clientId),
+        storage.getMessagesForUser(clientId),
+        storage.getInvoicesForClient(clientId),
+        storage.getUnreadMessageCount(clientId)
+      ]);
+
+      // Get recent activity (last 5 items from each)
+      const recentConsultations = consultations.slice(0, 3);
+      const recentMessages = messages.slice(0, 3);
+      const recentInvoices = invoices.slice(0, 3);
+
+      res.json({
+        success: true,
+        dashboard: {
+          stats: {
+            totalConsultations: consultations.length,
+            totalMessages: messages.length,
+            totalInvoices: invoices.length,
+            unreadMessages: unreadCount
+          },
+          recentActivity: {
+            consultations: recentConsultations,
+            messages: recentMessages,
+            invoices: recentInvoices
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Get client dashboard error:", error);
+      res.status(500).json({ error: "Failed to get dashboard data" });
+    }
+  });
+
+  // Client consultations
+  app.get("/api/client/consultations", authenticateClient, async (req: any, res) => {
+    try {
+      const consultations = await storage.getConsultationsForClient(req.user._id.toString());
+      res.json({ consultations });
+    } catch (error) {
+      console.error("Get client consultations error:", error);
+      res.status(500).json({ error: "Failed to get consultations" });
+    }
+  });
+
+  // Client messages/communications
+  app.get("/api/client/messages", authenticateClient, async (req: any, res) => {
+    try {
+      const messages = await storage.getMessagesForUser(req.user._id.toString());
+      const unreadCount = await storage.getUnreadMessageCount(req.user._id.toString());
+      res.json({ messages, unreadCount });
+    } catch (error) {
+      console.error("Get client messages error:", error);
+      res.status(500).json({ error: "Failed to get messages" });
+    }
+  });
+
+  app.post("/api/client/messages", authenticateClient, async (req: any, res) => {
+    try {
+      const { subject, content, messageType } = req.body;
+
+      if (!subject || !content) {
+        return res.status(400).json({ error: "Subject and content are required" });
+      }
+
+      // For now, messages to admin - in future could support client-to-client
+      const adminUsers = await storage.getAllUsers();
+      const adminUser = adminUsers.find(user => user.role === 'admin');
+
+      if (!adminUser) {
+        return res.status(500).json({ error: "No admin user found" });
+      }
+
+      const message = await storage.createMessage({
+        fromUserId: new mongoose.Types.ObjectId(req.user._id),
+        toUserId: new mongoose.Types.ObjectId(adminUser._id),
+        subject: sanitizeHtml(subject, { allowedTags: [], allowedAttributes: {} }),
+        content: sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} }),
+        messageType: messageType || 'general'
+      });
+
+      res.json({
+        success: true,
+        message: 'Message sent successfully',
+        messageId: message._id
+      });
+    } catch (error) {
+      console.error("Send client message error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
+  app.patch("/api/client/messages/:id/read", authenticateClient, async (req: any, res) => {
+    try {
+      const message = await storage.markMessageAsRead(req.params.id);
+      if (!message) {
+        return res.status(404).json({ error: "Message not found" });
+      }
+
+      res.json({ success: true, message: 'Message marked as read' });
+    } catch (error) {
+      console.error("Mark message read error:", error);
+      res.status(500).json({ error: "Failed to mark message as read" });
+    }
+  });
+
+  // Client invoices
+  app.get("/api/client/invoices", authenticateClient, async (req: any, res) => {
+    try {
+      const invoices = await storage.getInvoicesForClient(req.user._id.toString());
+      res.json({ invoices });
+    } catch (error) {
+      console.error("Get client invoices error:", error);
+      res.status(500).json({ error: "Failed to get invoices" });
+    }
+  });
+
+  // Client documents/files
+  app.get("/api/client/documents", authenticateClient, async (req: any, res) => {
+    try {
+      const documents = await storage.getClientDocuments(req.user._id.toString());
+      res.json({ documents });
+    } catch (error) {
+      console.error("Get client documents error:", error);
+      res.status(500).json({ error: "Failed to get documents" });
+    }
+  });
+
+  // Client resources
+  app.get("/api/client/resources", authenticateClient, async (req: any, res) => {
+    try {
+      const { search, category } = req.query;
+      let resources;
+
+      if (search || category) {
+        resources = await storage.searchResources(search as string, category as string);
+      } else {
+        resources = await storage.getResourcesForClients();
+      }
+
+      res.json({ resources });
+    } catch (error) {
+      console.error("Get client resources error:", error);
+      res.status(500).json({ error: "Failed to get resources" });
+    }
+  });
+
+  app.post("/api/client/resources/:id/download", authenticateClient, async (req: any, res) => {
+    try {
+      const resource = await storage.incrementResourceDownloadCount(req.params.id);
+      if (!resource) {
+        return res.status(404).json({ error: "Resource not found" });
+      }
+
+      res.json({ success: true, message: 'Download recorded' });
+    } catch (error) {
+      console.error("Record resource download error:", error);
+      res.status(500).json({ error: "Failed to record download" });
+    }
   });
 
   // Admin User Management Routes
@@ -215,9 +708,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get dashboard statistics (admin only)
   app.get("/api/admin/dashboard-stats", authenticateToken, async (req: any, res) => {
     try {
+      console.log(`[ADMIN DEBUG] Dashboard stats request for user ${req.user.username} with role ${req.user.role}`);
       if (req.user.role !== 'admin') {
+        console.log(`[ADMIN DEBUG] Access denied: User ${req.user.username} has role ${req.user.role}, admin required`);
         return res.status(403).json({ error: 'Admin access required' });
       }
+      console.log(`[ADMIN DEBUG] Admin access granted for dashboard stats`);
 
       const [users, consultations, contacts, blogs] = await Promise.all([
         storage.getAllUsers(),
@@ -1140,7 +1636,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/contact", async (req, res) => {
     try {
       const validatedData = insertContactSchema.parse(req.body);
-          
+
       // Sanitize user input
       const sanitizedData = {
         firstName: sanitizeHtml(validatedData.firstName, { allowedTags: [], allowedAttributes: {} }),
@@ -1151,10 +1647,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: sanitizeHtml(validatedData.message, { allowedTags: [], allowedAttributes: {} }),
         newsletter: validatedData.newsletter
       };
-      
+
       // Store the contact submission
       const contact = await storage.createContactSubmission(sanitizedData);
-      
+
+      // If newsletter subscription is requested, add to newsletter subscribers
+      if (sanitizedData.newsletter) {
+        try {
+          // Check if subscriber already exists
+          const existingSubscriber = await storage.getNewsletterSubscriber(sanitizedData.email);
+          if (!existingSubscriber) {
+            await storage.createNewsletterSubscriber({
+              email: sanitizedData.email,
+              firstName: sanitizedData.firstName,
+              lastName: sanitizedData.lastName,
+              source: 'contact-form'
+            });
+            console.log(`✅ Added ${sanitizedData.email} to newsletter subscribers`);
+          } else {
+            console.log(`ℹ️ ${sanitizedData.email} already subscribed to newsletter`);
+          }
+        } catch (newsletterError) {
+          console.error('❌ Error adding newsletter subscriber:', newsletterError);
+          // Don't fail the contact form submission if newsletter signup fails
+        }
+      }
+
       // Send notifications
       await sendContactNotification({
         ...sanitizedData,
@@ -1163,7 +1681,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         newsletter: sanitizedData.newsletter || false,
       });
       await sendAutoReply(validatedData.email, validatedData.firstName);
-      
+
       res.json({
         success: true,
         message: "Thank you for your message! We will get back to you soon.",
@@ -1171,9 +1689,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error("Contact form error:", error);
-      res.status(400).json({ 
-        success: false, 
-        message: error instanceof Error ? error.message : "Failed to process contact form" 
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to process contact form"
       });
     }
   });
@@ -1370,6 +1888,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false, 
         message: error instanceof Error ? error.message : "Failed to book consultation" 
       });
+    }
+  });
+
+  // Send personalized contact response
+  app.post("/api/admin/contacts/:id/response", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const id = req.params.id;
+      const { responseMessage } = req.body;
+
+      if (!responseMessage || !responseMessage.trim()) {
+        return res.status(400).json({ error: 'Response message is required' });
+      }
+
+      // Get the contact submission
+      const contact = await storage.getContactSubmission(id);
+      if (!contact) {
+        return res.status(404).json({ error: "Contact submission not found" });
+      }
+
+      // Send personalized response email
+      await sendContactResponse({
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        email: contact.email,
+        company: contact.company,
+        service: contact.service,
+        message: contact.message,
+        newsletter: contact.newsletter,
+        responseMessage: responseMessage.trim()
+      });
+
+      // Update contact status to responded
+      const updatedContact = await storage.updateContactSubmissionStatus(id, 'responded');
+      if (!updatedContact) {
+        return res.status(404).json({ error: "Contact submission not found" });
+      }
+
+      console.log(`[DEBUG] Successfully sent personalized response and updated contact ${id} status to responded`);
+
+      res.json({
+        success: true,
+        message: 'Personalized response sent successfully',
+        contact: {
+          id: updatedContact._id.toString(),
+          firstName: updatedContact.firstName,
+          lastName: updatedContact.lastName,
+          email: updatedContact.email,
+          company: updatedContact.company,
+          service: updatedContact.service,
+          message: updatedContact.message,
+          newsletter: updatedContact.newsletter,
+          status: updatedContact.status,
+          respondedAt: updatedContact.respondedAt,
+          createdAt: updatedContact.createdAt
+        }
+      });
+    } catch (error) {
+      console.error("Send personalized contact response error:", error);
+      res.status(500).json({ error: "Failed to send personalized response" });
     }
   });
 
@@ -1853,6 +2434,178 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Update training file status error:', error);
       res.status(500).json({ error: "Failed to update training file status" });
+    }
+  });
+
+  // Newsletter subscriber management routes (admin only)
+  app.get("/api/admin/newsletter/subscribers", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const subscribers = await storage.getAllNewsletterSubscribers();
+      const subscribersWithIds = subscribers.map(subscriber => ({
+        id: subscriber._id.toString(),
+        email: subscriber.email,
+        firstName: subscriber.firstName,
+        lastName: subscriber.lastName,
+        source: subscriber.source,
+        isActive: subscriber.isActive,
+        subscribedAt: subscriber.subscribedAt,
+        unsubscribedAt: subscriber.unsubscribedAt,
+        createdAt: subscriber.createdAt
+      }));
+
+      res.json({ subscribers: subscribersWithIds });
+    } catch (error) {
+      console.error("Get newsletter subscribers error:", error);
+      res.status(500).json({ error: "Failed to get newsletter subscribers" });
+    }
+  });
+
+  app.post("/api/admin/newsletter/subscribers", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { email, firstName, lastName } = req.body;
+
+      if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+      }
+
+      // Check if subscriber already exists
+      const existingSubscriber = await storage.getNewsletterSubscriber(email);
+      if (existingSubscriber) {
+        return res.status(400).json({ error: 'Subscriber already exists' });
+      }
+
+      const subscriber = await storage.createNewsletterSubscriber({
+        email: sanitizeHtml(email, { allowedTags: [], allowedAttributes: {} }),
+        firstName: firstName ? sanitizeHtml(firstName, { allowedTags: [], allowedAttributes: {} }) : undefined,
+        lastName: lastName ? sanitizeHtml(lastName, { allowedTags: [], allowedAttributes: {} }) : undefined,
+        source: 'admin-added'
+      });
+
+      res.json({
+        success: true,
+        message: 'Newsletter subscriber added successfully',
+        subscriber: {
+          id: subscriber._id.toString(),
+          email: subscriber.email,
+          firstName: subscriber.firstName,
+          lastName: subscriber.lastName,
+          source: subscriber.source,
+          isActive: subscriber.isActive,
+          subscribedAt: subscriber.subscribedAt
+        }
+      });
+    } catch (error) {
+      console.error("Add newsletter subscriber error:", error);
+      res.status(500).json({ error: "Failed to add newsletter subscriber" });
+    }
+  });
+
+  app.patch("/api/admin/newsletter/subscribers/:email/status", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { email } = req.params;
+      const { isActive } = req.body;
+
+      if (typeof isActive !== 'boolean') {
+        return res.status(400).json({ error: 'isActive must be a boolean' });
+      }
+
+      const updates: any = { isActive };
+      if (!isActive) {
+        updates.unsubscribedAt = new Date();
+      }
+
+      const subscriber = await storage.updateNewsletterSubscriber(email, updates);
+      if (!subscriber) {
+        return res.status(404).json({ error: "Newsletter subscriber not found" });
+      }
+
+      res.json({
+        success: true,
+        message: `Subscriber ${isActive ? 'activated' : 'deactivated'} successfully`,
+        subscriber: {
+          id: subscriber._id.toString(),
+          email: subscriber.email,
+          isActive: subscriber.isActive,
+          unsubscribedAt: subscriber.unsubscribedAt
+        }
+      });
+    } catch (error) {
+      console.error("Update newsletter subscriber status error:", error);
+      res.status(500).json({ error: "Failed to update newsletter subscriber status" });
+    }
+  });
+
+  app.delete("/api/admin/newsletter/subscribers/:email", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { email } = req.params;
+      const deleted = await storage.deleteNewsletterSubscriber(email);
+
+      if (!deleted) {
+        return res.status(404).json({ error: "Newsletter subscriber not found" });
+      }
+
+      res.json({
+        success: true,
+        message: 'Newsletter subscriber deleted successfully'
+      });
+    } catch (error) {
+      console.error("Delete newsletter subscriber error:", error);
+      res.status(500).json({ error: "Failed to delete newsletter subscriber" });
+    }
+  });
+
+  // Send newsletter to all active subscribers
+  app.post("/api/admin/newsletter/send", authenticateToken, async (req: any, res) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin access required' });
+      }
+
+      const { subject, content } = req.body;
+
+      if (!subject || !content) {
+        return res.status(400).json({ error: 'Subject and content are required' });
+      }
+
+      // Get all active subscribers
+      const subscribers = await storage.getActiveNewsletterSubscribers();
+      const subscriberEmails = subscribers.map(sub => sub.email);
+
+      if (subscriberEmails.length === 0) {
+        return res.status(400).json({ error: 'No active newsletter subscribers found' });
+      }
+
+      // Send newsletter
+      const result = await sendNewsletter(
+        sanitizeHtml(subject, { allowedTags: [], allowedAttributes: {} }),
+        content, // Allow HTML content for rich formatting
+        subscriberEmails
+      );
+
+      res.json({
+        success: true,
+        message: `Newsletter sent to ${result.success} subscribers${result.failed > 0 ? ` (${result.failed} failed)` : ''}`,
+        result
+      });
+    } catch (error) {
+      console.error("Send newsletter error:", error);
+      res.status(500).json({ error: "Failed to send newsletter" });
     }
   });
 

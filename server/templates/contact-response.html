@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Confirmed - IPEACE Consultancy</title>
+    <title>Personal Response - IPEACE Consultancy</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
         .container { max-width: 600px; margin: 0 auto; background-color: white; }
@@ -11,9 +11,10 @@
         .content { padding: 40px 30px; color: #333; line-height: 1.6; }
         .footer { background-color: #f8f9fa; padding: 30px; text-align: center; color: #666; font-size: 14px; }
         .button { display: inline-block; background-color: #f5a623; color: #1b365d; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
-        .highlight { background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .response-box { background-color: #f0f8ff; padding: 25px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f5a623; }
+        .original-inquiry { background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1b365d; }
         .contact-info { background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
-        .success-icon { font-size: 48px; color: #28a745; text-align: center; margin: 20px 0; }
+        .response-icon { font-size: 48px; color: #f5a623; text-align: center; margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -22,25 +23,35 @@
             <div style="text-align: center; margin-bottom: 20px;">
                 <img src="https://ipeace-consultancy.com/logo.png" alt="IPEACE Consultancy Logo" style="max-width: 150px; height: auto;">
             </div>
-            <h1>🎉 Contact Confirmed!</h1>
-            <p>Your inquiry has been reviewed and confirmed</p>
+            <h1>💬 Personal Response</h1>
+            <p>Direct response to your inquiry</p>
         </div>
 
         <div class="content">
-            <div class="success-icon">✅</div>
+            <div class="response-icon">📝</div>
             <p>Dear {{firstName}} {{lastName}},</p>
 
-            <p>Great news! Your contact inquiry has been reviewed and confirmed by our team at IPEACE Consultancy.</p>
+            <p>Thank you for contacting IPEACE Consultancy. We've reviewed your inquiry and wanted to provide you with a personal response.</p>
 
-            <div class="highlight">
-                <h3>Your Inquiry Details:</h3>
+            <div class="original-inquiry">
+                <h3>Your Original Inquiry:</h3>
                 <p><strong>Service Requested:</strong> {{service}}</p>
                 <p><strong>Company:</strong> {{company}}</p>
                 <p><strong>Submitted:</strong> {{timestamp}}</p>
-                <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">CONFIRMED</span></p>
+                <p><strong>Message:</strong></p>
+                <div style="background-color: white; padding: 15px; border-radius: 5px; margin-top: 10px; border: 1px solid #e9ecef;">
+                    {{originalMessage}}
+                </div>
             </div>
 
-            <p>Our team will now proceed with your request. You can expect to hear from us within the next 24 hours with more detailed information about how we'll assist you.</p>
+            <div class="response-box">
+                <h3>Our Response:</h3>
+                <div style="background-color: white; padding: 20px; border-radius: 5px; margin-top: 10px; border: 1px solid #e9ecef; white-space: pre-wrap;">
+                    {{responseMessage}}
+                </div>
+            </div>
+
+            <p>If you have any questions about our response or need further clarification, please don't hesitate to reply to this email or contact us directly.</p>
 
             <div class="contact-info">
                 <h4>Direct Contact Information:</h4>
@@ -50,20 +61,18 @@
                 <p>💬 Live Chat: Available 24/7 on our website</p>
             </div>
 
-            <p>If you have any additional information or specific requirements, please don't hesitate to reply to this email or contact us directly.</p>
-
             <div style="text-align: center; margin: 30px 0;">
                 <a href="https://ipeace-consultancy.com" class="button">Visit Our Website</a>
             </div>
 
-            <p>We look forward to working with you!</p>
+            <p>We appreciate your interest in IPEACE Consultancy and look forward to assisting you further.</p>
 
             <p>Best regards,<br>
             <strong>The IPEACE Consultancy Team</strong></p>
         </div>
 
         <div class="footer">
-            <p>This email confirms that your inquiry has been received and is being processed.</p>
+            <p>This is a personal response to your inquiry. For your records, this communication has been logged in our system.</p>
             <p>&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
         </div>
     </div>

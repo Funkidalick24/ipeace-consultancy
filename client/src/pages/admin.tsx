@@ -2,7 +2,6 @@ console.log('[DEBUG] Admin module loading...');
 
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RegisterForm } from '@/components/auth/register-form';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +15,7 @@ import ConsultationList from '@/components/admin/ConsultationList';
 import ContactList from '@/components/admin/ContactList';
 import MediaLibrary from '@/components/admin/MediaLibrary';
 import ContentManager from '@/components/admin/ContentManager';
+import NewsletterManager from '@/components/admin/NewsletterManager';
 
 console.log('[DEBUG] Admin module imports completed');
 
@@ -60,10 +60,6 @@ export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAuth, setShowAuth] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(true);
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
-  const [loginError, setLoginError] = useState('');
   const [showAddBlogForm, setShowAddBlogForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -81,7 +77,7 @@ export default function Admin() {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       if (token) {
         const response = await fetch('/api/auth/verify', {
           headers: {
@@ -90,20 +86,28 @@ export default function Admin() {
         });
         if (response.ok) {
           const data = await response.json();
-          setUser(data.user);
-          fetchBlogs();
-          fetchDashboardStats();
-          fetchRecentActivities();
+          if (data.user.role === 'admin') {
+            setUser(data.user);
+            fetchBlogs();
+            fetchDashboardStats();
+            fetchRecentActivities();
+          } else {
+            // Not an admin, redirect to unified portal
+            window.location.href = '/client-portal';
+          }
         } else {
-          localStorage.removeItem('authToken');
-          setShowAuth(true);
+          localStorage.removeItem('adminToken');
+          // Redirect to unified portal for authentication
+          window.location.href = '/client-portal';
         }
       } else {
-        setShowAuth(true);
+        // No admin token, redirect to unified portal
+        window.location.href = '/client-portal';
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      setShowAuth(true);
+      // Redirect to unified portal on error
+      window.location.href = '/client-portal';
     } finally {
       setLoading(false);
     }
@@ -111,7 +115,7 @@ export default function Admin() {
 
   const fetchBlogs = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/blogs', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -126,7 +130,7 @@ export default function Admin() {
 
   const fetchDashboardStats = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/dashboard-stats', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -143,7 +147,7 @@ export default function Admin() {
 
   const fetchRecentActivities = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/recent-activity', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -161,38 +165,13 @@ export default function Admin() {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(loginData)
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('authToken', data.token);
-        setUser(data.user);
-        setShowAuth(false);
-        setLoginError('');
-      } else {
-        setLoginError(data.error || 'Login failed');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      setLoginError('Login failed');
-    }
-  };
-
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
     setUser(null);
     setBlogs([]);
-    setShowAuth(true);
-    setIsLoginMode(true);
+    // Redirect to unified portal
+    window.location.href = '/client-portal';
   };
 
   const handleAddBlogPost = async (blogPostData: {
@@ -204,7 +183,7 @@ export default function Admin() {
     displayImage?: string;
   }) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/blogs', {
         method: 'POST',
         headers: {
@@ -245,7 +224,7 @@ export default function Admin() {
     if (!editingBlog) return;
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/blogs/${editingBlog.id}`, {
         method: 'PUT',
         headers: {
@@ -274,7 +253,7 @@ export default function Admin() {
     console.log('handleDeleteBlog called with ID:', blogId, 'Type:', typeof blogId);
     if (window.confirm('Are you sure you want to delete this blog post?')) {
       try {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('adminToken');
         console.log('Making DELETE request to:', `/api/blogs/${blogId}`);
         const response = await fetch(`/api/blogs/${blogId}`, {
           method: 'DELETE',
@@ -304,72 +283,6 @@ export default function Admin() {
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center">Loading...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (showAuth) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-16">
-        <div className="container mx-auto px-4 max-w-md">
-          {isLoginMode ? (
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h1 className="text-2xl font-bold text-center mb-6">Admin Login</h1>
-              <form onSubmit={handleLogin}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Username</label>
-                  <input
-                    type="text"
-                    value={loginData.username}
-                    onChange={(e) => setLoginData({...loginData, username: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <label className="block text-gray-700 mb-2">Password</label>
-                  <input
-                    type="password"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-                {loginError && (
-                  <div className="text-red-600 mb-4">{loginError}</div>
-                )}
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Login
-                </button>
-              </form>
-
-              <div className="mt-6 text-center">
-                <p className="text-gray-600">
-                  Don't have an account?{' '}
-                  <button
-                    onClick={() => setIsLoginMode(false)}
-                    className="text-blue-600 hover:text-blue-800 font-medium"
-                  >
-                    Create Account
-                  </button>
-                </p>
-              </div>
-            </div>
-          ) : (
-            <RegisterForm
-              onSuccess={() => {
-                setIsLoginMode(true);
-                setLoginError('');
-                alert('Account created successfully! Please login with your credentials.');
-              }}
-              onSwitchToLogin={() => setIsLoginMode(true)}
-            />
-          )}
         </div>
       </div>
     );
@@ -696,20 +609,7 @@ export default function Admin() {
 
           {/* Communication Tab */}
           <TabsContent value="communication">
-            <Card>
-              <CardHeader>
-                <CardTitle>Email & Communication</CardTitle>
-                <CardDescription>Manage email templates and communications</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Communication Center</h3>
-                  <p className="text-muted-foreground mb-4">Coming soon - Email templates, newsletter management, and communication history</p>
-                  <Button disabled>Feature in Development</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <NewsletterManager />
           </TabsContent>
 
           {/* Media Tab */}

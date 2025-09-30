@@ -38,7 +38,7 @@ export default function UserList({ onEditUser }: UserListProps) {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/users', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -69,7 +69,7 @@ export default function UserList({ onEditUser }: UserListProps) {
 
   const handleRoleChange = async (userId: string, newRole: string) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/users/${userId}/role`, {
         method: 'PATCH',
         headers: {
@@ -108,7 +108,7 @@ export default function UserList({ onEditUser }: UserListProps) {
 
   const handleDeleteUser = async (user: User) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/admin/users/${user.id}`, {
         method: 'DELETE',
         headers: {

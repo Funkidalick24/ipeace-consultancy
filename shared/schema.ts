@@ -4,14 +4,19 @@ import { z } from "zod";
 export const insertUserSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
-  role: z.enum(["admin", "user"]).default("user"),
+  role: z.enum(["admin", "client", "employee"]).default("client"),
+  email: z.string().email().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  phone: z.string().optional(),
+  company: z.string().optional(),
 });
 
 export const userSchema = z.object({
   _id: z.string(),
   username: z.string(),
   password: z.string(),
-  role: z.enum(["admin", "user"]),
+  role: z.enum(["admin", "client", "employee"]),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

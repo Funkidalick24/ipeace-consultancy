@@ -21,6 +21,13 @@ const Admin = lazy(() => {
   console.log('[DEBUG] Lazy loading Admin component');
   return import("./pages/admin");
 });
+const ClientPortal = lazy(() => import("./pages/client-portal"));
+const ClientDashboard = lazy(() => import("./pages/client-dashboard"));
+const ClientConsultations = lazy(() => import("./pages/client-consultations"));
+const ClientDocuments = lazy(() => import("./pages/client-documents"));
+const ClientMessages = lazy(() => import("./pages/client-messages"));
+const ClientInvoices = lazy(() => import("./pages/client-invoices"));
+const ClientResources = lazy(() => import("./pages/client-resources"));
 
 function Router() {
   return (
@@ -33,6 +40,13 @@ function Router() {
       <Route path="/blogs" component={Blogs} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/admin" component={Admin} />
+      <Route path="/client-portal" component={ClientPortal} />
+      <Route path="/client/dashboard" component={ClientDashboard} />
+      <Route path="/client/consultations" component={ClientConsultations} />
+      <Route path="/client/documents" component={ClientDocuments} />
+      <Route path="/client/messages" component={ClientMessages} />
+      <Route path="/client/invoices" component={ClientInvoices} />
+      <Route path="/client/resources" component={ClientResources} />
       <Route component={NotFound} />
     </Switch>
   );

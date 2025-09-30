@@ -45,7 +45,7 @@ export default function ConsultationList() {
 
   const fetchConsultations = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/consultations', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -118,7 +118,7 @@ export default function ConsultationList() {
     setUpdatingStatus(consultationId);
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/consultations/${consultationId}/status`, {
         method: 'PATCH',
         headers: {

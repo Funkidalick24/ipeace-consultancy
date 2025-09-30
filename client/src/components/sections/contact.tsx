@@ -74,6 +74,14 @@ export const ContactSection = memo(function ContactSection() {
   });
 
   const onSubmit = (data: ContactFormData) => {
+    console.log(`[DIAGNOSTIC] Contact form submission:`, {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      newsletter: data.newsletter,
+      messageLength: data.message.length
+    });
+
     // Sanitize user input before sending to server
     const sanitizedData = {
       firstName: DOMPurify.sanitize(data.firstName),
@@ -84,7 +92,18 @@ export const ContactSection = memo(function ContactSection() {
       message: DOMPurify.sanitize(data.message),
       newsletter: data.newsletter
     };
-    
+
+    console.log(`[DIAGNOSTIC] Sanitized data for submission:`, {
+      ...sanitizedData,
+      message: sanitizedData.message.substring(0, 50) + '...' // Truncate for logging
+    });
+
+    // ISSUE: Newsletter subscription is stored in contact record but no separate newsletter subscriber system exists
+    if (data.newsletter) {
+      console.log(`[DIAGNOSTIC] ISSUE DETECTED: User opted for newsletter but no newsletter subscriber system implemented`);
+      console.log(`[DIAGNOSTIC] Newsletter data will be stored in contact record only`);
+    }
+
     contactMutation.mutate(sanitizedData);
   };
 

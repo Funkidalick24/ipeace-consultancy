@@ -42,7 +42,7 @@ export default function MediaLibrary() {
 
   const fetchFiles = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/files', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -79,7 +79,7 @@ export default function MediaLibrary() {
     setUploadProgress(0);
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const formData = new FormData();
 
       for (let i = 0; i < selectedFiles.length; i++) {
@@ -128,7 +128,7 @@ export default function MediaLibrary() {
 
   const handleDeleteFile = async (fileId: string) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch(`/api/files/${fileId}`, {
         method: 'DELETE',
         headers: {
@@ -165,7 +165,7 @@ export default function MediaLibrary() {
     if (selectedFiles.length === 0) return;
 
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const deletePromises = selectedFiles.map(fileId =>
         fetch(`/api/files/${fileId}`, {
           method: 'DELETE',

@@ -136,9 +136,14 @@ export class AuthService {
   }
 
   // Login user
-  async login(username: string, password: string): Promise<{ user: IUser; token: string } | null> {
+  async login(identifier: string, password: string): Promise<{ user: IUser; token: string } | null> {
     try {
-      const user = await storage.getUserByUsername(username);
+      // Check if identifier is an email or username
+      const isEmail = identifier.includes('@');
+      const user = isEmail
+        ? await storage.getUserByEmail(identifier)
+        : await storage.getUserByUsername(identifier);
+
       if (!user) return null;
 
       if (!(await this.verifyPassword(password, user.password))) return null;
@@ -159,13 +164,22 @@ export class AuthService {
   // Get user from token
   async getUserFromToken(token: string): Promise<IUser | null> {
     try {
+      console.log(`[AUTH DEBUG] Verifying token...`);
       const payload = this.verifyToken(token);
-      if (!payload) return null;
+      console.log(`[AUTH DEBUG] Token verification result: ${payload ? 'valid' : 'invalid/expired'}`);
 
+      if (!payload) {
+        console.log(`[AUTH DEBUG] Token verification failed`);
+        return null;
+      }
+
+      console.log(`[AUTH DEBUG] Looking up user with ID: ${payload.userId}`);
       const user = await storage.getUser(payload.userId);
+      console.log(`[AUTH DEBUG] User lookup result: ${user ? `found (${user.username}, ${user.role})` : 'not found'}`);
+
       return user || null;
     } catch (error) {
-      console.error('Get user from token error:', error);
+      console.error('[AUTH DEBUG] Get user from token error:', error);
       return null;
     }
   }

@@ -1,9 +1,10 @@
-import { User, ContactSubmission, ChatMessage, ConsultationBooking, BlogPost, StaticPage, Testimonial, TeamMember, FAQItem, File, IUser, IContactSubmission, IChatMessage, IConsultationBooking, IBlogPost, IStaticPage, ITestimonial, ITeamMember, IFAQItem, IFile } from "./models";
+import { User, ContactSubmission, ChatMessage, ConsultationBooking, BlogPost, StaticPage, Testimonial, TeamMember, FAQItem, File, ClientProfile, Message, Invoice, Resource, NewsletterSubscriber, IUser, IContactSubmission, IChatMessage, IConsultationBooking, IBlogPost, IStaticPage, ITestimonial, ITeamMember, IFAQItem, IFile, IClientProfile, IMessage, IInvoice, IResource, INewsletterSubscriber } from "./models";
 import { type InsertUser, type InsertContact, type InsertConsultation, type InsertBlogPost } from "@shared/schema";
 
 export interface IStorage {
   getUser(id: string): Promise<IUser | null>;
   getUserByUsername(username: string): Promise<IUser | null>;
+  getUserByEmail(email: string): Promise<IUser | null>;
   getAllUsers(): Promise<IUser[]>;
   createUser(user: InsertUser): Promise<IUser>;
   updateUserRole(id: string, role: string): Promise<IUser | null>;
@@ -64,6 +65,47 @@ export interface IStorage {
   getTrainingFiles(): Promise<IFile[]>;
   updateFileTrainingStatus(id: string, isTrainingData: boolean, trainingEnabled?: boolean): Promise<IFile | null>;
   deleteFile(id: string): Promise<boolean>;
+
+  // Client Portal methods
+  // Client Profile methods
+  createClientProfile(profile: Partial<IClientProfile>): Promise<IClientProfile>;
+  getClientProfile(userId: string): Promise<IClientProfile | null>;
+  updateClientProfile(userId: string, updates: Partial<IClientProfile>): Promise<IClientProfile | null>;
+
+  // Message methods
+  createMessage(message: Partial<IMessage>): Promise<IMessage>;
+  getMessagesForUser(userId: string): Promise<IMessage[]>;
+  getMessage(id: string): Promise<IMessage | null>;
+  markMessageAsRead(id: string): Promise<IMessage | null>;
+  getUnreadMessageCount(userId: string): Promise<number>;
+
+  // Invoice methods
+  createInvoice(invoice: Partial<IInvoice>): Promise<IInvoice>;
+  getInvoicesForClient(clientId: string): Promise<IInvoice[]>;
+  getInvoice(id: string): Promise<IInvoice | null>;
+  updateInvoiceStatus(id: string, status: string, paidAt?: Date, paymentMethod?: string): Promise<IInvoice | null>;
+
+  // Resource methods
+  createResource(resource: Partial<IResource>): Promise<IResource>;
+  getResourcesForClients(): Promise<IResource[]>;
+  getResource(id: string): Promise<IResource | null>;
+  incrementResourceDownloadCount(id: string): Promise<IResource | null>;
+  searchResources(query: string, category?: string): Promise<IResource[]>;
+
+  // Client-specific consultation methods
+  getConsultationsForClient(clientId: string): Promise<IConsultationBooking[]>;
+
+  // Client-specific file methods
+  getClientDocuments(clientId: string): Promise<IFile[]>;
+  shareFileWithClient(fileId: string, clientId: string): Promise<IFile | null>;
+
+  // Newsletter subscriber methods
+  createNewsletterSubscriber(subscriber: Partial<INewsletterSubscriber>): Promise<INewsletterSubscriber>;
+  getNewsletterSubscriber(email: string): Promise<INewsletterSubscriber | null>;
+  getAllNewsletterSubscribers(): Promise<INewsletterSubscriber[]>;
+  getActiveNewsletterSubscribers(): Promise<INewsletterSubscriber[]>;
+  updateNewsletterSubscriber(email: string, updates: Partial<INewsletterSubscriber>): Promise<INewsletterSubscriber | null>;
+  deleteNewsletterSubscriber(email: string): Promise<boolean>;
 }
 
 export class MongoStorage implements IStorage {
@@ -81,6 +123,15 @@ export class MongoStorage implements IStorage {
       return await User.findOne({ username });
     } catch (error) {
       console.error('Error getting user by username:', error);
+      return null;
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<IUser | null> {
+    try {
+      return await User.findOne({ email });
+    } catch (error) {
+      console.error('Error getting user by email:', error);
       return null;
     }
   }
@@ -655,6 +706,340 @@ export class MongoStorage implements IStorage {
       return !!result;
     } catch (error) {
       console.error('Error deleting FAQ item:', error);
+      return false;
+    }
+  }
+
+  // Client Portal methods
+  // Client Profile methods
+  async createClientProfile(profile: Partial<IClientProfile>): Promise<IClientProfile> {
+    try {
+      const clientProfile = new ClientProfile(profile);
+      return await clientProfile.save();
+    } catch (error) {
+      console.error('Error creating client profile:', error);
+      throw error;
+    }
+  }
+
+  async getClientProfile(userId: string): Promise<IClientProfile | null> {
+    try {
+      return await ClientProfile.findOne({ userId });
+    } catch (error) {
+      console.error('Error getting client profile:', error);
+      return null;
+    }
+  }
+
+  async updateClientProfile(userId: string, updates: Partial<IClientProfile>): Promise<IClientProfile | null> {
+    try {
+      return await ClientProfile.findOneAndUpdate(
+        { userId },
+        { ...updates, updatedAt: new Date() },
+        { new: true, upsert: true }
+      );
+    } catch (error) {
+      console.error('Error updating client profile:', error);
+      return null;
+    }
+  }
+
+  // Message methods
+  async createMessage(message: Partial<IMessage>): Promise<IMessage> {
+    try {
+      const newMessage = new Message(message);
+      return await newMessage.save();
+    } catch (error) {
+      console.error('Error creating message:', error);
+      throw error;
+    }
+  }
+
+  async getMessagesForUser(userId: string): Promise<IMessage[]> {
+    try {
+      return await Message.find({
+        $or: [{ fromUserId: userId }, { toUserId: userId }]
+      })
+        .populate('fromUserId', 'firstName lastName email')
+        .populate('toUserId', 'firstName lastName email')
+        .sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting messages for user:', error);
+      return [];
+    }
+  }
+
+  async getMessage(id: string): Promise<IMessage | null> {
+    try {
+      return await Message.findById(id)
+        .populate('fromUserId', 'firstName lastName email')
+        .populate('toUserId', 'firstName lastName email');
+    } catch (error) {
+      console.error('Error getting message:', error);
+      return null;
+    }
+  }
+
+  async markMessageAsRead(id: string): Promise<IMessage | null> {
+    try {
+      return await Message.findByIdAndUpdate(
+        id,
+        { isRead: true, readAt: new Date() },
+        { new: true }
+      );
+    } catch (error) {
+      console.error('Error marking message as read:', error);
+      return null;
+    }
+  }
+
+  async getUnreadMessageCount(userId: string): Promise<number> {
+    try {
+      return await Message.countDocuments({
+        toUserId: userId,
+        isRead: false
+      });
+    } catch (error) {
+      console.error('Error getting unread message count:', error);
+      return 0;
+    }
+  }
+
+  // Invoice methods
+  async createInvoice(invoice: Partial<IInvoice>): Promise<IInvoice> {
+    try {
+      const newInvoice = new Invoice({
+        ...invoice,
+        status: invoice.status || 'draft'
+      });
+      return await newInvoice.save();
+    } catch (error) {
+      console.error('Error creating invoice:', error);
+      throw error;
+    }
+  }
+
+  async getInvoicesForClient(clientId: string): Promise<IInvoice[]> {
+    try {
+      return await Invoice.find({ clientId })
+        .populate('clientId', 'firstName lastName email company')
+        .populate('consultationId')
+        .sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting invoices for client:', error);
+      return [];
+    }
+  }
+
+  async getInvoice(id: string): Promise<IInvoice | null> {
+    try {
+      return await Invoice.findById(id)
+        .populate('clientId', 'firstName lastName email company')
+        .populate('consultationId')
+        .populate('createdBy', 'firstName lastName');
+    } catch (error) {
+      console.error('Error getting invoice:', error);
+      return null;
+    }
+  }
+
+  async updateInvoiceStatus(id: string, status: string, paidAt?: Date, paymentMethod?: string): Promise<IInvoice | null> {
+    try {
+      const updateData: any = { status };
+      if (paidAt) updateData.paidAt = paidAt;
+      if (paymentMethod) updateData.paymentMethod = paymentMethod;
+      return await Invoice.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+      console.error('Error updating invoice status:', error);
+      return null;
+    }
+  }
+
+  // Resource methods
+  async createResource(resource: Partial<IResource>): Promise<IResource> {
+    try {
+      const newResource = new Resource({
+        ...resource,
+        downloadCount: resource.downloadCount || 0,
+        isPublished: resource.isPublished || false,
+        isPremium: resource.isPremium || false
+      });
+      return await newResource.save();
+    } catch (error) {
+      console.error('Error creating resource:', error);
+      throw error;
+    }
+  }
+
+  async getResourcesForClients(): Promise<IResource[]> {
+    try {
+      return await Resource.find({
+        isPublished: true,
+        accessLevel: { $in: ['all', 'client'] }
+      }).sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting resources for clients:', error);
+      return [];
+    }
+  }
+
+  async getResource(id: string): Promise<IResource | null> {
+    try {
+      return await Resource.findById(id);
+    } catch (error) {
+      console.error('Error getting resource:', error);
+      return null;
+    }
+  }
+
+  async incrementResourceDownloadCount(id: string): Promise<IResource | null> {
+    try {
+      return await Resource.findByIdAndUpdate(
+        id,
+        { $inc: { downloadCount: 1 } },
+        { new: true }
+      );
+    } catch (error) {
+      console.error('Error incrementing resource download count:', error);
+      return null;
+    }
+  }
+
+  async searchResources(query: string, category?: string): Promise<IResource[]> {
+    try {
+      const searchQuery: any = {
+        isPublished: true,
+        accessLevel: { $in: ['all', 'client'] }
+      };
+
+      if (category) {
+        searchQuery.category = category;
+      }
+
+      if (query) {
+        searchQuery.$or = [
+          { title: { $regex: query, $options: 'i' } },
+          { description: { $regex: query, $options: 'i' } },
+          { tags: { $in: [new RegExp(query, 'i')] } }
+        ];
+      }
+
+      return await Resource.find(searchQuery).sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error searching resources:', error);
+      return [];
+    }
+  }
+
+  // Client-specific consultation methods
+  async getConsultationsForClient(clientId: string): Promise<IConsultationBooking[]> {
+    try {
+      // Find consultations by matching email/phone with user data
+      const user = await User.findById(clientId);
+      if (!user) return [];
+
+      return await ConsultationBooking.find({
+        $or: [
+          { email: user.email },
+          { phone: user.phone }
+        ]
+      }).sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting consultations for client:', error);
+      return [];
+    }
+  }
+
+  // Client-specific file methods
+  async getClientDocuments(clientId: string): Promise<IFile[]> {
+    try {
+      return await File.find({
+        $or: [
+          { uploadedBy: clientId },
+          { sharedWithClients: clientId },
+          { isClientDocument: true }
+        ]
+      }).sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting client documents:', error);
+      return [];
+    }
+  }
+
+  async shareFileWithClient(fileId: string, clientId: string): Promise<IFile | null> {
+    try {
+      return await File.findByIdAndUpdate(
+        fileId,
+        { $addToSet: { sharedWithClients: clientId } },
+        { new: true }
+      );
+    } catch (error) {
+      console.error('Error sharing file with client:', error);
+      return null;
+    }
+  }
+
+  // Newsletter subscriber methods
+  async createNewsletterSubscriber(subscriber: Partial<INewsletterSubscriber>): Promise<INewsletterSubscriber> {
+    try {
+      const newSubscriber = new NewsletterSubscriber({
+        ...subscriber,
+        isActive: subscriber.isActive !== undefined ? subscriber.isActive : true,
+        subscribedAt: subscriber.subscribedAt || new Date()
+      });
+      return await newSubscriber.save();
+    } catch (error) {
+      console.error('Error creating newsletter subscriber:', error);
+      throw error;
+    }
+  }
+
+  async getNewsletterSubscriber(email: string): Promise<INewsletterSubscriber | null> {
+    try {
+      return await NewsletterSubscriber.findOne({ email });
+    } catch (error) {
+      console.error('Error getting newsletter subscriber:', error);
+      return null;
+    }
+  }
+
+  async getAllNewsletterSubscribers(): Promise<INewsletterSubscriber[]> {
+    try {
+      return await NewsletterSubscriber.find().sort({ createdAt: -1 });
+    } catch (error) {
+      console.error('Error getting all newsletter subscribers:', error);
+      return [];
+    }
+  }
+
+  async getActiveNewsletterSubscribers(): Promise<INewsletterSubscriber[]> {
+    try {
+      return await NewsletterSubscriber.find({ isActive: true }).sort({ subscribedAt: -1 });
+    } catch (error) {
+      console.error('Error getting active newsletter subscribers:', error);
+      return [];
+    }
+  }
+
+  async updateNewsletterSubscriber(email: string, updates: Partial<INewsletterSubscriber>): Promise<INewsletterSubscriber | null> {
+    try {
+      return await NewsletterSubscriber.findOneAndUpdate(
+        { email },
+        { ...updates, updatedAt: new Date() },
+        { new: true }
+      );
+    } catch (error) {
+      console.error('Error updating newsletter subscriber:', error);
+      return null;
+    }
+  }
+
+  async deleteNewsletterSubscriber(email: string): Promise<boolean> {
+    try {
+      const result = await NewsletterSubscriber.findOneAndDelete({ email });
+      return !!result;
+    } catch (error) {
+      console.error('Error deleting newsletter subscriber:', error);
       return false;
     }
   }

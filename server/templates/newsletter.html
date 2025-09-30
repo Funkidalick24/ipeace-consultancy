@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{subject}} - IPEACE Consultancy Newsletter</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
+        .container { max-width: 600px; margin: 0 auto; background-color: white; }
+        .header { background: linear-gradient(135deg, #1b365d, #f5a623); color: white; padding: 40px 30px; text-align: center; }
+        .content { padding: 40px 30px; color: #333; line-height: 1.6; }
+        .footer { background-color: #f8f9fa; padding: 30px; text-align: center; color: #666; font-size: 14px; }
+        .button { display: inline-block; background-color: #f5a623; color: #1b365d; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .newsletter-content { margin: 20px 0; }
+        .unsubscribe { font-size: 12px; color: #999; margin-top: 20px; }
+        .unsubscribe a { color: #f5a623; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="https://ipeace-consultancy.com/logo.png" alt="IPEACE Consultancy Logo" style="max-width: 150px; height: auto;">
+            </div>
+            <h1>IPEACE Consultancy</h1>
+            <p>Newsletter</p>
+        </div>
+
+        <div class="content">
+            <div class="newsletter-content">
+                {{{content}}}
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="https://ipeace-consultancy.com" class="button">Visit Our Website</a>
+            </div>
+
+            <div class="unsubscribe">
+                <p>You're receiving this newsletter because you subscribed to updates from IPEACE Consultancy.</p>
+                <p>If you no longer wish to receive these emails, you can <a href="{{unsubscribeUrl}}">unsubscribe here</a>.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+            <p>135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+        </div>
+    </div>
+</body>
+</html>
