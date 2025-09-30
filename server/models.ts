@@ -350,12 +350,54 @@ const ClientProfileSchema = new Schema<IClientProfile>({
   }
 }, { timestamps: true });
 
+// Conversation interface and schema for message threads
+export interface IConversation extends Document {
+  _id: string;
+  participants: mongoose.Types.ObjectId[];
+  subject: string;
+  lastMessage?: {
+    content: string;
+    fromUserId: mongoose.Types.ObjectId;
+    createdAt: Date;
+  };
+  messageCount: number;
+  unreadCount: { [userId: string]: number };
+  conversationType: 'direct' | 'group' | 'support';
+  relatedConsultationId?: mongoose.Types.ObjectId;
+  relatedInvoiceId?: mongoose.Types.ObjectId;
+  relatedFileId?: mongoose.Types.ObjectId;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const ConversationSchema = new Schema<IConversation>({
+  participants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
+  subject: { type: String, required: true },
+  lastMessage: {
+    content: { type: String },
+    fromUserId: { type: Schema.Types.ObjectId, ref: 'User' },
+    createdAt: { type: Date }
+  },
+  messageCount: { type: Number, default: 0 },
+  unreadCount: { type: Schema.Types.Mixed, default: {} },
+  conversationType: {
+    type: String,
+    enum: ['direct', 'group', 'support'],
+    default: 'direct'
+  },
+  relatedConsultationId: { type: Schema.Types.ObjectId, ref: 'ConsultationBooking' },
+  relatedInvoiceId: { type: Schema.Types.ObjectId, ref: 'Invoice' },
+  relatedFileId: { type: Schema.Types.ObjectId, ref: 'File' },
+  isActive: { type: Boolean, default: true }
+}, { timestamps: true });
+
 // Message interface and schema for client communications
 export interface IMessage extends Document {
   _id: string;
+  conversationId: mongoose.Types.ObjectId;
   fromUserId: mongoose.Types.ObjectId;
   toUserId: mongoose.Types.ObjectId;
-  subject: string;
   content: string;
   messageType: 'general' | 'consultation' | 'invoice' | 'document' | 'system';
   relatedConsultationId?: mongoose.Types.ObjectId;
@@ -369,9 +411,9 @@ export interface IMessage extends Document {
 }
 
 const MessageSchema = new Schema<IMessage>({
+  conversationId: { type: Schema.Types.ObjectId, ref: 'Conversation', required: true },
   fromUserId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   toUserId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  subject: { type: String, required: true },
   content: { type: String, required: true },
   messageType: {
     type: String,
@@ -522,6 +564,7 @@ export const TeamMember = mongoose.model<ITeamMember>('TeamMember', TeamMemberSc
 export const FAQItem = mongoose.model<IFAQItem>('FAQItem', FAQItemSchema);
 export const File = mongoose.model<IFile>('File', FileSchema);
 export const ClientProfile = mongoose.model<IClientProfile>('ClientProfile', ClientProfileSchema);
+export const Conversation = mongoose.model<IConversation>('Conversation', ConversationSchema);
 export const Message = mongoose.model<IMessage>('Message', MessageSchema);
 export const Invoice = mongoose.model<IInvoice>('Invoice', InvoiceSchema);
 export const Resource = mongoose.model<IResource>('Resource', ResourceSchema);

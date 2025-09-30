@@ -1,4 +1,4 @@
-import { User, ContactSubmission, ChatMessage, ConsultationBooking, BlogPost, StaticPage, Testimonial, TeamMember, FAQItem, File, ClientProfile, Message, Invoice, Resource, NewsletterSubscriber, IUser, IContactSubmission, IChatMessage, IConsultationBooking, IBlogPost, IStaticPage, ITestimonial, ITeamMember, IFAQItem, IFile, IClientProfile, IMessage, IInvoice, IResource, INewsletterSubscriber } from "./models";
+import { User, ContactSubmission, ChatMessage, ConsultationBooking, BlogPost, StaticPage, Testimonial, TeamMember, FAQItem, File, ClientProfile, Conversation, Message, Invoice, Resource, NewsletterSubscriber, IUser, IContactSubmission, IChatMessage, IConsultationBooking, IBlogPost, IStaticPage, ITestimonial, ITeamMember, IFAQItem, IFile, IClientProfile, IConversation, IMessage, IInvoice, IResource, INewsletterSubscriber } from "./models";
 import { type InsertUser, type InsertContact, type InsertConsultation, type InsertBlogPost } from "@shared/schema";
 
 export interface IStorage {
@@ -78,6 +78,15 @@ export interface IStorage {
   getMessage(id: string): Promise<IMessage | null>;
   markMessageAsRead(id: string): Promise<IMessage | null>;
   getUnreadMessageCount(userId: string): Promise<number>;
+
+  // Conversation methods
+  createConversation(conversation: Partial<IConversation>): Promise<IConversation>;
+  getConversationsForUser(userId: string): Promise<IConversation[]>;
+  getConversation(id: string): Promise<IConversation | null>;
+  getMessagesForConversation(conversationId: string): Promise<IMessage[]>;
+  addMessageToConversation(conversationId: string, message: Partial<IMessage>): Promise<IMessage>;
+  markConversationAsRead(conversationId: string, userId: string): Promise<IConversation | null>;
+  getUnreadConversationCount(userId: string): Promise<number>;
 
   // Invoice methods
   createInvoice(invoice: Partial<IInvoice>): Promise<IInvoice>;
@@ -801,6 +810,139 @@ export class MongoStorage implements IStorage {
       });
     } catch (error) {
       console.error('Error getting unread message count:', error);
+      return 0;
+    }
+  }
+
+  // Conversation methods
+  async createConversation(conversation: Partial<IConversation>): Promise<IConversation> {
+    try {
+      const newConversation = new Conversation(conversation);
+      return await newConversation.save();
+    } catch (error) {
+      console.error('Error creating conversation:', error);
+      throw error;
+    }
+  }
+
+  async getConversationsForUser(userId: string): Promise<IConversation[]> {
+    try {
+      return await Conversation.find({
+        participants: userId,
+        isActive: true
+      })
+        .populate('participants', 'firstName lastName email role')
+        .populate('lastMessage.fromUserId', 'firstName lastName')
+        .sort({ updatedAt: -1 });
+    } catch (error) {
+      console.error('Error getting conversations for user:', error);
+      return [];
+    }
+  }
+
+  async getConversation(id: string): Promise<IConversation | null> {
+    try {
+      return await Conversation.findById(id)
+        .populate('participants', 'firstName lastName email role')
+        .populate('lastMessage.fromUserId', 'firstName lastName');
+    } catch (error) {
+      console.error('Error getting conversation:', error);
+      return null;
+    }
+  }
+
+  async getMessagesForConversation(conversationId: string): Promise<IMessage[]> {
+    try {
+      return await Message.find({ conversationId })
+        .populate('fromUserId', 'firstName lastName email role')
+        .populate('toUserId', 'firstName lastName email role')
+        .sort({ createdAt: 1 });
+    } catch (error) {
+      console.error('Error getting messages for conversation:', error);
+      return [];
+    }
+  }
+
+  async addMessageToConversation(conversationId: string, messageData: Partial<IMessage>): Promise<IMessage> {
+    try {
+      // Create the message
+      const message = new Message({
+        ...messageData,
+        conversationId
+      });
+      const savedMessage = await message.save();
+
+      // Update conversation with last message info
+      await Conversation.findByIdAndUpdate(conversationId, {
+        lastMessage: {
+          content: savedMessage.content,
+          fromUserId: savedMessage.fromUserId,
+          createdAt: savedMessage.createdAt
+        },
+        messageCount: await Message.countDocuments({ conversationId }),
+        updatedAt: new Date()
+      });
+
+      // Update unread counts for other participants
+      const conversation = await Conversation.findById(conversationId);
+      if (conversation) {
+        const unreadCount = { ...conversation.unreadCount };
+        conversation.participants.forEach(participantId => {
+          const participantIdStr = participantId.toString();
+          if (participantIdStr !== savedMessage.fromUserId.toString()) {
+            unreadCount[participantIdStr] = (unreadCount[participantIdStr] || 0) + 1;
+          }
+        });
+        await Conversation.findByIdAndUpdate(conversationId, { unreadCount });
+      }
+
+      return savedMessage.populate('fromUserId', 'firstName lastName email role')
+        .populate('toUserId', 'firstName lastName email role');
+    } catch (error) {
+      console.error('Error adding message to conversation:', error);
+      throw error;
+    }
+  }
+
+  async markConversationAsRead(conversationId: string, userId: string): Promise<IConversation | null> {
+    try {
+      // Mark all messages in conversation as read for this user
+      await Message.updateMany(
+        { conversationId, toUserId: userId, isRead: false },
+        { isRead: true, readAt: new Date() }
+      );
+
+      // Update conversation unread count
+      const conversation = await Conversation.findById(conversationId);
+      if (conversation) {
+        const unreadCount = { ...conversation.unreadCount };
+        delete unreadCount[userId];
+        return await Conversation.findByIdAndUpdate(conversationId, { unreadCount }, { new: true });
+      }
+
+      return conversation;
+    } catch (error) {
+      console.error('Error marking conversation as read:', error);
+      return null;
+    }
+  }
+
+  async getUnreadConversationCount(userId: string): Promise<number> {
+    try {
+      const conversations = await Conversation.find({
+        participants: userId,
+        isActive: true
+      });
+
+      let totalUnread = 0;
+      conversations.forEach(conv => {
+        const userUnread = conv.unreadCount?.[userId] || 0;
+        totalUnread += userUnread;
+      });
+
+      return totalUnread;
+    } catch (error) {
+      console.error('Error getting unread conversation count:', error);
       return 0;
     }
   }

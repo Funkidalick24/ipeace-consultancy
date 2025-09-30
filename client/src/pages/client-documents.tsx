@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'wouter';
 
 interface Document {
   id: string;
@@ -12,8 +11,7 @@ interface Document {
   uploadedBy: string;
 }
 
-export default function ClientDocuments() {
-  const [, navigate] = useLocation();
+export function ClientDocumentsTab() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -21,15 +19,8 @@ export default function ClientDocuments() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('clientToken');
-    if (!token) {
-      navigate('/client-portal');
-      return;
-    }
-
     fetchDocuments();
-  }, [navigate]);
+  }, []);
 
   const fetchDocuments = async () => {
     try {
@@ -43,10 +34,6 @@ export default function ClientDocuments() {
       if (response.ok) {
         const data = await response.json();
         setDocuments(data.documents);
-      } else if (response.status === 401) {
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientUser');
-        navigate('/client-portal');
       }
     } catch (error) {
       console.error('Error fetching documents:', error);
@@ -149,11 +136,6 @@ export default function ClientDocuments() {
     return true;
   });
 
-  const handleLogout = () => {
-    localStorage.removeItem('clientToken');
-    localStorage.removeItem('clientUser');
-    navigate('/client-portal');
-  };
 
   if (loading) {
     return (
@@ -167,48 +149,26 @@ export default function ClientDocuments() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/client/dashboard')}
-                className="text-primary-blue hover:text-secondary-blue font-medium"
-              >
-                ← Back to Dashboard
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900">My Documents</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <input
-                ref={fileInputRef}
-                type="file"
-                multiple
-                onChange={handleFileUpload}
-                className="hidden"
-                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-              />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-                className="btn-primary px-4 py-2 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {uploading ? 'Uploading...' : 'Upload Documents'}
-              </button>
-              <button
-                onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-800 font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
+    <div>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-900">My Documents</h2>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            onChange={handleFileUpload}
+            className="hidden"
+            accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="btn-primary px-4 py-2 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {uploading ? 'Uploading...' : 'Upload Documents'}
+          </button>
         </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
         <div className="mb-6">
           <div className="flex flex-wrap gap-2">
@@ -346,4 +306,9 @@ export default function ClientDocuments() {
       </div>
     </div>
   );
+}
+export default function ClientDocuments() {
+  // Redirect to dashboard with documents tab
+  window.location.href = '/client/dashboard?tab=documents';
+  return null;
 }

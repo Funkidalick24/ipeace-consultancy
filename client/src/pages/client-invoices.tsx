@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
 
 interface Invoice {
   id: string;
@@ -24,23 +23,15 @@ interface Invoice {
   createdAt: string;
 }
 
-export default function ClientInvoices() {
-  const [, navigate] = useLocation();
+export function ClientInvoicesTab() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [filter, setFilter] = useState<'all' | 'paid' | 'pending' | 'overdue'>('all');
 
   useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('clientToken');
-    if (!token) {
-      navigate('/client-portal');
-      return;
-    }
-
     fetchInvoices();
-  }, [navigate]);
+  }, []);
 
   const fetchInvoices = async () => {
     try {
@@ -54,10 +45,6 @@ export default function ClientInvoices() {
       if (response.ok) {
         const data = await response.json();
         setInvoices(data.invoices);
-      } else if (response.status === 401) {
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientUser');
-        navigate('/client-portal');
       }
     } catch (error) {
       console.error('Error fetching invoices:', error);
@@ -124,11 +111,6 @@ export default function ClientInvoices() {
     return new Date(dueDate) < new Date() && !['paid', 'cancelled'].includes(selectedInvoice?.status || '');
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('clientToken');
-    localStorage.removeItem('clientUser');
-    navigate('/client-portal');
-  };
 
   if (loading) {
     return (
@@ -142,33 +124,8 @@ export default function ClientInvoices() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/client/dashboard')}
-                className="text-primary-blue hover:text-secondary-blue font-medium"
-              >
-                ← Back to Dashboard
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900">My Invoices</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-800 font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div>
+      <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Invoices List */}
           <div className="lg:col-span-1">
@@ -430,4 +387,10 @@ export default function ClientInvoices() {
       </div>
     </div>
   );
+}
+
+export default function ClientInvoices() {
+  // Redirect to dashboard with invoices tab
+  window.location.href = '/client/dashboard?tab=invoices';
+  return null;
 }

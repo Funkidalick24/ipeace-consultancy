@@ -427,16 +427,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clientId = req.user._id.toString();
 
       // Get dashboard data in parallel
-      const [consultations, messages, invoices, unreadCount] = await Promise.all([
+      const [consultations, conversations, invoices, unreadCount] = await Promise.all([
         storage.getConsultationsForClient(clientId),
-        storage.getMessagesForUser(clientId),
+        storage.getConversationsForUser(clientId),
         storage.getInvoicesForClient(clientId),
-        storage.getUnreadMessageCount(clientId)
+        storage.getUnreadConversationCount(clientId)
       ]);
 
-      // Get recent activity (last 5 items from each)
+      // Get recent activity (last 3 items from each)
       const recentConsultations = consultations.slice(0, 3);
-      const recentMessages = messages.slice(0, 3);
+
+      // Get recent messages from conversations
+      const recentConversations = conversations
+        .filter(conv => conv.lastMessage)
+        .sort((a, b) => new Date(b.lastMessage!.createdAt).getTime() - new Date(a.lastMessage!.createdAt).getTime())
+        .slice(0, 3);
+
+      const recentMessages = await Promise.all(
+        recentConversations.map(async (conv) => {
+          // Get the actual last message to get its ID
+          const messages = await storage.getMessagesForConversation(conv._id.toString());
+          const lastMessage = messages[messages.length - 1];
+          return {
+            _id: lastMessage?._id || conv._id,
+            subject: conv.subject,
+            content: conv.lastMessage!.content,
+            createdAt: conv.lastMessage!.createdAt,
+            conversationId: conv._id
+          };
+        })
+      );
+
       const recentInvoices = invoices.slice(0, 3);
 
       res.json({
@@ -444,7 +465,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         dashboard: {
           stats: {
             totalConsultations: consultations.length,
-            totalMessages: messages.length,
+            totalMessages: conversations.length,
             totalInvoices: invoices.length,
             unreadMessages: unreadCount
           },
@@ -488,8 +509,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { subject, content, messageType } = req.body;
 
-      if (!subject || !content) {
-        return res.status(400).json({ error: "Subject and content are required" });
+      if (!content) {
+        return res.status(400).json({ error: "Content is required" });
       }
 
       // For now, messages to admin - in future could support client-to-client
@@ -500,10 +521,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ error: "No admin user found" });
       }
 
-      const message = await storage.createMessage({
-        fromUserId: new mongoose.Types.ObjectId(req.user._id),
+      // Check if conversation already exists between this client and admin
+      const existingConversations = await storage.getConversationsForUser(req.user._id.toString());
+      let conversation = existingConversations.find(conv =>
+        conv.participants.length === 2 &&
+        conv.participants.some(p => p._id.toString() === adminUser._id.toString()) &&
+        conv.participants.some(p => p._id.toString() === req.user._id.toString())
+      );
+
+      if (!conversation) {
+        // Create new conversation
+        conversation = await storage.createConversation({
+          participants: [req.user._id, adminUser._id],
+          subject: subject || 'Support Conversation',
+          conversationType: 'support'
+        });
+      }
+
+      // Add message to conversation
+      const message = await storage.addMessageToConversation(conversation._id.toString(), {
+        fromUserId: req.user._id,
         toUserId: new mongoose.Types.ObjectId(adminUser._id),
-        subject: sanitizeHtml(subject, { allowedTags: [], allowedAttributes: {} }),
         content: sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} }),
         messageType: messageType || 'general'
       });
@@ -511,7 +549,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         success: true,
         message: 'Message sent successfully',
-        messageId: message._id
+        messageId: message._id,
+        conversationId: conversation._id.toString()
       });
     } catch (error) {
       console.error("Send client message error:", error);
@@ -530,6 +569,139 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Mark message read error:", error);
       res.status(500).json({ error: "Failed to mark message as read" });
+    }
+  });
+
+  // Client conversation routes
+  app.get("/api/client/conversations", authenticateClient, async (req: any, res) => {
+    try {
+      const conversations = await storage.getConversationsForUser(req.user._id.toString());
+      const unreadCount = await storage.getUnreadConversationCount(req.user._id.toString());
+      res.json({ conversations, unreadCount });
+    } catch (error) {
+      console.error("Get client conversations error:", error);
+      res.status(500).json({ error: "Failed to get conversations" });
+    }
+  });
+
+  app.get("/api/client/conversations/:id", authenticateClient, async (req: any, res) => {
+    try {
+      const conversation = await storage.getConversation(req.params.id);
+      if (!conversation) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
+
+      // Check if user is participant
+      if (!conversation.participants.some(p => p._id.toString() === req.user._id.toString())) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+
+      const messages = await storage.getMessagesForConversation(req.params.id);
+      res.json({ conversation, messages });
+    } catch (error) {
+      console.error("Get conversation error:", error);
+      res.status(500).json({ error: "Failed to get conversation" });
+    }
+  });
+
+  app.post("/api/client/conversations", authenticateClient, async (req: any, res) => {
+    try {
+      const { toUserId, subject, content, messageType } = req.body;
+
+      if (!toUserId || !content) {
+        return res.status(400).json({ error: "Recipient and content are required" });
+      }
+
+      // Check if conversation already exists between these users
+      const existingConversations = await storage.getConversationsForUser(req.user._id.toString());
+      let conversation = existingConversations.find(conv =>
+        conv.participants.length === 2 &&
+        conv.participants.some(p => p._id.toString() === toUserId) &&
+        conv.participants.some(p => p._id.toString() === req.user._id.toString())
+      );
+
+      if (!conversation) {
+        // Create new conversation
+        conversation = await storage.createConversation({
+          participants: [req.user._id, toUserId],
+          subject: subject || 'New Conversation',
+          conversationType: 'direct'
+        });
+      }
+
+      // Add message to conversation
+      const message = await storage.addMessageToConversation(conversation._id.toString(), {
+        fromUserId: req.user._id,
+        toUserId: toUserId,
+        content: sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} }),
+        messageType: messageType || 'general'
+      });
+
+      res.json({
+        success: true,
+        message: 'Message sent successfully',
+        conversationId: conversation._id.toString(),
+        messageId: message._id
+      });
+    } catch (error) {
+      console.error("Send conversation message error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
+  app.post("/api/client/conversations/:id/messages", authenticateClient, async (req: any, res) => {
+    try {
+      const { content, messageType } = req.body;
+
+      if (!content) {
+        return res.status(400).json({ error: "Content is required" });
+      }
+
+      const conversation = await storage.getConversation(req.params.id);
+      if (!conversation) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
+
+      // Check if user is participant
+      if (!conversation.participants.some(p => p._id.toString() === req.user._id.toString())) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+
+      // Find recipient (other participant)
+      const recipientId = conversation.participants.find(p => p._id.toString() !== req.user._id.toString());
+      if (!recipientId) {
+        return res.status(400).json({ error: "No recipient found" });
+      }
+
+      const message = await storage.addMessageToConversation(req.params.id, {
+        fromUserId: req.user._id,
+        toUserId: recipientId,
+        content: sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} }),
+        messageType: messageType || 'general'
+      });
+
+      res.json({
+        success: true,
+        message: 'Message sent successfully',
+        messageId: message._id
+      });
+    } catch (error) {
+      console.error("Send conversation message error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
+  app.patch("/api/client/conversations/:id/read", authenticateClient, async (req: any, res) => {
+    try {
+      const conversation = await storage.markConversationAsRead(req.params.id, req.user._id.toString());
+      if (!conversation) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
+
+      res.json({ success: true, message: 'Conversation marked as read' });
+    } catch (error) {
+      console.error("Mark conversation read error:", error);
+      res.status(500).json({ error: "Failed to mark conversation as read" });
     }
   });
 

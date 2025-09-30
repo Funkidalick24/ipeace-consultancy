@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
 
 interface Resource {
   id: string;
@@ -15,8 +14,7 @@ interface Resource {
   createdAt: string;
 }
 
-export default function ClientResources() {
-  const [, navigate] = useLocation();
+export function ClientResourcesTab() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,15 +22,8 @@ export default function ClientResources() {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
 
   useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('clientToken');
-    if (!token) {
-      navigate('/client-portal');
-      return;
-    }
-
     fetchResources();
-  }, [navigate]);
+  }, []);
 
   const fetchResources = async () => {
     try {
@@ -46,10 +37,6 @@ export default function ClientResources() {
       if (response.ok) {
         const data = await response.json();
         setResources(data.resources);
-      } else if (response.status === 401) {
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientUser');
-        navigate('/client-portal');
       }
     } catch (error) {
       console.error('Error fetching resources:', error);
@@ -146,11 +133,6 @@ export default function ClientResources() {
     { value: 'regulation', label: 'Regulations', count: resources.filter(r => r.category === 'regulation').length },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem('clientToken');
-    localStorage.removeItem('clientUser');
-    navigate('/client-portal');
-  };
 
   if (loading) {
     return (
@@ -164,33 +146,8 @@ export default function ClientResources() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/client/dashboard')}
-                className="text-primary-blue hover:text-secondary-blue font-medium"
-              >
-                ← Back to Dashboard
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900">Resource Library</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-800 font-medium"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div>
+      <div className="space-y-6">
         {/* Search and Filters */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -362,4 +319,9 @@ export default function ClientResources() {
       </div>
     </div>
   );
+}
+export default function ClientResources() {
+  // Redirect to dashboard with resources tab
+  window.location.href = '/client/dashboard?tab=resources';
+  return null;
 }
