@@ -85,6 +85,7 @@ export async function sendContactNotification(contact: ContactNotification): Pro
       message: contact.message,
       newsletter: contact.newsletter ? 'Yes' : 'No',
       timestamp: formatEmailDate(new Date()),
+      logoUrl: companyInfo.logo,
     };
 
     // Send email to customer
@@ -131,6 +132,7 @@ export async function sendContactConfirmation(contact: ContactNotification): Pro
       message: contact.message,
       newsletter: contact.newsletter ? 'Yes' : 'No',
       timestamp: formatEmailDate(new Date()),
+      logoUrl: companyInfo.logo,
     };
 
     // Send confirmation email to customer
@@ -172,6 +174,7 @@ export async function sendConsultationConfirmationEmail(booking: any): Promise<v
       preferredTime: formatEmailTime(booking.preferredTime),
       description: booking.description || 'No description provided',
       bookingId: booking._id?.toString() || 'TBD',
+      logoUrl: companyInfo.logo,
     };
 
     // Send confirmation email to customer
@@ -207,6 +210,7 @@ export async function sendContactResponse(contact: ContactNotification & { respo
       originalMessage: contact.message,
       responseMessage: contact.responseMessage,
       timestamp: formatEmailDate(new Date()),
+      logoUrl: companyInfo.logo,
     };
 
     // Send personalized response email to customer
@@ -244,7 +248,8 @@ export async function sendNewsletter(subject: string, content: string, subscribe
       const templateData = {
         subject: subject,
         content: content,
-        unsubscribeUrl: `${process.env.FRONTEND_URL || 'https://ipeace-consultancy.com'}/unsubscribe?email=${encodeURIComponent(email)}`
+        unsubscribeUrl: `${process.env.FRONTEND_URL || 'https://ipeace-consultancy.com'}/unsubscribe?email=${encodeURIComponent(email)}`,
+        logoUrl: companyInfo.logo,
       };
 
       // Send newsletter email
@@ -276,6 +281,7 @@ export async function sendEmailVerificationCode(email: string, firstName: string
       firstName: firstName,
       verificationCode: verificationCode,
       timestamp: formatEmailDate(new Date()),
+      logoUrl: companyInfo.logo,
     };
 
     // Create a simple HTML template for verification email
@@ -297,6 +303,9 @@ export async function sendEmailVerificationCode(email: string, firstName: string
         <body>
           <div class="container">
             <div class="header">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <img src="${templateData.logoUrl}" alt="IPEACE Consultancy Logo" style="max-width: 150px; height: auto;">
+              </div>
               <h1>IPEACE Consultancy</h1>
               <p>Email Verification</p>
             </div>

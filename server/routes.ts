@@ -286,6 +286,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Don't fail registration if profile creation fails
       }
 
+      // If newsletter subscription is requested, add to newsletter subscribers
+      console.log(`[NEWSLETTER DEBUG] Client registration newsletter value: ${req.body.newsletter}`);
+      console.log(`[NEWSLETTER DEBUG] Client registration email: ${result.user.email}`);
+      if (req.body.newsletter && result.user.email) {
+        console.log(`[NEWSLETTER DEBUG] Processing newsletter subscription for ${result.user.email}`);
+        try {
+          // Check if subscriber already exists
+          console.log(`[NEWSLETTER DEBUG] Checking for existing subscriber: ${result.user.email}`);
+          const existingSubscriber = await storage.getNewsletterSubscriber(result.user.email);
+          console.log(`[NEWSLETTER DEBUG] Existing subscriber check result:`, existingSubscriber ? 'EXISTS' : 'NOT FOUND');
+
+          if (!existingSubscriber) {
+            console.log(`[NEWSLETTER DEBUG] Creating new newsletter subscriber`);
+            const newSubscriber = await storage.createNewsletterSubscriber({
+              email: result.user.email,
+              firstName: result.user.firstName,
+              lastName: result.user.lastName,
+              source: 'website-signup'
+            });
+            console.log(`✅ Added ${result.user.email} to newsletter subscribers from client registration`, newSubscriber._id);
+          } else {
+            console.log(`ℹ️ ${result.user.email} already subscribed to newsletter`);
+          }
+        } catch (newsletterError) {
+          console.error('❌ Error adding newsletter subscriber from client registration:', newsletterError);
+          // Don't fail registration if newsletter signup fails
+        }
+      } else {
+        console.log(`[NEWSLETTER DEBUG] Newsletter not requested for ${result.user.email}`);
+      }
+
       // Send email verification code
       try {
         if (result.user.email) {
@@ -1824,25 +1855,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const contact = await storage.createContactSubmission(sanitizedData);
 
       // If newsletter subscription is requested, add to newsletter subscribers
+      console.log(`[NEWSLETTER DEBUG] Contact form newsletter value: ${sanitizedData.newsletter}`);
+      console.log(`[NEWSLETTER DEBUG] Contact form email: ${sanitizedData.email}`);
       if (sanitizedData.newsletter) {
+        console.log(`[NEWSLETTER DEBUG] Processing newsletter subscription for ${sanitizedData.email}`);
         try {
           // Check if subscriber already exists
+          console.log(`[NEWSLETTER DEBUG] Checking for existing subscriber: ${sanitizedData.email}`);
           const existingSubscriber = await storage.getNewsletterSubscriber(sanitizedData.email);
+          console.log(`[NEWSLETTER DEBUG] Existing subscriber check result:`, existingSubscriber ? 'EXISTS' : 'NOT FOUND');
+
           if (!existingSubscriber) {
-            await storage.createNewsletterSubscriber({
+            console.log(`[NEWSLETTER DEBUG] Creating new newsletter subscriber`);
+            const newSubscriber = await storage.createNewsletterSubscriber({
               email: sanitizedData.email,
               firstName: sanitizedData.firstName,
               lastName: sanitizedData.lastName,
               source: 'contact-form'
             });
-            console.log(`✅ Added ${sanitizedData.email} to newsletter subscribers`);
+            console.log(`✅ Added ${sanitizedData.email} to newsletter subscribers from contact form`, newSubscriber._id);
           } else {
             console.log(`ℹ️ ${sanitizedData.email} already subscribed to newsletter`);
           }
         } catch (newsletterError) {
-          console.error('❌ Error adding newsletter subscriber:', newsletterError);
+          console.error('❌ Error adding newsletter subscriber from contact form:', newsletterError);
           // Don't fail the contact form submission if newsletter signup fails
         }
+      } else {
+        console.log(`[NEWSLETTER DEBUG] Newsletter not requested for ${sanitizedData.email}`);
       }
 
       // Send notifications
@@ -1864,6 +1904,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(400).json({
         success: false,
         message: error instanceof Error ? error.message : "Failed to process contact form"
+      });
+    }
+  });
+
+  // Newsletter subscription endpoint (public)
+  app.post("/api/newsletter/subscribe", async (req, res) => {
+    try {
+      const { email, firstName, lastName } = req.body;
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is required"
+        });
+      }
+
+      // Sanitize input
+      const sanitizedEmail = sanitizeHtml(email, { allowedTags: [], allowedAttributes: {} });
+      const sanitizedFirstName = firstName ? sanitizeHtml(firstName, { allowedTags: [], allowedAttributes: {} }) : undefined;
+      const sanitizedLastName = lastName ? sanitizeHtml(lastName, { allowedTags: [], allowedAttributes: {} }) : undefined;
+
+      // Check if subscriber already exists
+      const existingSubscriber = await storage.getNewsletterSubscriber(sanitizedEmail);
+      if (existingSubscriber) {
+        return res.json({
+          success: true,
+          message: "Email is already subscribed to newsletter",
+          alreadySubscribed: true
+        });
+      }
+
+      // Create new subscriber
+      const subscriber = await storage.createNewsletterSubscriber({
+        email: sanitizedEmail,
+        firstName: sanitizedFirstName,
+        lastName: sanitizedLastName,
+        source: 'website-signup'
+      });
+
+      console.log(`✅ Added ${sanitizedEmail} to newsletter subscribers via public API`);
+
+      res.json({
+        success: true,
+        message: "Successfully subscribed to newsletter",
+        subscriber: {
+          id: subscriber._id.toString(),
+          email: subscriber.email,
+          firstName: subscriber.firstName,
+          lastName: subscriber.lastName,
+          source: subscriber.source,
+          subscribedAt: subscriber.subscribedAt
+        }
+      });
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to subscribe to newsletter"
       });
     }
   });
@@ -1990,6 +2088,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         consultationType: sanitizedData.consultationType,
         description: sanitizedData.description
       });
+
+      // If newsletter subscription is requested, add to newsletter subscribers
+      console.log(`[NEWSLETTER DEBUG] Consultation form newsletter value: ${validatedData.newsletter}`);
+      console.log(`[NEWSLETTER DEBUG] Consultation form email: ${sanitizedData.email}`);
+      if (validatedData.newsletter) {
+        console.log(`[NEWSLETTER DEBUG] Processing newsletter subscription for ${sanitizedData.email}`);
+        try {
+          // Check if subscriber already exists
+          console.log(`[NEWSLETTER DEBUG] Checking for existing subscriber: ${sanitizedData.email}`);
+          const existingSubscriber = await storage.getNewsletterSubscriber(sanitizedData.email);
+          console.log(`[NEWSLETTER DEBUG] Existing subscriber check result:`, existingSubscriber ? 'EXISTS' : 'NOT FOUND');
+
+          if (!existingSubscriber) {
+            console.log(`[NEWSLETTER DEBUG] Creating new newsletter subscriber`);
+            const newSubscriber = await storage.createNewsletterSubscriber({
+              email: sanitizedData.email,
+              firstName: sanitizedData.firstName,
+              lastName: sanitizedData.lastName,
+              source: 'consultation-form'
+            });
+            console.log(`✅ Added ${sanitizedData.email} to newsletter subscribers from consultation form`, newSubscriber._id);
+          } else {
+            console.log(`ℹ️ ${sanitizedData.email} already subscribed to newsletter`);
+          }
+        } catch (newsletterError) {
+          console.error('❌ Error adding newsletter subscriber from consultation form:', newsletterError);
+          // Don't fail the booking if newsletter signup fails
+        }
+      } else {
+        console.log(`[NEWSLETTER DEBUG] Newsletter not requested for ${sanitizedData.email}`);
+      }
 
       // Create calendar event
       let calendarEventId: string | null = null;

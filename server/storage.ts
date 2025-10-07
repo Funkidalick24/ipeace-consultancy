@@ -896,8 +896,11 @@ export class MongoStorage implements IStorage {
         await Conversation.findByIdAndUpdate(conversationId, { unreadCount });
       }
 
-      return savedMessage.populate('fromUserId', 'firstName lastName email role')
-        .populate('toUserId', 'firstName lastName email role');
+      const populatedMessage = await Message.populate(savedMessage, [
+        { path: 'fromUserId', select: 'firstName lastName email role' },
+        { path: 'toUserId', select: 'firstName lastName email role' }
+      ]);
+      return populatedMessage;
     } catch (error) {
       console.error('Error adding message to conversation:', error);
       throw error;
@@ -1124,12 +1127,16 @@ export class MongoStorage implements IStorage {
   // Newsletter subscriber methods
   async createNewsletterSubscriber(subscriber: Partial<INewsletterSubscriber>): Promise<INewsletterSubscriber> {
     try {
+      console.log(`[STORAGE DEBUG] Creating newsletter subscriber:`, subscriber);
       const newSubscriber = new NewsletterSubscriber({
         ...subscriber,
         isActive: subscriber.isActive !== undefined ? subscriber.isActive : true,
         subscribedAt: subscriber.subscribedAt || new Date()
       });
-      return await newSubscriber.save();
+      console.log(`[STORAGE DEBUG] NewsletterSubscriber instance created:`, newSubscriber);
+      const savedSubscriber = await newSubscriber.save();
+      console.log(`[STORAGE DEBUG] NewsletterSubscriber saved successfully:`, savedSubscriber._id);
+      return savedSubscriber;
     } catch (error) {
       console.error('Error creating newsletter subscriber:', error);
       throw error;
@@ -1138,7 +1145,10 @@ export class MongoStorage implements IStorage {
 
   async getNewsletterSubscriber(email: string): Promise<INewsletterSubscriber | null> {
     try {
-      return await NewsletterSubscriber.findOne({ email });
+      console.log(`[STORAGE DEBUG] Looking up newsletter subscriber by email: ${email}`);
+      const subscriber = await NewsletterSubscriber.findOne({ email });
+      console.log(`[STORAGE DEBUG] Newsletter subscriber lookup result:`, subscriber ? 'FOUND' : 'NOT FOUND');
+      return subscriber;
     } catch (error) {
       console.error('Error getting newsletter subscriber:', error);
       return null;
@@ -1147,7 +1157,10 @@ export class MongoStorage implements IStorage {
 
   async getAllNewsletterSubscribers(): Promise<INewsletterSubscriber[]> {
     try {
-      return await NewsletterSubscriber.find().sort({ createdAt: -1 });
+      console.log(`[STORAGE DEBUG] Getting all newsletter subscribers`);
+      const subscribers = await NewsletterSubscriber.find().sort({ createdAt: -1 });
+      console.log(`[STORAGE DEBUG] Found ${subscribers.length} newsletter subscribers`);
+      return subscribers;
     } catch (error) {
       console.error('Error getting all newsletter subscribers:', error);
       return [];

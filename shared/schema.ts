@@ -95,6 +95,7 @@ export const consultationBookingSchema = z.object({
     required_error: "Please select a consultation type",
   }),
   description: z.string().min(1, "Description is required"),
+  newsletter: z.boolean().default(false),
 });
 
 export const consultationBookingResponseSchema = z.object({

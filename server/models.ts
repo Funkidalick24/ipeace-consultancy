@@ -488,7 +488,7 @@ export interface INewsletterSubscriber extends Document {
   email: string;
   firstName?: string;
   lastName?: string;
-  source: 'contact-form' | 'website-signup' | 'admin-added';
+  source: 'contact-form' | 'consultation-form' | 'website-signup' | 'admin-added';
   isActive: boolean;
   subscribedAt: Date;
   unsubscribedAt?: Date;
@@ -502,7 +502,7 @@ const NewsletterSubscriberSchema = new Schema<INewsletterSubscriber>({
   lastName: { type: String },
   source: {
     type: String,
-    enum: ['contact-form', 'website-signup', 'admin-added'],
+    enum: ['contact-form', 'consultation-form', 'website-signup', 'admin-added'],
     default: 'contact-form'
   },
   isActive: { type: Boolean, default: true },

@@ -16,7 +16,7 @@ interface NewsletterSubscriber {
   email: string;
   firstName?: string;
   lastName?: string;
-  source: 'contact-form' | 'website-signup' | 'admin-added';
+  source: 'contact-form' | 'consultation-form' | 'website-signup' | 'admin-added';
   isActive: boolean;
   subscribedAt: string;
   unsubscribedAt?: string;

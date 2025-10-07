@@ -21,6 +21,7 @@ interface ClientRegisterData {
   companySize: string;
   legalNeeds: string[];
   preferredContactMethod: 'email' | 'phone' | 'both';
+  newsletter: boolean;
 }
 
 export function ClientRegisterForm({ onSuccess, onSwitchToLogin }: ClientRegisterFormProps) {
@@ -38,7 +39,8 @@ export function ClientRegisterForm({ onSuccess, onSwitchToLogin }: ClientRegiste
     industry: '',
     companySize: '',
     legalNeeds: [],
-    preferredContactMethod: 'email'
+    preferredContactMethod: 'email',
+    newsletter: false
   });
   const [registerError, setRegisterError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +89,7 @@ export function ClientRegisterForm({ onSuccess, onSwitchToLogin }: ClientRegiste
           companySize: registerData.companySize,
           legalNeeds: registerData.legalNeeds,
           preferredContactMethod: registerData.preferredContactMethod,
+          newsletter: registerData.newsletter,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         })
       });
@@ -214,6 +217,22 @@ export function ClientRegisterForm({ onSuccess, onSwitchToLogin }: ClientRegiste
               onChange={(e) => setRegisterData({...registerData, company: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-colors"
             />
+          </div>
+        </div>
+
+        {/* Newsletter Subscription */}
+        <div className="border-t pt-6">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="newsletter"
+              checked={registerData.newsletter}
+              onChange={(e) => setRegisterData({...registerData, newsletter: e.target.checked})}
+              className="mr-2"
+            />
+            <label htmlFor="newsletter" className="text-gray-700 font-medium">
+              Subscribe to our newsletter for updates and insights
+            </label>
           </div>
         </div>
 

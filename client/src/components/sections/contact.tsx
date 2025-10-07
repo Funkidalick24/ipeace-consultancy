@@ -98,11 +98,7 @@ export const ContactSection = memo(function ContactSection() {
       message: sanitizedData.message.substring(0, 50) + '...' // Truncate for logging
     });
 
-    // ISSUE: Newsletter subscription is stored in contact record but no separate newsletter subscriber system exists
-    if (data.newsletter) {
-      console.log(`[DIAGNOSTIC] ISSUE DETECTED: User opted for newsletter but no newsletter subscriber system implemented`);
-      console.log(`[DIAGNOSTIC] Newsletter data will be stored in contact record only`);
-    }
+    // Newsletter subscription is handled in the backend API route
 
     contactMutation.mutate(sanitizedData);
   };

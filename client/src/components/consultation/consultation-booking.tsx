@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
@@ -43,9 +44,10 @@ export const ConsultationBooking = memo(function ConsultationBooking({ trigger, 
       company: '',
       serviceType: undefined,
       preferredDate: '',
-      preferredTime: '',
+      preferredTime: undefined,
       consultationType: undefined,
       description: '',
+      newsletter: false,
     },
   });
 
@@ -395,6 +397,26 @@ export const ConsultationBooking = memo(function ConsultationBooking({ trigger, 
                         />
                       </FormControl>
                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="newsletter"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm text-gray-700">
+                          Subscribe to our newsletter
+                        </FormLabel>
+                      </div>
                     </FormItem>
                   )}
                 />

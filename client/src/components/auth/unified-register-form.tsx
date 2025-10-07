@@ -17,6 +17,7 @@ interface RegisterData {
   password: string;
   confirmPassword: string;
   userType: 'client' | 'employee';
+  newsletter: boolean;
   // Client-specific fields
   businessType?: string;
   industry?: string;
@@ -37,6 +38,7 @@ export function UnifiedRegisterForm({ onSuccess, onSwitchToLogin }: UnifiedRegis
     password: '',
     confirmPassword: '',
     userType: 'client',
+    newsletter: false,
     businessType: '',
     industry: '',
     companySize: '',
@@ -83,6 +85,7 @@ export function UnifiedRegisterForm({ onSuccess, onSwitchToLogin }: UnifiedRegis
         company: registerData.company,
         password: registerData.password,
         role: registerData.userType,
+        newsletter: registerData.newsletter,
         businessType: registerData.businessType,
         industry: registerData.industry,
         companySize: registerData.companySize,
@@ -256,6 +259,22 @@ export function UnifiedRegisterForm({ onSuccess, onSwitchToLogin }: UnifiedRegis
               onChange={(e) => setRegisterData({...registerData, company: e.target.value})}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-colors"
             />
+          </div>
+        </div>
+
+        {/* Newsletter Subscription */}
+        <div className="border-t pt-6">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="newsletter"
+              checked={registerData.newsletter}
+              onChange={(e) => setRegisterData({...registerData, newsletter: e.target.checked})}
+              className="mr-2"
+            />
+            <label htmlFor="newsletter" className="text-gray-700 font-medium">
+              Subscribe to our newsletter for updates and insights
+            </label>
           </div>
         </div>
 

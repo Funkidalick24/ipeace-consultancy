@@ -57,6 +57,6 @@ export const companyInfo = {
   address: '135 Baines Avenue, Avenues, Harare, Zimbabwe',
   phone: '+263 4 123 4567',
   email: 'info@ipeace-consultancy.com',
-  website: 'https://ipeace-consultancy.com',
-  logo: 'https://ipeace-consultancy.com/logo.png',
+  website: process.env.FRONTEND_URL || 'https://ipeace-consultancy.com',
+  logo: `${process.env.FRONTEND_URL || 'https://ipeace-consultancy.com'}/logo.png`,
 };
