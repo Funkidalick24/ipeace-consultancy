@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,6 +33,26 @@ export const ConsultationBooking = memo(function ConsultationBooking({ trigger, 
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState<BookingSuccess | null>(null);
+  const [countdown, setCountdown] = useState(10);
+
+  // Auto-close modal after successful booking
+  useEffect(() => {
+    if (bookingSuccess) {
+      setCountdown(10);
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            resetForm();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [bookingSuccess]);
 
   const form = useForm<ConsultationBookingForm>({
     resolver: zodResolver(consultationBookingSchema),
@@ -93,6 +113,7 @@ export const ConsultationBooking = memo(function ConsultationBooking({ trigger, 
   const resetForm = () => {
     form.reset();
     setBookingSuccess(null);
+    setCountdown(10);
     setIsOpen(false);
   };
 
@@ -132,9 +153,14 @@ export const ConsultationBooking = memo(function ConsultationBooking({ trigger, 
               <p className="text-gray-700 mb-4">
                 {t('consultation.success.message')}
               </p>
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
                 <p className="text-sm text-gray-600">
                   {t('consultation.success.bookingId')}: <span className="font-semibold">#{bookingSuccess.bookingId}</span>
+                </p>
+              </div>
+              <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  This window will close automatically in <span className="font-semibold">{countdown}</span> seconds
                 </p>
               </div>
             </div>
