@@ -10,6 +10,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(compression());
 
+// Add timeout middleware to prevent hanging requests (30 seconds)
+app.use((req: any, res: any, next: any) => {
+  const timeout = setTimeout(() => {
+    if (!res.headersSent) {
+      res.status(408).json({ error: 'Request timeout' });
+    }
+  }, 30000); // 30 seconds
+
+  res.on('finish', () => {
+    clearTimeout(timeout);
+  });
+
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;

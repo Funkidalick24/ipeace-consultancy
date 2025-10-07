@@ -16,10 +16,34 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { PassThrough } from 'stream';
 import mongoose from 'mongoose';
+import cache from 'memory-cache';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Cache helper functions
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  const getCachedServiceTypeName = (serviceType: string): string => {
+    const cacheKey = `serviceType_${serviceType}`;
+    let name = cache.get(cacheKey);
+    if (!name) {
+      name = getServiceTypeName(serviceType);
+      cache.put(cacheKey, name, CACHE_TTL);
+    }
+    return name;
+  };
+
+  const getCachedConsultationTypeName = (consultationType: string): string => {
+    const cacheKey = `consultationType_${consultationType}`;
+    let name = cache.get(cacheKey);
+    if (!name) {
+      name = getConsultationTypeName(consultationType);
+      cache.put(cacheKey, name, CACHE_TTL);
+    }
+    return name;
+  };
+
   // Auth middleware
   const authenticateToken = async (req: any, res: any, next: any) => {
     console.log(`[AUTH DEBUG] ${req.method} ${req.path} - Authenticating request`);
@@ -2008,8 +2032,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Background processing functions for performance optimization
+  const handleCalendarOperations = async (bookingId: string, bookingData: any, startTime: Date, endTime: Date) => {
+    const startTimePerf = Date.now();
+    try {
+      console.log(`[PERF] Starting calendar operations for booking ${bookingId}`);
+
+      // Create calendar event
+      const calendarEventId = await microsoftCalendar.createEvent(bookingData);
+
+      if (calendarEventId) {
+        // Update booking with calendar event ID
+        await storage.updateConsultationBooking(bookingId, {
+          calendarEventId: calendarEventId
+        });
+        console.log(`✅ Calendar event created and linked: ${calendarEventId} (${Date.now() - startTimePerf}ms)`);
+      }
+    } catch (calendarError) {
+      console.error(`❌ Calendar integration error for booking ${bookingId}:`, calendarError);
+      console.log(`⚠️ Booking ${bookingId} created successfully, but calendar event creation failed`);
+    }
+  };
+
+  const handleEmailOperations = async (bookingId: string, sanitizedData: any, validatedData: any, booking: any) => {
+    const startTimePerf = Date.now();
+    try {
+      console.log(`[PERF] Starting email operations for booking ${bookingId}`);
+
+      // Send notifications in parallel
+      await Promise.all([
+        sendConsultationBookingNotification({
+          ...sanitizedData,
+          company: sanitizedData.company || undefined,
+        }),
+        sendConsultationConfirmation(validatedData.email, validatedData.firstName, bookingId, {
+          ...booking,
+          firstName: sanitizedData.firstName,
+          lastName: sanitizedData.lastName,
+          email: sanitizedData.email,
+          phone: sanitizedData.phone,
+          company: sanitizedData.company,
+          serviceType: sanitizedData.serviceType,
+          preferredDate: sanitizedData.preferredDate,
+          preferredTime: sanitizedData.preferredTime,
+          consultationType: sanitizedData.consultationType,
+          description: sanitizedData.description
+        })
+      ]);
+
+      console.log(`✅ Email notifications sent for booking ${bookingId} (${Date.now() - startTimePerf}ms)`);
+    } catch (emailError) {
+      console.error(`❌ Email sending error for booking ${bookingId}:`, emailError);
+    }
+  };
+
   // Book consultation
   app.post("/api/consultations", async (req, res) => {
+    const requestStartTime = Date.now();
+    console.log(`[PERF] Starting consultation booking request`);
+
     try {
       // Validate request body structure
       if (!req.body || typeof req.body !== 'object') {
@@ -2042,7 +2123,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: "Required fields are missing or invalid after sanitization"
         });
       }
-      
+
       // Transform validated data to match storage function expectations
       const preferredDateObj = new Date(validatedData.preferredDate);
       if (isNaN(preferredDateObj.getTime())) {
@@ -2065,7 +2146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`🔍 Checking calendar availability for ${startTime.toISOString()} to ${endTime.toISOString()}`);
 
-      // Check if the time slot is available
+      // Check if the time slot is available (this is still blocking for validation)
       const isAvailable = await microsoftCalendar.checkAvailability(startTime, endTime);
 
       if (!isAvailable) {
@@ -2075,56 +2156,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Store the consultation booking
-      const booking = await storage.createConsultationBooking({
-        firstName: sanitizedData.firstName,
-        lastName: sanitizedData.lastName,
-        email: sanitizedData.email,
-        phone: sanitizedData.phone,
-        company: sanitizedData.company,
-        serviceType: sanitizedData.serviceType,
-        preferredDate: preferredDateObj,
-        preferredTime: sanitizedData.preferredTime,
-        consultationType: sanitizedData.consultationType,
-        description: sanitizedData.description
-      });
-
-      // If newsletter subscription is requested, add to newsletter subscribers
-      console.log(`[NEWSLETTER DEBUG] Consultation form newsletter value: ${validatedData.newsletter}`);
-      console.log(`[NEWSLETTER DEBUG] Consultation form email: ${sanitizedData.email}`);
-      if (validatedData.newsletter) {
-        console.log(`[NEWSLETTER DEBUG] Processing newsletter subscription for ${sanitizedData.email}`);
-        try {
-          // Check if subscriber already exists
-          console.log(`[NEWSLETTER DEBUG] Checking for existing subscriber: ${sanitizedData.email}`);
-          const existingSubscriber = await storage.getNewsletterSubscriber(sanitizedData.email);
-          console.log(`[NEWSLETTER DEBUG] Existing subscriber check result:`, existingSubscriber ? 'EXISTS' : 'NOT FOUND');
-
-          if (!existingSubscriber) {
-            console.log(`[NEWSLETTER DEBUG] Creating new newsletter subscriber`);
-            const newSubscriber = await storage.createNewsletterSubscriber({
-              email: sanitizedData.email,
-              firstName: sanitizedData.firstName,
-              lastName: sanitizedData.lastName,
-              source: 'consultation-form'
-            });
-            console.log(`✅ Added ${sanitizedData.email} to newsletter subscribers from consultation form`, newSubscriber._id);
-          } else {
-            console.log(`ℹ️ ${sanitizedData.email} already subscribed to newsletter`);
-          }
-        } catch (newsletterError) {
-          console.error('❌ Error adding newsletter subscriber from consultation form:', newsletterError);
-          // Don't fail the booking if newsletter signup fails
-        }
-      } else {
-        console.log(`[NEWSLETTER DEBUG] Newsletter not requested for ${sanitizedData.email}`);
-      }
-
-      // Create calendar event
-      let calendarEventId: string | null = null;
-      try {
-        const bookingData = {
-          _id: booking._id?.toString() || '',
+      // Store the consultation booking and handle newsletter in parallel
+      const [booking] = await Promise.all([
+        storage.createConsultationBooking({
           firstName: sanitizedData.firstName,
           lastName: sanitizedData.lastName,
           email: sanitizedData.email,
@@ -2134,60 +2168,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
           preferredDate: preferredDateObj,
           preferredTime: sanitizedData.preferredTime,
           consultationType: sanitizedData.consultationType,
-          description: sanitizedData.description,
-          status: 'pending' as const,
-          createdAt: new Date()
-        };
+          description: sanitizedData.description
+        }),
+        // Handle newsletter subscription in parallel
+        validatedData.newsletter ? (async () => {
+          console.log(`[NEWSLETTER DEBUG] Processing newsletter subscription for ${sanitizedData.email}`);
+          try {
+            const existingSubscriber = await storage.getNewsletterSubscriber(sanitizedData.email);
+            if (!existingSubscriber) {
+              const newSubscriber = await storage.createNewsletterSubscriber({
+                email: sanitizedData.email,
+                firstName: sanitizedData.firstName,
+                lastName: sanitizedData.lastName,
+                source: 'consultation-form'
+              });
+              console.log(`✅ Added ${sanitizedData.email} to newsletter subscribers from consultation form`, newSubscriber._id);
+            } else {
+              console.log(`ℹ️ ${sanitizedData.email} already subscribed to newsletter`);
+            }
+          } catch (newsletterError) {
+            console.error('❌ Error adding newsletter subscriber from consultation form:', newsletterError);
+          }
+        })() : Promise.resolve()
+      ]);
 
-        calendarEventId = await microsoftCalendar.createEvent(bookingData);
+      const bookingId = booking._id?.toString() || '';
 
-        if (calendarEventId) {
-          // Update booking with calendar event ID
-          await storage.updateConsultationBooking(booking._id?.toString() || '', {
-            calendarEventId: calendarEventId
-          });
-          console.log(`✅ Calendar event created and linked: ${calendarEventId}`);
-        }
-      } catch (calendarError) {
-        console.error('❌ Calendar integration error:', calendarError);
-        // Don't fail the booking if calendar creation fails
-        console.log('⚠️ Booking created successfully, but calendar event creation failed');
-      }
-      
-      // Send notifications
-      await sendConsultationBookingNotification({
-        ...sanitizedData,
-        company: sanitizedData.company || undefined,
-      });
-      await sendConsultationConfirmation(validatedData.email, validatedData.firstName, booking._id?.toString(), {
-        ...booking,
+      // Prepare data for background operations
+      const bookingData = {
+        _id: bookingId,
         firstName: sanitizedData.firstName,
         lastName: sanitizedData.lastName,
         email: sanitizedData.email,
         phone: sanitizedData.phone,
         company: sanitizedData.company,
         serviceType: sanitizedData.serviceType,
-        preferredDate: sanitizedData.preferredDate,
+        preferredDate: preferredDateObj,
         preferredTime: sanitizedData.preferredTime,
         consultationType: sanitizedData.consultationType,
-        description: sanitizedData.description
-      });
-      
-      res.json({ 
-        success: true, 
+        description: sanitizedData.description,
+        status: 'pending' as const,
+        createdAt: new Date()
+      };
+
+      // Fire-and-forget background operations (don't await)
+      handleCalendarOperations(bookingId, bookingData, startTime, endTime);
+      handleEmailOperations(bookingId, sanitizedData, validatedData, booking);
+
+      const responseTime = Date.now() - requestStartTime;
+      console.log(`[PERF] Consultation booking completed in ${responseTime}ms - booking ${bookingId}`);
+
+      res.json({
+        success: true,
         message: "Consultation booked successfully! We will contact you soon to confirm your appointment.",
-        bookingId: booking._id?.toString(),
+        bookingId: bookingId,
         booking: {
           ...booking,
-          serviceTypeName: getServiceTypeName(booking.serviceType),
-          consultationTypeName: getConsultationTypeName(booking.consultationType),
+          serviceTypeName: getCachedServiceTypeName(booking.serviceType),
+          consultationTypeName: getCachedConsultationTypeName(booking.consultationType),
         }
       });
     } catch (error) {
-      console.error("Consultation booking error:", error);
-      res.status(400).json({ 
-        success: false, 
-        message: error instanceof Error ? error.message : "Failed to book consultation" 
+      const responseTime = Date.now() - requestStartTime;
+      console.error(`[PERF] Consultation booking failed after ${responseTime}ms:`, error);
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Failed to book consultation"
       });
     }
   });
@@ -2343,8 +2389,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: plainBooking.description,
           status: plainBooking.status,
           createdAt: plainBooking.createdAt?.toISOString(),
-          serviceTypeName: getServiceTypeName(plainBooking.serviceType),
-          consultationTypeName: getConsultationTypeName(plainBooking.consultationType),
+          serviceTypeName: getCachedServiceTypeName(plainBooking.serviceType),
+          consultationTypeName: getCachedConsultationTypeName(plainBooking.consultationType),
         };
       });
 
@@ -2397,8 +2443,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: plainBooking.description,
           status: plainBooking.status,
           createdAt: plainBooking.createdAt,
-          serviceTypeName: getServiceTypeName(plainBooking.serviceType),
-          consultationTypeName: getConsultationTypeName(plainBooking.consultationType),
+          serviceTypeName: getCachedServiceTypeName(plainBooking.serviceType),
+          consultationTypeName: getCachedConsultationTypeName(plainBooking.consultationType),
         }
       });
     } catch (error) {
@@ -2480,8 +2526,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: plainBooking.description,
           status: plainBooking.status,
           createdAt: plainBooking.createdAt,
-          serviceTypeName: getServiceTypeName(plainBooking.serviceType),
-          consultationTypeName: getConsultationTypeName(plainBooking.consultationType),
+          serviceTypeName: getCachedServiceTypeName(plainBooking.serviceType),
+          consultationTypeName: getCachedConsultationTypeName(plainBooking.consultationType),
         }
       });
     } catch (error) {
