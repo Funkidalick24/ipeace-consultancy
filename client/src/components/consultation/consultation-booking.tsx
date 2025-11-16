@@ -113,7 +113,7 @@ export const ConsultationBooking = memo(function ConsultationBooking({ trigger, 
   const resetForm = () => {
     form.reset();
     setBookingSuccess(null);
-    setCountdown(10);
+    setCountdown(20);
     setIsOpen(false);
   };
 
