@@ -385,7 +385,7 @@ export const ContactSection = memo(function ContactSection() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open('https://maps.google.com/?q=135+Baines+Avenue,+Harare,+Zimbabwe', '_blank')}
+                          onClick={() => window.open('https://maps.app.goo.gl/cQuv9moeBCRVcqSi9?g_st=ic', '_blank')}
                           className="flex items-center gap-2"
                         >
                           <Navigation className="h-4 w-4" />
@@ -394,7 +394,7 @@ export const ContactSection = memo(function ContactSection() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=-17.81937,31.0429761', '_blank')}
+                          onClick={() => window.open('https://maps.app.goo.gl/cQuv9moeBCRVcqSi9?g_st=ic', '_blank')}
                           className="flex items-center gap-2"
                         >
                           <Navigation className="h-4 w-4" />
