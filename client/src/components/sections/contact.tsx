@@ -317,8 +317,8 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.phone')}
                       </h4>
-                      <p className="text-gray-700">+263 4 123 4567</p>
-                      <p className="text-gray-700">+263 77 123 4567</p>
+                      <p className="text-gray-700">+263 8644 283 181</p>
+                      <p className="text-gray-700">+263 71 356 6827</p>
                     </div>
                   </div>
 
@@ -358,8 +358,8 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.hours')}
                       </h4>
-                      <p className="text-gray-700">Monday - Friday: 8:00 AM - 6:00 PM</p>
-                      <p className="text-gray-700">Saturday: 9:00 AM - 1:00 PM</p>
+                      <p className="text-gray-700">Monday - Friday: 8:30 AM - 4:30 PM</p>
+                      <p className="text-gray-700">Saturday: Closed</p>
                       <p className="text-gray-700">Sunday: Closed</p>
                       <p className="text-sm text-primary-blue font-medium mt-1">
                         Chat: 24/7 Available
@@ -379,7 +379,7 @@ export const ContactSection = memo(function ContactSection() {
                   <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 text-gray-700 text-center p-6">
                     <div className="text-center">
                       <MapPin className="h-12 w-12 mx-auto mb-4 text-primary-blue" />
-                      <h4 className="text-lg font-semibold mb-2">IPEACE Office Location</h4>
+                      <h4 className="text-lg font-semibold mb-2">IPEACE OFFICE LOCATION</h4>
                       <p className="text-sm mb-4">135 Baines Avenue<br />Avenues, Harare<br />Zimbabwe</p>
                       <div className="flex flex-col sm:flex-row gap-2 justify-center">
                         <Button
