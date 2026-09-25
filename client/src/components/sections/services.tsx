@@ -71,9 +71,10 @@ export const ServicesSection = memo(function ServicesSection() {
   const services = ['regulatory', 'ai', 'strategy', 'training', 'documents', 'support'];
 
   return (
-    <section id="services" className="py-20 bg-white">
+    <section id="services" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <span className="section-kicker mb-4">Our menu of expertise</span>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('services.title')}
           </h2>
@@ -89,10 +90,10 @@ export const ServicesSection = memo(function ServicesSection() {
             const description = serviceDescriptions[service as keyof typeof serviceDescriptions];
             
             return (
-              <Card key={service} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:shadow-xl transition-all duration-300 group">
+              <Card key={service} className="bg-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group">
                 <CardContent className="p-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="text-2xl text-white h-8 w-8" />
+                  <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <Icon className="text-2xl text-primary-blue h-7 w-7" />
                   </div>
                   <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">
                     {t(`contact.form.services.${service}`)}
@@ -126,12 +127,12 @@ export const ServicesSection = memo(function ServicesSection() {
 
         {/* CTA Section */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-primary-blue to-secondary-blue rounded-2xl p-12 text-white">
+          <div className="bg-primary-blue rounded-2xl p-8 md:p-12 text-white shadow-xl">
             <h3 className="text-3xl font-bold mb-4">{t('services.cta.title')}</h3>
-            <p className="text-xl mb-8 text-black">{t('services.cta.subtitle')}</p>
+            <p className="text-xl mb-8 text-blue-100">{t('services.cta.subtitle')}</p>
             <ConsultationBooking
               trigger={
-                <Button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">
+                <Button className="btn-accent px-8 py-4 font-semibold text-lg">
                   {t('services.cta.button')}
                 </Button>
               }

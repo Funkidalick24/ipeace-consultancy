@@ -89,26 +89,27 @@ export default function Blogs() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="site-page min-h-screen bg-[var(--cream)]">
       <SEOHead {...pageSEO.blogs} />
       <Header />
 
       <main className="pt-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+            <span className="section-kicker mb-4">Fresh perspectives</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Ideas worth sharing</h1>
             <p className="text-xl text-gray-600">Latest insights and updates from IPEACE</p>
           </div>
 
           {/* View Toggle */}
           {blogs.length > 0 && (
             <div className="flex justify-center mb-8">
-              <div className="flex bg-white rounded-lg shadow-sm border">
+              <div className="flex bg-white rounded-2xl shadow-sm border border-blue-100 p-1">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('grid')}
-                  className="rounded-r-none"
+                  className="rounded-xl"
                 >
                   <Grid className="w-4 h-4 mr-2" />
                   Grid
@@ -117,7 +118,7 @@ export default function Blogs() {
                   variant={viewMode === 'list' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('list')}
-                  className="rounded-l-none"
+                  className="rounded-xl"
                 >
                   <List className="w-4 h-4 mr-2" />
                   List
@@ -138,7 +139,7 @@ export default function Blogs() {
               {blogs.map((blog) => (
                 <article
                   key={blog.id}
-                  className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
+                  className={`bg-white rounded-2xl shadow-[0_10px_30px_rgba(31,41,55,0.08)] overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all cursor-pointer ${
                     viewMode === 'list' ? 'flex' : ''
                   }`}
                   onClick={() => window.location.href = `/blog/${blog.slug}`}
