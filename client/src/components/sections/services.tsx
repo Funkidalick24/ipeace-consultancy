@@ -23,58 +23,16 @@ const serviceIcons = {
   support: Headphones,
 };
 
-const serviceFeatures = {
-  regulatory: [
-    'Companies Act compliance audits',
-    'Securities registration guidance',
-    'Corporate governance frameworks'
-  ],
-  ai: [
-    '24/7 consultation chatbot',
-    'Document analysis and review',
-    'Risk assessment algorithms'
-  ],
-  strategy: [
-    'Market analysis and planning',
-    'Digital transformation roadmaps',
-    'Performance optimization'
-  ],
-  training: [
-    'Compliance workshops',
-    'Leadership development',
-    'Digital skills training'
-  ],
-  documents: [
-    'Company incorporation',
-    'Annual returns filing',
-    'Contract review and drafting'
-  ],
-  support: [
-    'Instant responses',
-    'Expert escalation',
-    'Emergency consultation'
-  ]
-};
-
-const serviceDescriptions = {
-  regulatory: 'Navigate Zimbabwe\'s Companies Act, Securities regulations, and other statutory requirements with confidence and precision.',
-  ai: 'Get instant, accurate business guidance trained on Zimbabwe\'s legal frameworks.',
-  strategy: 'Strategic planning and implementation services designed to accelerate growth while maintaining regulatory compliance.',
-  training: 'Comprehensive training programs to upskill your team on regulatory requirements and best business practices.',
-  documents: 'Professional document preparation, review, and filing services for all business registration and compliance needs.',
-  support: 'Round-the-clock support through our chatbot and expert consultants for urgent business and compliance queries.'
-};
+const services = ['regulatory', 'ai', 'strategy', 'training', 'documents', 'support'] as const;
 
 export const ServicesSection = memo(function ServicesSection() {
   const { t } = useTranslation();
-
-  const services = ['regulatory', 'ai', 'strategy', 'training', 'documents', 'support'];
 
   return (
     <section id="services" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-kicker mb-4">Our menu of expertise</span>
+          <span className="section-kicker mb-4">{t('services.kicker')}</span>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('services.title')}
           </h2>
@@ -86,8 +44,8 @@ export const ServicesSection = memo(function ServicesSection() {
         <div className="grid lg:grid-cols-3 gap-8">
           {services.map((service) => {
             const Icon = serviceIcons[service as keyof typeof serviceIcons];
-            const features = serviceFeatures[service as keyof typeof serviceFeatures];
-            const description = serviceDescriptions[service as keyof typeof serviceDescriptions];
+            const features = t(`services.cards.${service}.features`, { returnObjects: true }) as string[];
+            const description = t(`services.cards.${service}.description`);
             
             return (
               <Card key={service} className="bg-white hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group">
