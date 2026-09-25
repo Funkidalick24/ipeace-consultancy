@@ -33,7 +33,7 @@ export const Header = memo(function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur shadow-sm z-50 border-b border-orange-100">
+    <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur shadow-sm z-50 border-b border-blue-100">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}

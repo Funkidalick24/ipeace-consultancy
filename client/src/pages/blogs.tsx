@@ -104,7 +104,7 @@ export default function Blogs() {
           {/* View Toggle */}
           {blogs.length > 0 && (
             <div className="flex justify-center mb-8">
-              <div className="flex bg-white rounded-2xl shadow-sm border border-orange-100 p-1">
+              <div className="flex bg-white rounded-2xl shadow-sm border border-blue-100 p-1">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'ghost'}
                   size="sm"

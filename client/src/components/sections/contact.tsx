@@ -295,8 +295,8 @@ export const ContactSection = memo(function ContactSection() {
                 
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <MapPin className="text-orange-600 h-6 w-6" />
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="text-primary-blue h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -311,8 +311,8 @@ export const ContactSection = memo(function ContactSection() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Phone className="text-orange-600 h-6 w-6" />
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Phone className="text-primary-blue h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -324,8 +324,8 @@ export const ContactSection = memo(function ContactSection() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Mail className="text-orange-600 h-6 w-6" />
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Mail className="text-primary-blue h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -352,8 +352,8 @@ export const ContactSection = memo(function ContactSection() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Clock className="text-orange-600 h-6 w-6" />
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Clock className="text-primary-blue h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -376,8 +376,8 @@ export const ContactSection = memo(function ContactSection() {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">Find Us</h3>
                 
-                <div className="bg-orange-50 h-64 rounded-2xl mb-4 overflow-hidden">
-                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-orange-50 to-amber-100 text-gray-700 text-center p-6">
+                <div className="bg-blue-50 h-64 rounded-2xl mb-4 overflow-hidden">
+                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 text-gray-700 text-center p-6">
                     <div className="text-center">
                       <MapPin className="h-12 w-12 mx-auto mb-4 text-primary-blue" />
                       <h4 className="text-lg font-semibold mb-2">IPEACE OFFICE LOCATION</h4>

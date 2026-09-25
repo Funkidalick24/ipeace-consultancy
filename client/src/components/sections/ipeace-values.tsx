@@ -43,8 +43,8 @@ export const IPEACEValuesSection = memo(function IPEACEValuesSection() {
             return (
               <Card key={value} className="bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
-                    <Icon className="text-2xl text-orange-600 h-7 w-7" />
+                  <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
+                    <Icon className="text-2xl text-primary-blue h-7 w-7" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">
                     {t(`about.values.${value}.title`)}

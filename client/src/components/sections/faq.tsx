@@ -88,8 +88,8 @@ export const FAQSection = memo(function FAQSection() {
       <section id="faq" className="py-20 bg-[var(--cream)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 mx-auto">
-              <HelpCircle className="text-2xl text-orange-600 h-8 w-8" />
+            <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+              <HelpCircle className="text-2xl text-primary-blue h-8 w-8" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t('faq.title')}
@@ -109,8 +109,8 @@ export const FAQSection = memo(function FAQSection() {
       <section id="faq" className="py-20 bg-[var(--cream)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 mx-auto">
-              <HelpCircle className="text-2xl text-orange-600 h-8 w-8" />
+            <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+              <HelpCircle className="text-2xl text-primary-blue h-8 w-8" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t('faq.title')}
@@ -185,8 +185,8 @@ export const FAQSection = memo(function FAQSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <span className="section-kicker mb-4">Helpful answers</span>
-          <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 mx-auto">
-            <HelpCircle className="text-2xl text-orange-600 h-8 w-8" />
+          <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+            <HelpCircle className="text-2xl text-primary-blue h-8 w-8" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('faq.title')}
@@ -203,7 +203,7 @@ export const FAQSection = memo(function FAQSection() {
                 <CardContent className="p-0">
                   <Button
                     variant="ghost"
-                    className="w-full h-auto min-h-16 p-6 text-left justify-between hover:bg-orange-50/50"
+                    className="w-full h-auto min-h-16 p-6 text-left justify-between hover:bg-blue-50/50"
                     onClick={() => toggleItem(index)}
                     aria-expanded={openItems.includes(index)}
                     aria-controls={`faq-answer-${index}`}

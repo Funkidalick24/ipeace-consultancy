@@ -21,14 +21,14 @@
   --accent-foreground: hsl(222, 31%, 19%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(18, 90%, 53%);
+  --ring: hsl(0, 0%, 31%);
   --radius: 1rem;
-  
+
   /* IPEACE Brand Colors */
-  --primary-blue: hsl(222, 43%, 16%);
-  --secondary-blue: hsl(153, 42%, 32%);
-  --accent-yellow: hsl(18, 90%, 53%);
-  --cream: hsl(40, 43%, 97%);
+  --primary-blue: hsl(216, 56%, 24%);
+  --secondary-blue: hsl(213, 93%, 68%);
+  --accent-yellow: hsl(38, 100%, 59%);
+  --cream: hsl(0, 0%, 98%);
 }
 
 .dark {
@@ -60,24 +60,27 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Inter', 'Open Sans', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
+    line-height: 1.6;
     font-display: swap;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold;
-    font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+    font-family: 'Montserrat', system-ui, sans-serif;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
     font-display: swap;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-[var(--accent-yellow)] text-white hover:brightness-95 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-orange-500/20 rounded-xl;
+    @apply bg-[var(--primary-blue)] text-white hover:bg-blue-800 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-blue-900/20 rounded-xl;
   }
   
   .btn-accent {
-    @apply bg-[var(--accent-yellow)] text-white hover:brightness-95 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-orange-500/20 rounded-xl;
+    @apply bg-[var(--accent-yellow)] text-[var(--primary-blue)] hover:bg-yellow-500 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-blue-900/20 rounded-xl;
   }
   
   .text-primary-blue {
@@ -120,7 +123,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(15, 25, 45, 0.12);
+    background: rgba(27, 54, 93, 0.85);
     z-index: 1;
   }
   
@@ -138,6 +141,6 @@
   }
 
   .section-kicker {
-    @apply inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-orange-700;
+    @apply inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-primary-blue;
   }
 }

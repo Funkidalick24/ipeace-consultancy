@@ -13,8 +13,8 @@ export const HeroSection = memo(function HeroSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-orange-200/30 bg-white/10 px-3 py-1.5 text-sm font-semibold text-orange-100 mb-6"><Sparkles className="h-4 w-4 text-orange-300" /> Better business, served thoughtfully</div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/30 bg-white/10 px-3 py-1.5 text-sm font-semibold text-blue-100 mb-6"><Sparkles className="h-4 w-4 text-accent-yellow" /> Better business, served thoughtfully</div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight mb-6">
               <div>{t('hero.title').split(',')[0]}</div>
               <div className="mt-2">
                 Foundation for <span className="text-accent-yellow">Legacy</span>
