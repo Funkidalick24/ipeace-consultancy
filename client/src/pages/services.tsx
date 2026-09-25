@@ -9,7 +9,7 @@ const ChatbotWidget = lazy(() => import('@/components/chatbot/chatbot-widget').t
 
 export default function Services() {
   return (
-    <div className="min-h-screen">
+    <div className="site-page min-h-screen">
       <SEOHead {...pageSEO.services} />
       <Header />
       <main className="pt-16">

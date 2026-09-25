@@ -104,9 +104,10 @@ export const ContactSection = memo(function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <section id="contact" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <span className="section-kicker mb-4">Let's start a conversation</span>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('contact.title')}
           </h2>
@@ -117,7 +118,7 @@ export const ContactSection = memo(function ContactSection() {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="bg-white shadow-sm border border-gray-100">
+          <Card className="bg-white">
             <CardContent className="p-8">
               <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-6">
                 {t('contact.form.title')}
@@ -286,7 +287,7 @@ export const ContactSection = memo(function ContactSection() {
           {/* Contact Information */}
           <div className="space-y-8">
             {/* Office Information */}
-            <Card className="bg-white shadow-sm border border-gray-100">
+            <Card className="bg-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                   {t('contact.office.title')}
@@ -294,8 +295,8 @@ export const ContactSection = memo(function ContactSection() {
                 
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center flex-shrink-0">
-                      <MapPin className="text-white h-6 w-6" />
+                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <MapPin className="text-orange-600 h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -310,8 +311,8 @@ export const ContactSection = memo(function ContactSection() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Phone className="text-white h-6 w-6" />
+                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Phone className="text-orange-600 h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -323,8 +324,8 @@ export const ContactSection = memo(function ContactSection() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Mail className="text-white h-6 w-6" />
+                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Mail className="text-orange-600 h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -351,8 +352,8 @@ export const ContactSection = memo(function ContactSection() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Clock className="text-white h-6 w-6" />
+                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Clock className="text-orange-600 h-6 w-6" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">
@@ -371,12 +372,12 @@ export const ContactSection = memo(function ContactSection() {
             </Card>
 
             {/* Interactive Map */}
-            <Card className="bg-white shadow-sm border border-gray-100">
+            <Card className="bg-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">Find Us</h3>
                 
-                <div className="bg-gray-100 h-64 rounded-lg mb-4 overflow-hidden">
-                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 text-gray-700 text-center p-6">
+                <div className="bg-orange-50 h-64 rounded-2xl mb-4 overflow-hidden">
+                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-orange-50 to-amber-100 text-gray-700 text-center p-6">
                     <div className="text-center">
                       <MapPin className="h-12 w-12 mx-auto mb-4 text-primary-blue" />
                       <h4 className="text-lg font-semibold mb-2">IPEACE OFFICE LOCATION</h4>
@@ -409,7 +410,7 @@ export const ContactSection = memo(function ContactSection() {
             </Card>
 
             {/* Social Media */}
-            <Card className="bg-white shadow-sm border border-gray-100">
+            <Card className="bg-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                   {t('contact.social.title')}

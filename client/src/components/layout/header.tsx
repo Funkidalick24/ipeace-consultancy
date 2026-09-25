@@ -33,7 +33,7 @@ export const Header = memo(function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50 border-b border-gray-100">
+    <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur shadow-sm z-50 border-b border-orange-100">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -70,7 +70,7 @@ width="180"
           <div className="flex items-center space-x-4">
             <LanguageToggle />
             <Button
-              className="hidden lg:block btn-accent px-4 py-2 rounded-md font-medium"
+                className="hidden lg:block btn-accent px-5 py-2 font-medium"
               onClick={() => {
                 window.location.href = '/contact';
               }}

@@ -3,31 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(0, 0%, 31%);
-  --muted: hsl(0, 0%, 90%);
-  --muted-foreground: hsl(0, 0%, 31%);
+  --background: hsl(40, 43%, 97%);
+  --foreground: hsl(222, 31%, 19%);
+  --muted: hsl(38, 33%, 92%);
+  --muted-foreground: hsl(220, 12%, 37%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(0, 0%, 31%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(0, 0%, 31%);
-  --border: hsl(0, 0%, 90%);
-  --input: hsl(0, 0%, 90%);
-  --primary: hsl(216, 56%, 24%);
+  --card-foreground: hsl(222, 31%, 19%);
+  --border: hsl(35, 26%, 86%);
+  --input: hsl(35, 26%, 86%);
+  --primary: hsl(18, 90%, 53%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(0, 0%, 90%);
   --secondary-foreground: hsl(0, 0%, 31%);
-  --accent: hsl(38, 100%, 59%);
-  --accent-foreground: hsl(216, 56%, 24%);
+  --accent: hsl(42, 100%, 67%);
+  --accent-foreground: hsl(222, 31%, 19%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(0, 0%, 31%);
-  --radius: 0.5rem;
+  --ring: hsl(18, 90%, 53%);
+  --radius: 1rem;
   
   /* IPEACE Brand Colors */
-  --primary-blue: hsl(216, 56%, 24%);
-  --secondary-blue: hsl(213, 93%, 68%);
-  --accent-yellow: hsl(38, 100%, 59%);
+  --primary-blue: hsl(222, 43%, 16%);
+  --secondary-blue: hsl(153, 42%, 32%);
+  --accent-yellow: hsl(18, 90%, 53%);
+  --cream: hsl(40, 43%, 97%);
 }
 
 .dark {
@@ -59,24 +60,24 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Open Sans', system-ui, sans-serif;
+    font-family: 'Inter', 'Open Sans', system-ui, sans-serif;
     font-display: swap;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold;
-    font-family: 'Montserrat', system-ui, sans-serif;
+    font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
     font-display: swap;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-[var(--primary-blue)] text-white hover:bg-blue-800 transition-all duration-200 transform hover:scale-105;
+    @apply bg-[var(--accent-yellow)] text-white hover:brightness-95 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-orange-500/20 rounded-xl;
   }
   
   .btn-accent {
-    @apply bg-[var(--accent-yellow)] text-[var(--primary-blue)] hover:bg-yellow-500 transition-all duration-200 transform hover:scale-105;
+    @apply bg-[var(--accent-yellow)] text-white hover:brightness-95 transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-orange-500/20 rounded-xl;
   }
   
   .text-primary-blue {
@@ -108,7 +109,7 @@
   }
   
   .gradient-hero {
-    background: linear-gradient(135deg, var(--primary-blue), var(--accent-yellow));
+    background: radial-gradient(circle at 82% 18%, rgba(255, 190, 87, .38), transparent 26%), radial-gradient(circle at 8% 85%, rgba(242, 109, 47, .28), transparent 28%), linear-gradient(135deg, #17233d, #273b62);
     position: relative;
   }
   
@@ -119,12 +120,24 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(27, 54, 93, 0.85); /* Dark overlay for better text contrast */
+    background: rgba(15, 25, 45, 0.12);
     z-index: 1;
   }
   
   .gradient-hero > * {
     position: relative;
     z-index: 2;
+  }
+
+  .site-page main > section {
+    position: relative;
+  }
+
+  .site-page main > section:nth-child(odd) {
+    background-color: var(--cream);
+  }
+
+  .section-kicker {
+    @apply inline-flex items-center gap-2 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-orange-700;
   }
 }
