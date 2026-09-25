@@ -28,7 +28,7 @@ export const IPEACEValuesSection = memo(function IPEACEValuesSection() {
     <section id="about" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-kicker mb-4">The IPEACE recipe</span>
+          <span className="section-kicker mb-4">{t('about.kicker')}</span>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             {t('about.title')}
           </h2>

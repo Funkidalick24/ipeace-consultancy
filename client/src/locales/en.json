@@ -24,31 +24,32 @@
   },
   "about": {
     "title": "What IPEACE Stands For",
-    "subtitle": "IPEACE is more than a name—it's an acronym and a promise. Each letter embodies a core value that guides every strategy, interaction, and solution we deliver.",
+    "kicker": "Our consulting approach",
+    "subtitle": "IPEACE helps Zimbabwean entrepreneurs and SMEs start, comply, and grow through practical business guidance.",
     "values": {
       "innovation": {
         "title": "Innovation",
-        "description": "We harness cutting-edge technologies and forward-thinking methodologies to keep our clients ahead of the curve."
+        "description": "We test practical approaches that simplify your work and solve the business problem at hand."
       },
       "precision": {
         "title": "Precision",
-        "description": "We believe in surgical accuracy: every recommendation, every report, every process is data-driven and meticulously vetted."
+        "description": "We check details, document decisions, and give clear recommendations you can act on with confidence."
       },
       "empowerment": {
         "title": "Empowerment",
-        "description": "We don't just \"consult\"—we upskill, mentor, and equip business leaders with the tools and mindset to own their growth."
+        "description": "We coach your team and leave usable tools so you can manage progress independently."
       },
       "agility": {
         "title": "Agility",
-        "description": "In a rapidly shifting market, speed wins. Our lean frameworks and rapid-iteration cycles let you pivot without pain."
+        "description": "We use short review cycles to adjust priorities quickly when your business needs change."
       },
       "compliance": {
         "title": "Compliance",
-        "description": "Regulations aren't roadblocks—they're springboards for trust and stability. We turn \"must-dos\" into competitive advantages."
+        "description": "We map requirements, prepare records, and help you meet deadlines with fewer compliance surprises."
       },
       "excellence": {
         "title": "Excellence",
-        "description": "From our client portal's intuitive UI to our round-the-clock support, we set—and exceed—industry benchmarks."
+        "description": "We set clear expectations, communicate progress regularly, and deliver work that is ready to use."
       }
     }
   },
