@@ -54,12 +54,57 @@
   },
   "services": {
     "title": "Zimbabwe Business Services: Compliance, Registration & Strategy",
-    "subtitle": "Complete business solutions for Zimbabwe entrepreneurs. From company registration to compliance audits, get expert guidance on Companies Act requirements, business licensing, and regulatory compliance.",
+    "subtitle": "Clear, practical support to launch, manage, and grow your Zimbabwe business with confidence.",
     "learnMore": "Learn More",
     "cta": {
       "title": "Need Help with Zimbabwe Business Compliance?",
-      "subtitle": "Get your free consultation today. Our experts can answer: How to register a company in Zimbabwe? What are the compliance requirements? How to get a business license?",
+      "subtitle": "Get clear next steps to strengthen compliance and move your business forward.",
       "button": "Get Free Compliance Check"
+    },
+    "kicker": "Practical consulting for confident decisions",
+    "cards": {
+      "regulatory": {
+        "description": "Stay compliant with Zimbabwean regulations through clear, practical guidance.",
+        "features": [
+          "Companies Act compliance audits",
+          "Corporate governance frameworks"
+        ]
+      },
+      "ai": {
+        "description": "Get timely, practical guidance through our Expert Advisory service.",
+        "features": [
+          "On-demand business guidance",
+          "Document analysis and review"
+        ]
+      },
+      "strategy": {
+        "description": "Turn your growth priorities into a focused, actionable business plan.",
+        "features": [
+          "Market analysis and planning",
+          "Digital transformation roadmaps"
+        ]
+      },
+      "training": {
+        "description": "Build the skills your team needs to operate confidently and compliantly.",
+        "features": [
+          "Compliance workshops",
+          "Leadership development"
+        ]
+      },
+      "documents": {
+        "description": "Prepare accurate business documents and filings without unnecessary delays.",
+        "features": [
+          "Company incorporation",
+          "Contract review and drafting"
+        ]
+      },
+      "support": {
+        "description": "Get responsive support when urgent business or compliance questions arise.",
+        "features": [
+          "Expert escalation",
+          "Emergency consultation"
+        ]
+      }
     }
   },
   "team": {

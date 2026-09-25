@@ -54,12 +54,39 @@
   },
   "services": {
     "title": "Masevhisi Edu",
-    "subtitle": "Mhinduro dzakakwana dzekubvunzurudza bhizinesi dzakagadzirisirwa nharaunda yemitemo yeZimbabwe.",
+    "subtitle": "Wana rutsigiro rwakajeka uye runoshanda kuti utange, utungamire, nekukudza bhizinesi rako muZimbabwe nechivimbo.",
     "learnMore": "Dzidza Zvimwe",
     "cta": {
       "title": "Wakagadzirira Kushandura Bhizinesi Rako?",
-      "subtitle": "Tanga nekubvunzurudza kwemahara uye uwane kuti IPEACE ingakubatsira sei kuwana budiriro.",
+      "subtitle": "Wana matanho akajeka ekusimbisa kutevedzera mitemo nekufambisa bhizinesi rako mberi.",
       "button": "Ronga Kubvunzurudza Kwemahara"
+    },
+    "kicker": "Kubvunzurudza kunoshanda pakuita zvisarudzo nechivimbo",
+    "cards": {
+      "regulatory": {
+        "description": "Tevedzera mitemo yeZimbabwe nechivimbo uchitungamirirwa nenzira yakajeka uye inoshanda.",
+        "features": ["Kuongorora kutevedzera Companies Act", "Masisitimu ekutonga kambani"]
+      },
+      "ai": {
+        "description": "Wana nhungamiro nenguva kuburikidza nesevhisi yedu yeMazano eNyanzvi.",
+        "features": ["Nhungamiro yebhizinesi paunenge waida", "Kuongorora nekudzokorora zvinyorwa"]
+      },
+      "strategy": {
+        "description": "Shandura zvinangwa zvako zvekukura kuita hurongwa hwebhizinesi hwakananga uye hunoshanda.",
+        "features": ["Kuongorora musika nekuronga", "Mamepu ekushandura mashandiro edhijitari"]
+      },
+      "training": {
+        "description": "Vaka hunyanzvi hunodiwa nechikwata chako kuti chishande nechivimbo uye chichitevedzera mitemo.",
+        "features": ["Misangano yekudzidzisa kutevedzera mitemo", "Kuvandudza hutungamiri"]
+      },
+      "documents": {
+        "description": "Gadzirira magwaro nemafaira ebhizinesi nemazvo pasina kunonoka kusiri madikanwa.",
+        "features": ["Kunyoresa kambani", "Kuongorora nekugadzira zvibvumirano"]
+      },
+      "support": {
+        "description": "Wana rutsigiro runokurumidza kana paine mibvunzo yechimbi-chimbi yebhizinesi kana yekutevedzera mitemo.",
+        "features": ["Kusvitswa kune nyanzvi", "Kubvunzurudza kwechimbichimbi"]
+      }
     }
   },
   "team": {
@@ -93,7 +120,7 @@
       "services": {
         "select": "Sarudza sevhisi",
         "regulatory": "Kutevera Mitemo",
-        "ai": "Kubvunzurudza kwakaongororwa",
+        "ai": "Mazano eNyanzvi",
         "strategy": "Zvirongwa zveBhizinesi",
         "training": "Kudzidzisa & Kukudziridza",
         "documents": "Masevhisi eZvinyorwa",
@@ -309,7 +336,7 @@
       "serviceTypes": {
         "select": "Sarudza sevhisi",
         "regulatory": "Kutevera Mitemo",
-        "ai": "Kubvunzurudza kwakaongororwa",
+        "ai": "Mazano eNyanzvi",
         "strategy": "Zvirongwa zveBhizinesi",
         "training": "Kudzidzisa & Kukudziridza",
         "documents": "Masevhisi eZvinyorwa",
