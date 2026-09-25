@@ -25,9 +25,10 @@ export const IPEACEValuesSection = memo(function IPEACEValuesSection() {
   ];
 
   return (
-    <section id="about" className="py-20 bg-gray-50">
+    <section id="about" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <span className="section-kicker mb-4">The IPEACE recipe</span>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             {t('about.title')}
           </h2>
@@ -40,10 +41,10 @@ export const IPEACEValuesSection = memo(function IPEACEValuesSection() {
           {values.map((value) => {
             const Icon = valueIcons[value as keyof typeof valueIcons];
             return (
-              <Card key={value} className="bg-white hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+              <Card key={value} className="bg-white hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-primary-blue rounded-lg flex items-center justify-center mb-6">
-                    <Icon className="text-2xl text-accent-yellow h-8 w-8" />
+                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
+                    <Icon className="text-2xl text-orange-600 h-7 w-7" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">
                     {t(`about.values.${value}.title`)}

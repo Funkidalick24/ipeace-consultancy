@@ -85,11 +85,11 @@ export const FAQSection = memo(function FAQSection() {
 
   if (loading) {
     return (
-      <section id="faq" className="py-20 bg-gray-50">
+      <section id="faq" className="py-20 bg-[var(--cream)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="w-16 h-16 bg-primary-blue rounded-lg flex items-center justify-center mb-6 mx-auto">
-              <HelpCircle className="text-2xl text-accent-yellow h-8 w-8" />
+            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+              <HelpCircle className="text-2xl text-orange-600 h-8 w-8" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t('faq.title')}
@@ -106,11 +106,11 @@ export const FAQSection = memo(function FAQSection() {
 
   if (faqs.length === 0) {
     return (
-      <section id="faq" className="py-20 bg-gray-50">
+      <section id="faq" className="py-20 bg-[var(--cream)]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="w-16 h-16 bg-primary-blue rounded-lg flex items-center justify-center mb-6 mx-auto">
-              <HelpCircle className="text-2xl text-accent-yellow h-8 w-8" />
+            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+              <HelpCircle className="text-2xl text-orange-600 h-8 w-8" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {t('faq.title')}
@@ -181,11 +181,12 @@ export const FAQSection = memo(function FAQSection() {
   }
 
   return (
-    <section id="faq" className="py-20 bg-gray-50">
+    <section id="faq" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="w-16 h-16 bg-primary-blue rounded-lg flex items-center justify-center mb-6 mx-auto">
-            <HelpCircle className="text-2xl text-accent-yellow h-8 w-8" />
+          <span className="section-kicker mb-4">Helpful answers</span>
+          <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+            <HelpCircle className="text-2xl text-orange-600 h-8 w-8" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('faq.title')}
@@ -198,11 +199,11 @@ export const FAQSection = memo(function FAQSection() {
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <Card key={faq.id} className="border border-gray-200 hover:shadow-md transition-shadow duration-200">
+              <Card key={faq.id} className="bg-white hover:shadow-md transition-shadow duration-200">
                 <CardContent className="p-0">
                   <Button
                     variant="ghost"
-                    className="w-full p-6 text-left justify-between hover:bg-gray-50"
+                    className="w-full h-auto min-h-16 p-6 text-left justify-between hover:bg-orange-50/50"
                     onClick={() => toggleItem(index)}
                     aria-expanded={openItems.includes(index)}
                     aria-controls={`faq-answer-${index}`}
@@ -232,7 +233,7 @@ export const FAQSection = memo(function FAQSection() {
 
           {/* CTA Section */}
           <div className="mt-12 text-center">
-            <div className="bg-gradient-to-r from-primary-blue to-secondary-blue rounded-2xl p-8 text-white">
+            <div className="bg-primary-blue rounded-2xl p-8 text-white shadow-xl">
               <h3 className="text-2xl font-bold mb-4">Still have questions about Zimbabwe business compliance?</h3>
               <p className="text-lg mb-6 opacity-90">
                 Our consultants can answer any question about company registration, compliance requirements, or business licensing in Zimbabwe.
