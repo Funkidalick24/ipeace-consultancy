@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronUp, HelpCircle, Share2, Copy, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 
 interface FAQItem {
@@ -21,8 +21,6 @@ export const FAQSection = memo(function FAQSection() {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [openItems, setOpenItems] = useState<number[]>([0]); // First FAQ open by default
-  const [showShareOptions, setShowShareOptions] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
     const fetchFAQs = async () => {

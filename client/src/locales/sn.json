@@ -29,31 +29,31 @@
   "about": {
     "title": "Zvinoreva IPEACE",
     "kicker": "Maitiro edu ekubvunza mazano",
-    "subtitle": "IPEACE haisi zita chete—ichiratidzo nechinzvimbo. Bhii rimwe nerimwe rinoratidza hunhu hwakakoshea hunofambisa zvirongwa zvese, kupindirana, uye mhinduro dzatinoita.",
+    "subtitle": "IPEACE inobatsira vanamuzvinabhizinesi neveSME veZimbabwe kutanga, kutevera mitemo, nekukura nemazano anoshanda.",
     "values": {
       "innovation": {
         "title": "Kusika",
-        "description": "Tinoshandisa tekinoroji yemazuva ano uye nzira dzekufunga dzemberi kuti vatengeji vedu vave pamberi."
+        "description": "Tinoedza nzira dzinoshanda dzinorerutsa basa renyu uye dzinogadzirisa dambudziko rebhizinesi."
       },
       "precision": {
         "title": "Kududzira",
-        "description": "Tinotenda mukududzira kwakafanana nekuvhiya: kurudziro imwe neimwe, chiriko chimwe nechimwe, maitiro ese akatungamirwa nedata uye akanyatsoongorora."
+        "description": "Tinotarisa mashoko, tinonyora sarudzo, uye tinopa mazano akajeka amunogona kushandisa."
       },
       "empowerment": {
         "title": "Kusimbisa",
-        "description": "Hatiingoti 'kubvunzurudza'—tinodzidza, tichiraira, uye tinoshongedza vatungamiri vebhizinesi nezvishandiso nemafungiro ekutonga kukura kwavo."
+        "description": "Tinodzidzisa timu yenyu uye tinosiya zvishandiso zvinobatsira kuti mufambise basa mega."
       },
       "agility": {
         "title": "Kukurumidza",
-        "description": "Mumusika uri kushanduka nekukurumidza, kumhanya kunokunda. Matanho edu akapfava uye kutevedzana-kwekukurumidza kunokubvumira kuti ushanduke pasina kurwadziwa."
+        "description": "Tinoongorora basa nguva nenguva kuti tigadzirise zvinokosha kana zvinodiwa zvichichinja."
       },
       "compliance": {
         "title": "Kutevera Mitemo",
-        "description": "Mitemo haisi zvipingaidzo—ndiyo zvigadziko zvekuvimba uye kutsiga. Tinoshandura 'zvinofanira kuitwa' kuita mukana wekukwikwidza."
+        "description": "Tinoronga zvinodiwa, tigadzirire magwaro, uye tinokubatsirai kusangana nenguva dzakatarwa."
       },
       "excellence": {
         "title": "Kunaka",
-        "description": "Kubva kune UI yekutonga yevatengi kusvika kurutsigiro rwedu rwemasikati nemanheru, tinogadza—uye tichipfuura—zviyero zveindasitiri."
+        "description": "Tinobvumirana zvinotarisirwa, tinogara tichizivisa mafambiro, uye tinopa basa ragadzirira kushandiswa."
       }
     }
   },
@@ -122,8 +122,8 @@
     "subtitle": "Usangoona mashoko edu chete. Aya ndiwo mashoko anotaura vatungamiri vebhizinesi muZimbabwe nezveruzivo rwavo rweIPEACE."
   },
   "contact": {
-    "title": "Bata Nesu",
-    "subtitle": "Wakagadzirira kushandura bhizinesi rako? Tibate nhasi kuti uwane kubvunzurudza kwemahara uye uone kuti IPEACE ingakubatsire sei kuwana zvinangwa zvako.",
+    "title": "Ngatitaure nezvezvinodiwa nebhizinesi renyu.",
+    "subtitle": "Tiudzei kwamunoda rubatsiro, uye tichakubatsirai kuwana danho rinoshanda rinotevera.",
     "form": {
       "title": "Titumire Meseji",
       "firstName": "Zita Rekutanga",

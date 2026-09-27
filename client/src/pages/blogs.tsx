@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { Grid, List } from 'lucide-react';
+import { Link } from 'wouter';
 import { SEOHead, pageSEO } from '@/components/seo/SEOHead';
 
 interface BlogPost {

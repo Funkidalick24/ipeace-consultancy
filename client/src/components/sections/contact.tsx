@@ -210,6 +210,9 @@ export const ContactSection = memo(function ContactSection() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem value="general-inquiry">
+                              {t('contact.form.services.general')}
+                            </SelectItem>
                             <SelectItem value="regulatory-compliance">
                               {t('contact.form.services.regulatory')}
                             </SelectItem>
@@ -227,6 +230,12 @@ export const ContactSection = memo(function ContactSection() {
                             </SelectItem>
                             <SelectItem value="support">
                               {t('contact.form.services.support')}
+                            </SelectItem>
+                            <SelectItem value="human-resources">
+                              {t('contact.form.services.humanResources')}
+                            </SelectItem>
+                            <SelectItem value="operations-finance">
+                              {t('contact.form.services.operationsFinance')}
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -368,7 +377,7 @@ export const ContactSection = memo(function ContactSection() {
                     aria-label="LinkedIn"
                   >
                     <Linkedin className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">LinkedIn</span>
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.linkedin')}</span>
                   </Button>
                   <Button
                     variant="outline"
@@ -377,7 +386,7 @@ export const ContactSection = memo(function ContactSection() {
                     aria-label="Facebook"
                   >
                     <Facebook className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">Facebook</span>
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.facebook')}</span>
                   </Button>
                   <Button
                     variant="outline"
@@ -386,7 +395,7 @@ export const ContactSection = memo(function ContactSection() {
                     aria-label="Instagram"
                   >
                     <Instagram className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">Instagram</span>
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.instagram')}</span>
                   </Button>
                 </div>
               </CardContent>
