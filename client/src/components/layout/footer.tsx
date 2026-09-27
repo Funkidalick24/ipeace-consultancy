@@ -74,60 +74,15 @@ export const Footer = memo(function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h4>
             <ul className="space-y-2">
-              <li>
-                <button
-                  onClick={() => navigateToPage('/')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.home')}
-                >
-                  {t('nav.home')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/about')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.about')}
-                >
-                  {t('nav.about')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/services')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.services')}
-                >
-                  {t('nav.services')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/faq')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.faq')}
-                >
-                  {t('nav.faq')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/blogs')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.blog')}
-                >
-                  {t('nav.blog')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/contact')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('nav.contact')}
-                >
-                  {t('nav.contact')}
-                </button>
-              </li>
+              {[
+                ['/services', 'nav.services'],
+                ['/about', 'nav.about'],
+                ['/contact', 'nav.contact'],
+              ].map(([path, label]) => (
+                <li key={path}>
+                  <button onClick={() => navigateToPage(path)} className="text-blue-100 hover:text-white transition-colors duration-200" aria-label={t(label)}>{t(label)}</button>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -135,51 +90,7 @@ export const Footer = memo(function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">{t('footer.services')}</h4>
             <ul className="space-y-2">
-              <li>
-                <button
-                  onClick={() => navigateToPage('/services')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('contact.form.services.regulatory')}
-                >
-                  {t('contact.form.services.regulatory')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/services')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('contact.form.services.ai')}
-                >
-                  {t('contact.form.services.ai')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/services')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('contact.form.services.strategy')}
-                >
-                  {t('contact.form.services.strategy')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/services')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('contact.form.services.training')}
-                >
-                  {t('contact.form.services.training')}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => navigateToPage('/services')}
-                  className="text-blue-100 hover:text-white transition-colors duration-200"
-                  aria-label={t('contact.form.services.support')}
-                >
-                  {t('contact.form.services.support')}
-                </button>
-              </li>
+              <li><button onClick={() => navigateToPage('/services')} className="text-blue-100 hover:text-white transition-colors duration-200" aria-label={t('footer.exploreServices')}>{t('footer.exploreServices')}</button></li>
             </ul>
           </div>
         </div>
@@ -201,12 +112,12 @@ export const Footer = memo(function Footer() {
             <button
               onClick={navigateToPortal}
               className="text-blue-100 hover:text-white text-sm transition-colors duration-200"
-              aria-label="Client Portal"
+              aria-label={t('footer.clientPortal')}
             >
-              Portal
+              {t('footer.clientPortal')}
             </button>
             <button
-              onClick={() => alert('Cookie Policy page coming soon')}
+              onClick={() => alert(t('footer.cookiesComingSoon'))}
               className="text-blue-100 hover:text-white text-sm transition-colors duration-200"
               aria-label={t('footer.cookies')}
             >

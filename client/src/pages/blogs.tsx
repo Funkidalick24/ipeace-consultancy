@@ -48,9 +48,9 @@ export default function Blogs() {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert('Link copied to clipboard!');
+      alert(t('blogs.copySuccess'));
     } catch (error) {
-      console.error('Failed to copy:', error);
+      console.error(t('blogs.copyError'), error);
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = text;
@@ -58,7 +58,7 @@ export default function Blogs() {
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      alert('Link copied to clipboard!');
+      alert(t('blogs.copySuccess'));
     }
   };
 
@@ -72,7 +72,7 @@ export default function Blogs() {
       const data = await response.json();
       setBlogs(data.blogs || []);
     } catch (error) {
-      console.error('Failed to fetch blogs:', error);
+      console.error(t('blogs.fetchError'), error);
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ export default function Blogs() {
     return (
       <div className="min-h-screen bg-gray-50 py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center">Loading blogs...</div>
+          <div className="text-center">{t('blogs.loading')}</div>
         </div>
       </div>
     );
@@ -96,9 +96,9 @@ export default function Blogs() {
       <main className="pt-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
-            <span className="section-kicker mb-4">Fresh perspectives</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Ideas worth sharing</h1>
-            <p className="text-xl text-gray-600">Latest insights and updates from IPEACE</p>
+            <span className="section-kicker mb-4">{t('blogs.kicker')}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t('blogs.title')}</h1>
+            <p className="text-xl text-gray-600">{t('blogs.subtitle')}</p>
           </div>
 
           {/* View Toggle */}
@@ -112,7 +112,7 @@ export default function Blogs() {
                   className="rounded-xl"
                 >
                   <Grid className="w-4 h-4 mr-2" />
-                  Grid
+                  {t('blogs.grid')}
                 </Button>
                 <Button
                   variant={viewMode === 'list' ? 'default' : 'ghost'}
@@ -121,7 +121,7 @@ export default function Blogs() {
                   className="rounded-xl"
                 >
                   <List className="w-4 h-4 mr-2" />
-                  List
+                  {t('blogs.list')}
                 </Button>
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function Blogs() {
 
           {blogs.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">No blog posts available yet.</p>
+              <p className="text-gray-500">{t('blogs.empty')}</p>
             </div>
           ) : (
             <div className={viewMode === 'grid'
@@ -186,7 +186,7 @@ export default function Blogs() {
                             shareOnSocial('x', blog.title, `${window.location.origin}/blog/${blog.slug}`);
                           }}
                           className="w-6 h-6 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors text-xs"
-                          title="Share on X"
+                          title={t('blogs.shareX')}
                         >
                           𝕏
                         </button>
@@ -197,7 +197,7 @@ export default function Blogs() {
                             copyToClipboard(`${window.location.origin}/blog/${blog.slug}`);
                           }}
                           className="w-6 h-6 bg-gray-600 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors text-xs"
-                          title="Copy link"
+                          title={t('blogs.copyLink')}
                         >
                           🔗
                         </button>

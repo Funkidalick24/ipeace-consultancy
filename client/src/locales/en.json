@@ -20,7 +20,11 @@
       "complianceLabel": "Success Rate",
       "experience": "3+",
       "experienceLabel": "Years Experience"
-    }
+    },
+    "eyebrow": "Better business, served thoughtfully",
+    "legacyLine": "Foundation for",
+    "legacyHighlight": "Legacy",
+    "imageAlt": "Professional business consulting team collaborating"
   },
   "about": {
     "title": "What IPEACE Stands For",
@@ -106,7 +110,8 @@
           "Emergency consultation"
         ]
       }
-    }
+    },
+    "learnMoreAria": "Learn more about {{service}}"
   },
   "team": {
     "title": "iPeace Leadership Team",
@@ -144,7 +149,12 @@
         "training": "Training & Development",
         "documents": "Document Services",
         "support": "24/7 Support"
-      }
+      },
+      "sending": "Sending...",
+      "successTitle": "Message sent successfully!",
+      "successDescription": "Thank you for your message. We will get back to you soon.",
+      "errorTitle": "Error sending message",
+      "errorDescription": "Please try again later."
     },
     "office": {
       "title": "Visit Our Office",
@@ -152,11 +162,22 @@
       "phone": "Phone",
       "email": "Email",
       "hours": "Business Hours",
-      "directions": "Get Directions"
+      "directions": "Get Directions",
+      "findUs": "Find Us",
+      "locationTitle": "IPEACE office location",
+      "viewMap": "View on Google Maps",
+      "emailLabels": {
+        "generalInquiries": "General inquiries",
+        "support": "Support",
+        "humanResources": "HR & recruitment",
+        "complianceServices": "Compliance services",
+        "operationsFinance": "Operations & finance"
+      }
     },
     "social": {
       "title": "Follow Us"
-    }
+    },
+    "kicker": "Let's start a conversation"
   },
   "footer": {
     "description": "Professional business consulting services specializing in Zimbabwe's regulatory landscape and business growth strategies.",
@@ -165,7 +186,10 @@
     "copyright": "© 2025 IPEACE Professional Consulting. All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "cookies": "Cookie Policy"
+    "cookies": "Cookie Policy",
+    "exploreServices": "Explore Services",
+    "clientPortal": "Client Portal",
+    "cookiesComingSoon": "Cookie Policy page coming soon"
   },
   "legal": {
     "close": "Close",
@@ -419,6 +443,33 @@
         "question": "What are the penalties for non-compliance in Zimbabwe?",
         "answer": "Penalties include fines up to $500,000, imprisonment up to 5 years, business closure, director disqualification, and reputational damage. We help businesses maintain 99.8% compliance rate through proactive monitoring."
       }
-    ]
+    ],
+    "kicker": "Helpful answers",
+    "loading": "Loading FAQs...",
+    "share": "Share FAQ",
+    "copied": "Copied!",
+    "copyLink": "Copy link",
+    "empty": "No FAQs available at the moment.",
+    "shareTitle": "FAQ - Business Consulting Questions Answered | IPEACE",
+    "shareText": "Check out these frequently asked questions about business consulting and compliance in Zimbabwe.",
+    "cta": {
+      "title": "Still have questions about Zimbabwe business compliance?",
+      "subtitle": "Our consultants can answer any question about company registration, compliance requirements, or business licensing in Zimbabwe.",
+      "button": "Ask Our Assistant"
+    }
+  },
+  "blogs": {
+    "loading": "Loading blogs...",
+    "kicker": "Fresh perspectives",
+    "title": "Ideas worth sharing",
+    "subtitle": "Latest insights and updates from IPEACE",
+    "grid": "Grid",
+    "list": "List",
+    "empty": "No blog posts available yet.",
+    "copySuccess": "Link copied to clipboard!",
+    "shareX": "Share on X",
+    "copyLink": "Copy link",
+    "fetchError": "Failed to fetch blogs",
+    "copyError": "Failed to copy"
   }
 }

@@ -73,7 +73,7 @@ export const ServicesSection = memo(function ServicesSection() {
                     onClick={() => {
                       window.location.href = '/contact';
                     }}
-                    aria-label={`${t('services.learnMore')} about ${t(`contact.form.services.${service}`)}`}
+                    aria-label={t('services.learnMoreAria', { service: t(`contact.form.services.${service}`) })}
                   >
                     {t('services.learnMore')} <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>

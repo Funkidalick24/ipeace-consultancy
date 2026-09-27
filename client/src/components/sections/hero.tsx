@@ -13,11 +13,11 @@ export const HeroSection = memo(function HeroSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/30 bg-white/10 px-3 py-1.5 text-sm font-semibold text-blue-100 mb-6"><Sparkles className="h-4 w-4 text-accent-yellow" /> Better business, served thoughtfully</div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/30 bg-white/10 px-3 py-1.5 text-sm font-semibold text-blue-100 mb-6"><Sparkles className="h-4 w-4 text-accent-yellow" />{t('hero.eyebrow')}</div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight mb-6">
               <div>{t('hero.title').split(',')[0]}</div>
               <div className="mt-2">
-                Foundation for <span className="text-accent-yellow">Legacy</span>
+                {t('hero.legacyLine')} <span className="text-accent-yellow">{t('hero.legacyHighlight')}</span>
               </div>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
@@ -76,7 +76,7 @@ export const HeroSection = memo(function HeroSection() {
           <div className="order-1 lg:order-2 mt-10 lg:mt-2.5">
             <img
               src="/hero.JPG"
-              alt="Professional business consulting team collaborating"
+              alt={t('hero.imageAlt')}
               width="800"
               height="533"
               className="rounded-2xl border-8 border-white/10 shadow-2xl w-full h-auto"

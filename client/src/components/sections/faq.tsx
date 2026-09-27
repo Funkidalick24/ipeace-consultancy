@@ -55,8 +55,8 @@ export const FAQSection = memo(function FAQSection() {
   };
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareTitle = 'FAQ - Business Consulting Questions Answered | IPEACE';
-  const shareText = 'Check out these frequently asked questions about business consulting and compliance in Zimbabwe.';
+  const shareTitle = t('faq.shareTitle');
+  const shareText = t('faq.shareText');
 
   const copyToClipboard = async () => {
     try {
@@ -98,7 +98,7 @@ export const FAQSection = memo(function FAQSection() {
               {t('faq.subtitle')}
             </p>
           </div>
-          <div className="text-center">Loading FAQs...</div>
+          <div className="text-center">{t('faq.loading')}</div>
         </div>
       </section>
     );
@@ -127,7 +127,7 @@ export const FAQSection = memo(function FAQSection() {
                 className="flex items-center gap-2"
               >
                 <Share2 className="w-4 h-4" />
-                Share FAQ
+                {t('faq.share')}
               </Button>
   
               {showShareOptions && (
@@ -139,7 +139,7 @@ export const FAQSection = memo(function FAQSection() {
                     className="flex items-center gap-2"
                   >
                     <Copy className="w-4 h-4" />
-                    {copySuccess ? 'Copied!' : 'Copy Link'}
+                    {copySuccess ? t('faq.copied') : t('faq.copyLink')}
                   </Button>
                   <Button
                     variant="ghost"
@@ -173,7 +173,7 @@ export const FAQSection = memo(function FAQSection() {
             </div>
           </div>
           <div className="text-center text-gray-600">
-            No FAQs available at the moment.
+            {t('faq.empty')}
           </div>
         </div>
       </section>
@@ -184,7 +184,7 @@ export const FAQSection = memo(function FAQSection() {
     <section id="faq" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-kicker mb-4">Helpful answers</span>
+          <span className="section-kicker mb-4">{t('faq.kicker')}</span>
           <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
             <HelpCircle className="text-2xl text-primary-blue h-8 w-8" />
           </div>
@@ -234,14 +234,14 @@ export const FAQSection = memo(function FAQSection() {
           {/* CTA Section */}
           <div className="mt-12 text-center">
             <div className="bg-primary-blue rounded-2xl p-8 text-white shadow-xl">
-              <h3 className="text-2xl font-bold mb-4">Still have questions about Zimbabwe business compliance?</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('faq.cta.title')}</h3>
               <p className="text-lg mb-6 opacity-90">
-                Our consultants can answer any question about company registration, compliance requirements, or business licensing in Zimbabwe.
+                {t('faq.cta.subtitle')}
               </p>
               <ConsultationBooking
                 trigger={
                   <Button className="btn-accent px-8 py-3">
-                    Ask Our Assistant
+                    {t('faq.cta.button')}
                   </Button>
                 }
               />
