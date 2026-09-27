@@ -25,7 +25,7 @@
   "about": {
     "title": "What IPEACE Stands For",
     "kicker": "Our consulting approach",
-    "subtitle": "IPEACE helps Zimbabwean entrepreneurs and SMEs start, comply, and grow through practical business guidance.",
+    "subtitle": "IPEACE helps Zimbabwean entrepreneurs and SMEs start, manage compliance, and grow with practical guidance.",
     "values": {
       "innovation": {
         "title": "Innovation",
@@ -117,8 +117,8 @@
     "subtitle": "Don't just take our word for it. Here's what business leaders across Zimbabwe say about their IPEACE experience."
   },
   "contact": {
-    "title": "Contact IPEACE: Zimbabwe Business Compliance Experts",
-    "subtitle": "Have questions about company registration in Zimbabwe? Need help with compliance requirements? Our consultants are here to help. Get expert answers to: How to register a business in Zimbabwe? What licenses do I need? How to stay compliant with Companies Act?",
+    "title": "Let’s talk about what your business needs.",
+    "subtitle": "Tell us where you need support, and we’ll help you find a practical next step.",
     "form": {
       "title": "Send Us a Message",
       "firstName": "First Name",
@@ -143,7 +143,10 @@
         "strategy": "Business Strategy",
         "training": "Training & Development",
         "documents": "Document Services",
-        "support": "24/7 Support"
+        "support": "24/7 Support",
+        "general": "General enquiry",
+        "humanResources": "Human resources and recruitment",
+        "operationsFinance": "Operations and finance"
       }
     },
     "office": {
@@ -152,10 +155,27 @@
       "phone": "Phone",
       "email": "Email",
       "hours": "Business Hours",
-      "directions": "Get Directions"
+      "directions": "Get Directions",
+      "addressValue": "135 Baines Avenue\\nAvenues\\nHarare, Zimbabwe",
+      "phonePrimary": "+263 8644 283 181",
+      "phoneSecondary": "+263 71 356 6827",
+      "generalEmail": "info@ipeace-consultancy.com",
+      "weekdayHours": "Monday–Friday: 8:30 AM–4:30 PM",
+      "saturdayHours": "Saturday: Closed",
+      "sundayHours": "Sunday: Closed",
+      "chatHours": "Chat: available 24/7"
     },
     "social": {
-      "title": "Follow Us"
+      "title": "Follow Us",
+      "linkedin": "LinkedIn",
+      "facebook": "Facebook",
+      "instagram": "Instagram"
+    },
+    "kicker": "Start a conversation",
+    "map": {
+      "title": "Find us",
+      "locationLabel": "IPEACE office location",
+      "action": "Get directions"
     }
   },
   "footer": {
@@ -419,6 +439,32 @@
         "question": "What are the penalties for non-compliance in Zimbabwe?",
         "answer": "Penalties include fines up to $500,000, imprisonment up to 5 years, business closure, director disqualification, and reputational damage. We help businesses maintain 99.8% compliance rate through proactive monitoring."
       }
-    ]
+    ],
+    "kicker": "Helpful answers",
+    "share": {
+      "title": "FAQ | IPEACE",
+      "text": "Read answers to common IPEACE consulting questions.",
+      "button": "Share FAQ",
+      "copy": "Copy link",
+      "copied": "Copied!"
+    },
+    "cta": {
+      "question": "Need advice for your next business step?",
+      "description": "Book a consultation and talk it through with an IPEACE consultant.",
+      "action": "Book a consultation"
+    },
+    "empty": {
+      "message": "We do not have published FAQs yet. Our team can still help with your question.",
+      "action": "Book a consultation"
+    }
+  },
+  "blogs": {
+    "kicker": "Practical insights",
+    "title": "IPEACE insights",
+    "subtitle": "Practical guidance on compliance, business operations, and decisions that help organisations move forward.",
+    "empty": {
+      "message": "No articles are published yet. Explore our services for practical guidance.",
+      "action": "Explore services"
+    }
   }
 }

@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronUp, HelpCircle, Share2, Copy, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 
 interface FAQItem {
@@ -21,8 +21,6 @@ export const FAQSection = memo(function FAQSection() {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [openItems, setOpenItems] = useState<number[]>([0]); // First FAQ open by default
-  const [showShareOptions, setShowShareOptions] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -54,34 +52,6 @@ export const FAQSection = memo(function FAQSection() {
     );
   };
 
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareTitle = 'FAQ - Business Consulting Questions Answered | IPEACE';
-  const shareText = 'Check out these frequently asked questions about business consulting and compliance in Zimbabwe.';
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  };
-
-  const shareOnFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-    window.open(url, '_blank', 'width=600,height=400');
-  };
-
-  const shareOnTwitter = () => {
-    const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-    window.open(url, '_blank', 'width=600,height=400');
-  };
-
-  const shareOnLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
-    window.open(url, '_blank', 'width=600,height=400');
-  };
 
   if (loading) {
     return (
@@ -120,60 +90,10 @@ export const FAQSection = memo(function FAQSection() {
             </p>
   
             {/* Share Section */}
-            <div className="flex flex-col items-center space-y-4">
-              <Button
-                variant="outline"
-                onClick={() => setShowShareOptions(!showShareOptions)}
-                className="flex items-center gap-2"
-              >
-                <Share2 className="w-4 h-4" />
-                Share FAQ
-              </Button>
-  
-              {showShareOptions && (
-                <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-md border">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={copyToClipboard}
-                    className="flex items-center gap-2"
-                  >
-                    <Copy className="w-4 h-4" />
-                    {copySuccess ? 'Copied!' : 'Copy Link'}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={shareOnFacebook}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
-                  >
-                    <Facebook className="w-4 h-4" />
-                    Facebook
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={shareOnTwitter}
-                    className="flex items-center gap-2 text-blue-400 hover:text-blue-500"
-                  >
-                    <Twitter className="w-4 h-4" />
-                    Twitter
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={shareOnLinkedIn}
-                    className="flex items-center gap-2 text-blue-700 hover:text-blue-800"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                    LinkedIn
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="text-center text-gray-600">
-            No FAQs available at the moment.
+            <p className="text-gray-600 mb-6">{t('faq.empty.message')}</p>
+            <ConsultationBooking
+              trigger={<Button className="btn-primary px-8 py-3">{t('faq.empty.action')}</Button>}
+            />
           </div>
         </div>
       </section>
@@ -184,7 +104,7 @@ export const FAQSection = memo(function FAQSection() {
     <section id="faq" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-kicker mb-4">Helpful answers</span>
+          <span className="section-kicker mb-4">{t('faq.kicker')}</span>
           <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
             <HelpCircle className="text-2xl text-primary-blue h-8 w-8" />
           </div>
@@ -234,14 +154,14 @@ export const FAQSection = memo(function FAQSection() {
           {/* CTA Section */}
           <div className="mt-12 text-center">
             <div className="bg-primary-blue rounded-2xl p-8 text-white shadow-xl">
-              <h3 className="text-2xl font-bold mb-4">Still have questions about Zimbabwe business compliance?</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('faq.cta.question')}</h3>
               <p className="text-lg mb-6 opacity-90">
-                Our consultants can answer any question about company registration, compliance requirements, or business licensing in Zimbabwe.
+                {t('faq.cta.description')}
               </p>
               <ConsultationBooking
                 trigger={
                   <Button className="btn-accent px-8 py-3">
-                    Ask Our Assistant
+                    {t('faq.cta.action')}
                   </Button>
                 }
               />

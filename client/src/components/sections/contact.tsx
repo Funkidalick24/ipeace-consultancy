@@ -107,7 +107,7 @@ export const ContactSection = memo(function ContactSection() {
     <section id="contact" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-kicker mb-4">Let's start a conversation</span>
+          <span className="section-kicker mb-4">{t('contact.kicker')}</span>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             {t('contact.title')}
           </h2>
@@ -209,6 +209,9 @@ export const ContactSection = memo(function ContactSection() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem value="general-inquiry">
+                              {t('contact.form.services.general')}
+                            </SelectItem>
                             <SelectItem value="regulatory-compliance">
                               {t('contact.form.services.regulatory')}
                             </SelectItem>
@@ -226,6 +229,12 @@ export const ContactSection = memo(function ContactSection() {
                             </SelectItem>
                             <SelectItem value="support">
                               {t('contact.form.services.support')}
+                            </SelectItem>
+                            <SelectItem value="human-resources">
+                              {t('contact.form.services.humanResources')}
+                            </SelectItem>
+                            <SelectItem value="operations-finance">
+                              {t('contact.form.services.operationsFinance')}
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -302,11 +311,7 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.address')}
                       </h4>
-                      <p className="text-gray-700">
-                        135 Baines Avenue<br />
-                        Avenues<br />
-                        Harare, Zimbabwe
-                      </p>
+                      <p className="text-gray-700 whitespace-pre-line">{t('contact.office.addressValue')}</p>
                     </div>
                   </div>
 
@@ -318,8 +323,8 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.phone')}
                       </h4>
-                      <p className="text-gray-700">+263 8644 283 181</p>
-                      <p className="text-gray-700">+263 71 356 6827</p>
+                      <p className="text-gray-700">{t('contact.office.phonePrimary')}</p>
+                      <p className="text-gray-700">{t('contact.office.phoneSecondary')}</p>
                     </div>
                   </div>
 
@@ -331,23 +336,7 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.email')}
                       </h4>
-                      <div className="space-y-1">
-                        <p className="text-gray-700">
-                          <strong>General Inquiries:</strong> info@ipeace-consultancy.com
-                        </p>
-                        <p className="text-gray-700">
-                          <strong>Support:</strong> support@ipeace-consultancy.com
-                        </p>
-                        <p className="text-gray-700">
-                          <strong>HR & Recruitment:</strong> hr@ipeace-consultancy.com
-                        </p>
-                        <p className="text-gray-700">
-                          <strong>Compliance Services:</strong> wilberforce@ipeace-consultancy.com
-                        </p>
-                        <p className="text-gray-700">
-                          <strong>Operations & Finance:</strong> clarence@ipeace-consultancy.com
-                        </p>
-                      </div>
+                      <p className="text-gray-700">{t('contact.office.generalEmail')}</p>
                     </div>
                   </div>
 
@@ -359,11 +348,11 @@ export const ContactSection = memo(function ContactSection() {
                       <h4 className="font-semibold text-gray-900 mb-1">
                         {t('contact.office.hours')}
                       </h4>
-                      <p className="text-gray-700">Monday - Friday: 8:30 AM - 4:30 PM</p>
-                      <p className="text-gray-700">Saturday: Closed</p>
-                      <p className="text-gray-700">Sunday: Closed</p>
+                      <p className="text-gray-700">{t('contact.office.weekdayHours')}</p>
+                      <p className="text-gray-700">{t('contact.office.saturdayHours')}</p>
+                      <p className="text-gray-700">{t('contact.office.sundayHours')}</p>
                       <p className="text-sm text-primary-blue font-medium mt-1">
-                        Chat: 24/7 Available
+                        {t('contact.office.chatHours')}
                       </p>
                     </div>
                   </div>
@@ -374,34 +363,23 @@ export const ContactSection = memo(function ContactSection() {
             {/* Interactive Map */}
             <Card className="bg-white">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6">Find Us</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">{t('contact.map.title')}</h3>
                 
                 <div className="bg-blue-50 h-64 rounded-2xl mb-4 overflow-hidden">
                   <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 text-gray-700 text-center p-6">
                     <div className="text-center">
                       <MapPin className="h-12 w-12 mx-auto mb-4 text-primary-blue" />
-                      <h4 className="text-lg font-semibold mb-2">IPEACE OFFICE LOCATION</h4>
-                      <p className="text-sm mb-4">135 Baines Avenue<br />Avenues, Harare<br />Zimbabwe</p>
-                      <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open('https://maps.app.goo.gl/cQuv9moeBCRVcqSi9?g_st=ic', '_blank')}
-                          className="flex items-center gap-2"
-                        >
-                          <Navigation className="h-4 w-4" />
-                          View on Google Maps
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open('https://maps.app.goo.gl/cQuv9moeBCRVcqSi9?g_st=ic', '_blank')}
-                          className="flex items-center gap-2"
-                        >
-                          <Navigation className="h-4 w-4" />
-                          Get Directions
-                        </Button>
-                      </div>
+                      <h4 className="text-lg font-semibold mb-2">{t('contact.map.locationLabel')}</h4>
+                      <p className="text-sm mb-4 whitespace-pre-line">{t('contact.office.addressValue')}</p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open('https://maps.app.goo.gl/cQuv9moeBCRVcqSi9?g_st=ic', '_blank')}
+                        className="flex items-center gap-2 mx-auto"
+                      >
+                        <Navigation className="h-4 w-4" />
+                        {t('contact.map.action')}
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -421,28 +399,28 @@ export const ContactSection = memo(function ContactSection() {
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
                     onClick={() => window.open('https://www.linkedin.com/company/ipeace-consultancy/', '_blank')}
-                    aria-label="LinkedIn"
+                    aria-label={t('contact.social.linkedin')}
                   >
                     <Linkedin className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">LinkedIn</span>
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.linkedin')}</span>
                   </Button>
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
                     onClick={() => window.open('https://www.facebook.com/share/17BxG8keoB/?mibextid=wwXIfr', '_blank')}
-                    aria-label="Facebook"
+                    aria-label={t('contact.social.facebook')}
                   >
                     <Facebook className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">Facebook</span>
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.facebook')}</span>
                   </Button>
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
                     onClick={() => window.open('https://www.instagram.com/ipeace_consultancy?igsh=MWJpc2VxY2d4MDYxaQ%3D%3D&utm_source=qr', '_blank')}
-                    aria-label="Instagram"
+                    aria-label={t('contact.social.instagram')}
                   >
                     <Instagram className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
-                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">Instagram</span>
+                    <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.instagram')}</span>
                   </Button>
                 </div>
               </CardContent>

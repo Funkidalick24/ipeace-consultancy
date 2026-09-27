@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { Grid, List } from 'lucide-react';
+import { Link } from 'wouter';
 import { SEOHead, pageSEO } from '@/components/seo/SEOHead';
 
 interface BlogPost {
@@ -96,9 +97,9 @@ export default function Blogs() {
       <main className="pt-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
-            <span className="section-kicker mb-4">Fresh perspectives</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Ideas worth sharing</h1>
-            <p className="text-xl text-gray-600">Latest insights and updates from IPEACE</p>
+            <span className="section-kicker mb-4">{t('blogs.kicker')}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t('blogs.title')}</h1>
+            <p className="text-xl text-gray-600">{t('blogs.subtitle')}</p>
           </div>
 
           {/* View Toggle */}
@@ -129,7 +130,10 @@ export default function Blogs() {
 
           {blogs.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">No blog posts available yet.</p>
+              <p className="text-gray-600 mb-6">{t('blogs.empty.message')}</p>
+              <Button asChild className="btn-primary">
+                <Link href="/services">{t('blogs.empty.action')}</Link>
+              </Button>
             </div>
           ) : (
             <div className={viewMode === 'grid'
