@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { insertContactSchema } from '@shared/schema';
 import { MapPin, Phone, Mail, Clock, Navigation, Linkedin, Instagram, Facebook } from 'lucide-react';
+import { officeContact } from '@/content/office-contact';
 import DOMPurify from 'dompurify';
 
 
@@ -59,15 +60,15 @@ export const ContactSection = memo(function ContactSection() {
     },
     onSuccess: () => {
       toast({
-        title: "Message sent successfully!",
-        description: "Thank you for your message. We will get back to you soon.",
+        title: t('contact.form.successTitle'),
+        description: t('contact.form.successDescription'),
       });
       form.reset();
     },
     onError: (error) => {
       toast({
-        title: "Error sending message",
-        description: error.message || "Please try again later.",
+        title: t('contact.form.errorTitle'),
+        description: error.message || t('contact.form.errorDescription'),
         variant: "destructive",
       });
     },
@@ -286,7 +287,7 @@ export const ContactSection = memo(function ContactSection() {
                     className="w-full btn-primary py-4"
                     disabled={contactMutation.isPending}
                   >
-                    {contactMutation.isPending ? 'Sending...' : t('contact.form.send')}
+                    {contactMutation.isPending ? t('contact.form.sending') : t('contact.form.send')}
                   </Button>
                 </form>
               </Form>
@@ -304,57 +305,20 @@ export const ContactSection = memo(function ContactSection() {
                 
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <MapPin className="text-primary-blue h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">
-                        {t('contact.office.address')}
-                      </h4>
-                      <p className="text-gray-700 whitespace-pre-line">{t('contact.office.addressValue')}</p>
-                    </div>
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0"><MapPin className="text-primary-blue h-6 w-6" /></div>
+                    <div><h4 className="font-semibold text-gray-900 mb-1">{t('contact.office.address')}</h4><p className="text-gray-700">{officeContact.addressLines.map((line) => <span key={line} className="block">{line}</span>)}</p></div>
                   </div>
-
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Phone className="text-primary-blue h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">
-                        {t('contact.office.phone')}
-                      </h4>
-                      <p className="text-gray-700">{t('contact.office.phonePrimary')}</p>
-                      <p className="text-gray-700">{t('contact.office.phoneSecondary')}</p>
-                    </div>
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0"><Phone className="text-primary-blue h-6 w-6" /></div>
+                    <div><h4 className="font-semibold text-gray-900 mb-1">{t('contact.office.phone')}</h4>{officeContact.phoneNumbers.map((phone) => <p key={phone} className="text-gray-700">{phone}</p>)}</div>
                   </div>
-
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Mail className="text-primary-blue h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">
-                        {t('contact.office.email')}
-                      </h4>
-                      <p className="text-gray-700">{t('contact.office.generalEmail')}</p>
-                    </div>
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0"><Mail className="text-primary-blue h-6 w-6" /></div>
+                    <div><h4 className="font-semibold text-gray-900 mb-1">{t('contact.office.email')}</h4><div className="space-y-1">{officeContact.emailContacts.map(({ labelKey, address }) => <p key={address} className="text-gray-700"><strong>{t(`contact.office.emailLabels.${labelKey}`)}:</strong> {address}</p>)}</div></div>
                   </div>
-
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Clock className="text-primary-blue h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">
-                        {t('contact.office.hours')}
-                      </h4>
-                      <p className="text-gray-700">{t('contact.office.weekdayHours')}</p>
-                      <p className="text-gray-700">{t('contact.office.saturdayHours')}</p>
-                      <p className="text-gray-700">{t('contact.office.sundayHours')}</p>
-                      <p className="text-sm text-primary-blue font-medium mt-1">
-                        {t('contact.office.chatHours')}
-                      </p>
-                    </div>
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0"><Clock className="text-primary-blue h-6 w-6" /></div>
+                    <div><h4 className="font-semibold text-gray-900 mb-1">{t('contact.office.hours')}</h4>{officeContact.hours.map((hours) => <p key={hours} className="text-gray-700">{hours}</p>)}<p className="text-sm text-primary-blue font-medium mt-1">{officeContact.chatAvailability}</p></div>
                   </div>
                 </div>
               </CardContent>
@@ -363,23 +327,34 @@ export const ContactSection = memo(function ContactSection() {
             {/* Interactive Map */}
             <Card className="bg-white">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6">{t('contact.map.title')}</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">{t('contact.office.findUs')}</h3>
                 
                 <div className="bg-blue-50 h-64 rounded-2xl mb-4 overflow-hidden">
                   <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-blue-100 text-gray-700 text-center p-6">
                     <div className="text-center">
                       <MapPin className="h-12 w-12 mx-auto mb-4 text-primary-blue" />
-                      <h4 className="text-lg font-semibold mb-2">{t('contact.map.locationLabel')}</h4>
-                      <p className="text-sm mb-4 whitespace-pre-line">{t('contact.office.addressValue')}</p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => window.open('https://maps.app.goo.gl/cQuv9moeBCRVcqSi9?g_st=ic', '_blank')}
-                        className="flex items-center gap-2 mx-auto"
-                      >
-                        <Navigation className="h-4 w-4" />
-                        {t('contact.map.action')}
-                      </Button>
+                      <h4 className="text-lg font-semibold mb-2">{t('contact.office.locationTitle')}</h4>
+                      <p className="text-sm mb-4">{officeContact.addressLines.map((line) => <span key={line} className="block">{line}</span>)}</p>
+                      <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open(officeContact.mapUrl, '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <Navigation className="h-4 w-4" />
+                          {t('contact.office.viewMap')}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open(officeContact.mapUrl, '_blank')}
+                          className="flex items-center gap-2"
+                        >
+                          <Navigation className="h-4 w-4" />
+                          {t('contact.office.directions')}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -398,8 +373,8 @@ export const ContactSection = memo(function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://www.linkedin.com/company/ipeace-consultancy/', '_blank')}
-                    aria-label={t('contact.social.linkedin')}
+                    onClick={() => window.open(officeContact.socialLinks.linkedin, '_blank')}
+                    aria-label="LinkedIn"
                   >
                     <Linkedin className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.linkedin')}</span>
@@ -407,8 +382,8 @@ export const ContactSection = memo(function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://www.facebook.com/share/17BxG8keoB/?mibextid=wwXIfr', '_blank')}
-                    aria-label={t('contact.social.facebook')}
+                    onClick={() => window.open(officeContact.socialLinks.facebook, '_blank')}
+                    aria-label="Facebook"
                   >
                     <Facebook className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.facebook')}</span>
@@ -416,8 +391,8 @@ export const ContactSection = memo(function ContactSection() {
                   <Button
                     variant="outline"
                     className="flex flex-col items-center p-4 border border-gray-200 hover:border-primary-blue hover:bg-blue-50 transition-all duration-200 group h-auto"
-                    onClick={() => window.open('https://www.instagram.com/ipeace_consultancy?igsh=MWJpc2VxY2d4MDYxaQ%3D%3D&utm_source=qr', '_blank')}
-                    aria-label={t('contact.social.instagram')}
+                    onClick={() => window.open(officeContact.socialLinks.instagram, '_blank')}
+                    aria-label="Instagram"
                   >
                     <Instagram className="h-6 w-6 text-gray-600 group-hover:text-primary-blue mb-2" />
                     <span className="text-sm text-gray-600 group-hover:text-primary-blue">{t('contact.social.instagram')}</span>

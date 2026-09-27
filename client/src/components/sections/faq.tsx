@@ -52,6 +52,34 @@ export const FAQSection = memo(function FAQSection() {
     );
   };
 
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareTitle = t('faq.shareTitle');
+  const shareText = t('faq.shareText');
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+
+  const shareOnFacebook = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareOnTwitter = () => {
+    const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareOnLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
 
   if (loading) {
     return (
@@ -68,7 +96,7 @@ export const FAQSection = memo(function FAQSection() {
               {t('faq.subtitle')}
             </p>
           </div>
-          <div className="text-center">Loading FAQs...</div>
+          <div className="text-center">{t('faq.loading')}</div>
         </div>
       </section>
     );
@@ -90,10 +118,60 @@ export const FAQSection = memo(function FAQSection() {
             </p>
   
             {/* Share Section */}
-            <p className="text-gray-600 mb-6">{t('faq.empty.message')}</p>
-            <ConsultationBooking
-              trigger={<Button className="btn-primary px-8 py-3">{t('faq.empty.action')}</Button>}
-            />
+            <div className="flex flex-col items-center space-y-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowShareOptions(!showShareOptions)}
+                className="flex items-center gap-2"
+              >
+                <Share2 className="w-4 h-4" />
+                {t('faq.share')}
+              </Button>
+  
+              {showShareOptions && (
+                <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-md border">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={copyToClipboard}
+                    className="flex items-center gap-2"
+                  >
+                    <Copy className="w-4 h-4" />
+                    {copySuccess ? t('faq.copied') : t('faq.copyLink')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={shareOnFacebook}
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                  >
+                    <Facebook className="w-4 h-4" />
+                    Facebook
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={shareOnTwitter}
+                    className="flex items-center gap-2 text-blue-400 hover:text-blue-500"
+                  >
+                    <Twitter className="w-4 h-4" />
+                    Twitter
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={shareOnLinkedIn}
+                    className="flex items-center gap-2 text-blue-700 hover:text-blue-800"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                    LinkedIn
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="text-center text-gray-600">
+            {t('faq.empty')}
           </div>
         </div>
       </section>
@@ -154,14 +232,14 @@ export const FAQSection = memo(function FAQSection() {
           {/* CTA Section */}
           <div className="mt-12 text-center">
             <div className="bg-primary-blue rounded-2xl p-8 text-white shadow-xl">
-              <h3 className="text-2xl font-bold mb-4">{t('faq.cta.question')}</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('faq.cta.title')}</h3>
               <p className="text-lg mb-6 opacity-90">
-                {t('faq.cta.description')}
+                {t('faq.cta.subtitle')}
               </p>
               <ConsultationBooking
                 trigger={
                   <Button className="btn-accent px-8 py-3">
-                    {t('faq.cta.action')}
+                    {t('faq.cta.button')}
                   </Button>
                 }
               />

@@ -20,7 +20,11 @@
       "complianceLabel": "Chiyero chekutevera Mitemo",
       "experience": "3+",
       "experienceLabel": "Makore eRuzivo"
-    }
+    },
+    "eyebrow": "Bhizinesi riri nani, rinoshandirwa zvine hanya",
+    "legacyLine": "Hwaro hwe",
+    "legacyHighlight": "Nhaka",
+    "imageAlt": "Chikwata chevanachipangamazano vebhizinesi chiri kushanda pamwe chete"
   },
   "about": {
     "title": "Zvinoreva IPEACE",
@@ -106,7 +110,8 @@
           "Kubvunzurudza kwechimbichimbi"
         ]
       }
-    }
+    },
+    "learnMoreAria": "Dzidza zvakawanda nezve {{service}}"
   },
   "team": {
     "title": "Sangana neTimu Yedu Yenyanzvi",
@@ -143,11 +148,13 @@
         "strategy": "Zvirongwa zveBhizinesi",
         "training": "Kudzidzisa & Kukudziridza",
         "documents": "Masevhisi eZvinyorwa",
-        "support": "Rutsigiro rwe24/7",
-        "general": "Mubvunzo wakajairika",
-        "humanResources": "Human resources nekutsvaga vashandi",
-        "operationsFinance": "Mafambisirwo emabasa nemari"
-      }
+        "support": "Rutsigiro rwe24/7"
+      },
+      "sending": "Kuri kutumirwa...",
+      "successTitle": "Meseji yatumirwa zvinobudirira!",
+      "successDescription": "Ndatenda nemeseji yenyu. Tichakupindurai munguva pfupi.",
+      "errorTitle": "Meseji yatadza kutumirwa",
+      "errorDescription": "Ndapota edzai zvakare gare gare."
     },
     "office": {
       "title": "Shanyira Hofisi Yedu",
@@ -156,27 +163,21 @@
       "email": "Email",
       "hours": "Nguva dzeBasa",
       "directions": "Wana Nzira",
-      "addressValue": "135 Baines Avenue\\nAvenues\\nHarare, Zimbabwe",
-      "phonePrimary": "+263 8644 283 181",
-      "phoneSecondary": "+263 71 356 6827",
-      "generalEmail": "info@ipeace-consultancy.com",
-      "weekdayHours": "Muvhuro–Chishanu: 8:30 AM–4:30 PM",
-      "saturdayHours": "Mugovera: Takavhara",
-      "sundayHours": "Svondo: Takavhara",
-      "chatHours": "Chat: iripo maawa ose"
+      "findUs": "Tiwanei",
+      "locationTitle": "Nzvimbo yehofisi yeIPEACE",
+      "viewMap": "Ona paGoogle Maps",
+      "emailLabels": {
+        "generalInquiries": "Mibvunzo yose",
+        "support": "Rutsigiro",
+        "humanResources": "Vashandi nekutsvaga vashandi",
+        "complianceServices": "Masevhisi ekutevedzera mitemo",
+        "operationsFinance": "Mashandiro nemari"
+      }
     },
     "social": {
-      "title": "Titevere",
-      "linkedin": "LinkedIn",
-      "facebook": "Facebook",
-      "instagram": "Instagram"
+      "title": "Titevere"
     },
-    "kicker": "Tangai hurukuro",
-    "map": {
-      "title": "Tiwanei",
-      "locationLabel": "Nzvimbo yehofisi yeIPEACE",
-      "action": "Wana nzira"
-    }
+    "kicker": "Ngatitange hurukuro"
   },
   "footer": {
     "description": "Masevhisi ekubvunzurudza bhizinesi ehunyanzvi anoita hunyanzvi munharaunda yemitemo yeZimbabwe uye zvirongwa zvekukura kwebhizinesi.",
@@ -185,7 +186,10 @@
     "copyright": "© 2025 IPEACE Professional Consulting. Kodzero dzese dzakachengetedzwa.",
     "privacy": "Mutemo weKuvanzika",
     "terms": "Mamiriro eService",
-    "cookies": "Mutemo weCookie"
+    "cookies": "Mutemo weCookie",
+    "exploreServices": "Ongorora Masevhisi",
+    "clientPortal": "Nzvimbo yeVatengi",
+    "cookiesComingSoon": "Peji reMutemo weCookie riri kuuya munguva pfupi"
   },
   "legal": {
     "close": "Vhara",
@@ -412,33 +416,34 @@
     }
   },
   "faq": {
-    "title": "Mibvunzo Inowanzobvunzwa",
-    "subtitle": "Wana mhinduro dzemibvunzo yakajairika pamusoro pekutanga nekufambisa bhizinesi muZimbabwe",
+    "title": "Mibvunzo Inowanzo Bvunzwa: Kutevedzera Mitemo Yebhizinesi muZimbabwe",
+    "subtitle": "Wana mhinduro dzemibvunzo inowanzo bvunzwa pamusoro pekutanga nekumhanyisa bhizinesi muZimbabwe",
     "kicker": "Mhinduro dzinobatsira",
-    "share": {
-      "title": "FAQ | IPEACE",
-      "text": "Verenga mhinduro dzemibvunzo inowanzo bvunzwa pamusoro peIPEACE.",
-      "button": "Govera FAQ",
-      "copy": "Kopa link",
-      "copied": "Zvakopwa!"
-    },
+    "loading": "Mibvunzo iri kurodhwa...",
+    "share": "Goverana Mibvunzo",
+    "copied": "Zvakopwa!",
+    "copyLink": "Kopa chinobatanidza",
+    "empty": "Parizvino hapana mibvunzo iripo.",
+    "shareTitle": "Mibvunzo Inowanzo Bvunzwa - Mibvunzo yeBhizinesi Yapindurwa | IPEACE",
+    "shareText": "Ona mibvunzo inowanzo bvunzwa pamusoro pebhizinesi nekutevedzera mitemo muZimbabwe.",
     "cta": {
-      "question": "Munoda mazano edanho renyu rinotevera rebhizinesi here?",
-      "description": "Bhukirai kubvunzana mutaure nemupi wemazano weIPEACE.",
-      "action": "Bhukirai kubvunzana"
-    },
-    "empty": {
-      "message": "Parizvino hapana FAQ dzakaburitswa. Chikwata chedu chinogona kukubatsirai nemubvunzo wenyu.",
-      "action": "Bhukirai kubvunzana"
+      "title": "Muchine mibvunzo pamusoro pekutevedzera mitemo yebhizinesi muZimbabwe?",
+      "subtitle": "Vanachipangamazano vedu vanogona kupindura mubvunzo upi zvawo pamusoro pekunyoresa kambani, zvinodiwa pakutevedzera mitemo, kana marezinesi ebhizinesi muZimbabwe.",
+      "button": "Bvunza Mubatsiri Wedu"
     }
   },
   "blogs": {
-    "kicker": "Ruzivo runoshanda",
-    "title": "Ruzivo rweIPEACE",
-    "subtitle": "Mazano anoshanda pamusoro pekutevera mitemo, mafambisirwo ebhizinesi, uye sarudzo dzinobatsira masangano kufambira mberi.",
-    "empty": {
-      "message": "Parizvino hapana zvinyorwa zvakaburitswa. Ongororai masevhisi edu kuti muwane mazano anoshanda.",
-      "action": "Ongororai masevhisi"
-    }
+    "loading": "Mabhurogu ari kurodhwa...",
+    "kicker": "Maonero matsva",
+    "title": "Pfungwa dzakafanira kugoverwa",
+    "subtitle": "Ruzivo rutsva nezvigadziriso kubva kuIPEACE",
+    "grid": "Gridhi",
+    "list": "Rondedzero",
+    "empty": "Hapasati pave nemabhurogu.",
+    "copySuccess": "Chinobatanidza chakopwa!",
+    "shareX": "Goverana paX",
+    "copyLink": "Kopa chinobatanidza",
+    "fetchError": "Mabhurogu atadza kurodhwa",
+    "copyError": "Kukopa kwatadza"
   }
 }
