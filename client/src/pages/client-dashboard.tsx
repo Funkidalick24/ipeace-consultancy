@@ -10,6 +10,7 @@ import { ClientMessagesTab } from './client-messages';
 import { ClientInvoicesTab } from './client-invoices';
 import { ClientDocumentsTab } from './client-documents';
 import { ClientResourcesTab } from './client-resources';
+import { authFetch, logout, getAuthUser, clearAuthUser } from '@/lib/auth';
 
 interface DashboardStats {
   totalConsultations: number;
@@ -52,16 +53,14 @@ export default function ClientDashboard() {
    } | null>(null);
 
   useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('clientToken');
-    const savedUser = localStorage.getItem('clientUser');
+    const savedUser = getAuthUser();
 
-    if (!token || !savedUser) {
+    if (!savedUser) {
       window.location.href = '/client-portal';
       return;
     }
 
-    setUser(JSON.parse(savedUser));
+    setUser(savedUser);
     fetchDashboardData();
 
     // Check for tab query parameter
@@ -74,20 +73,13 @@ export default function ClientDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/dashboard', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/client/dashboard');
 
       if (response.ok) {
         const data = await response.json();
         setDashboardData(data.dashboard);
       } else if (response.status === 401) {
-        // Token expired, redirect to login
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientUser');
+        clearAuthUser();
         window.location.href = '/client-portal';
       }
     } catch (error) {
@@ -97,9 +89,8 @@ export default function ClientDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('clientToken');
-    localStorage.removeItem('clientUser');
+  const handleLogout = async () => {
+    await logout();
     window.location.href = '/client-portal';
   };
 

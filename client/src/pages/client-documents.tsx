@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { authFetch } from '@/lib/auth';
 
 interface Document {
   id: string;
@@ -24,12 +25,7 @@ export function ClientDocumentsTab() {
 
   const fetchDocuments = async () => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/documents', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/client/documents');
 
       if (response.ok) {
         const data = await response.json();
@@ -49,18 +45,14 @@ export function ClientDocumentsTab() {
     setUploading(true);
 
     try {
-      const token = localStorage.getItem('clientToken');
       const formData = new FormData();
 
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
 
-      const response = await fetch('/api/client/upload', {
+      const response = await authFetch('/api/client/upload', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData
       });
 
@@ -84,12 +76,7 @@ export function ClientDocumentsTab() {
 
   const handleDownload = async (document: Document) => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch(`/api/files/${document.id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch(`/api/files/${document.id}`);
 
       if (response.ok) {
         const blob = await response.blob();

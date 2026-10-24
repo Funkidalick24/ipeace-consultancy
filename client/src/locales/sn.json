@@ -344,5 +344,35 @@
       ],
       "bookAnother": "Ronga Kubvunzurudza Kuririmuka"
     }
+  },
+  "faq": {
+    "title": "Mibvunzo Inowanzo Bvunzwa: Kutevera Mitemo yeBhizinesi muZimbabwe",
+    "subtitle": "Wana mhinduro dzemibvunzo inowanzo bvunzwa nezve kutanga uye kushandisa bhizinesi muZimbabwe",
+    "questions": [
+      {
+        "question": "Ndinoregistera kambani muZimbabwe sei?",
+        "answer": "Kuti uregister kambani muZimbabwe, unofanira: 1) Kusarudza zita rekambani risina kufanana, 2) Kugadzira Memorandum and Articles of Association, 3) Kufaila kuCompanies Office, 4) Kuwana tax clearance certificate, uye 5) Kunyoresa kuitira VAT kana zvichidikanwa. System yedu inogona kukutungamira munzvimbo imwe neimwe."
+      },
+      {
+        "question": "Zvinodiwa zvekutevera mitemo yekambani muZimbabwe ndezvi?",
+        "answer": "Kambani dzeZimbabwe dzinofanira kutevera: Companies Act Chapter 24:03, kufaila annual returns, director's reports, audited financial statements, kutevera mitemo yemitero, uye mitemo yemaindasitiri akasiyana. Tinopa machecklist ekutevera mitemo uye kuongorora kwakakwana."
+      },
+      {
+        "question": "Kunyoresa kambani muZimbabwe kunodhura marii?",
+        "answer": "Mari yekunyoresa kambani inochinja zvichienderana nerudzi: Private companies (~$50-200 USD), Public companies (~$500+ USD), pamwe nemamwe mari yemafees emagweta, tax clearance, uye mabusiness license. Tinopa mapakeji ekunyoresa anodhura zvakanaka ane zvinyorwa zvese zvinodikanwa."
+      },
+      {
+        "question": "Mabusiness license api andinoda muZimbabwe?",
+        "answer": "Mamwe maresense anodiwa anoenderana nerudzi rwebhizinesi rako: Trading License kubva kukanseri yemunharaunda, Tax Clearance Certificate, kunyoresa kweVAT (kana turnover >$60,000), Mamwe maresense emaindasitiri akasiyana (mining, tourism, nezvimwewo). Tinobatsira kuwana uye kuwana maresense ese anodiwa."
+      },
+      {
+        "question": "Munogona kutibatsira sei nekutevera mitemo yebhizinesi muZimbabwe?",
+        "answer": "Tinopa: kuongorora kutevera mitemo kwemaawa 24/7, kuongorora zvinyorwa otomatiki, zvitsva zvemitemo, kuongorora njodzi, mibvunzo yemutemo yekukurumidza, uye pfungwa dzekufembera kutevera mitemo dzakadzidziswa pane framework yemitemo yeZimbabwe."
+      },
+      {
+        "question": "Zvirango zvekutevera mitemo muZimbabwe ndezvi?",
+        "answer": "Zvirango zvinosanganisira mafines kusvika ku$500,000, kugara mujeri kusvika kumakore 5, kuvharwa kwebhizinesi, kudzimwa kwedirector, uye kukuvara kwezita. Tinobatsira mabhizinesi kuchengetedza chiyero chekutevera mitemo che99.8% kuburikidza nekuongorora kwekare."
+      }
+    ]
   }
 }

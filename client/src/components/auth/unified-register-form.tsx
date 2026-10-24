@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import EmailVerification from './email-verification';
 
 interface UnifiedRegisterFormProps {
-  onSuccess: (user: any, token: string, userType: 'client' | 'employee') => void;
+  onSuccess: (user: any, userType: 'client' | 'employee') => void;
   onSwitchToLogin: () => void;
 }
 
@@ -131,8 +131,7 @@ export function UnifiedRegisterForm({ onSuccess, onSwitchToLogin }: UnifiedRegis
 
   const handleVerificationComplete = () => {
     // After email verification, redirect to client portal
-    // Note: In a real app, you'd want to get the token from the verification process
-    onSuccess(null, '', 'client');
+    onSuccess(null, 'client');
   };
 
   const handleBackToRegistration = () => {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { UnifiedLoginForm } from '../components/auth/unified-login-form';
 import { UnifiedRegisterForm } from '../components/auth/unified-register-form';
 import { useLocation } from 'wouter';
+import { getAuthUser, setAuthUser } from '@/lib/auth';
 
 type AuthMode = 'login' | 'register';
 
@@ -12,26 +13,20 @@ export default function ClientPortal() {
   const [, navigate] = useLocation();
 
   useEffect(() => {
-    // Check if user is already logged in (either admin or client)
-    const adminToken = localStorage.getItem('adminToken');
-    const adminUser = localStorage.getItem('adminUser');
-    const clientToken = localStorage.getItem('clientToken');
-    const clientUser = localStorage.getItem('clientUser');
+    const authUser = getAuthUser();
 
-    if (adminToken && adminUser) {
-      const userData = JSON.parse(adminUser);
-      setUser(userData);
+    if (authUser) {
+      setUser(authUser);
       setIsAuthenticated(true);
-      navigate('/admin');
-    } else if (clientToken && clientUser) {
-      const userData = JSON.parse(clientUser);
-      setUser(userData);
-      setIsAuthenticated(true);
-      navigate('/client/dashboard');
+      if (authUser.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/client/dashboard');
+      }
     }
   }, [navigate]);
 
-  const handleLoginSuccess = (userData: any, token: string, userType: 'admin' | 'client' | 'employee') => {
+  const handleLoginSuccess = (userData: any, userType: 'admin' | 'client' | 'employee') => {
     setUser(userData);
     setIsAuthenticated(true);
 
@@ -43,20 +38,15 @@ export default function ClientPortal() {
     }
   };
 
-  const handleRegisterSuccess = (userData: any, token: string, userType: 'client' | 'employee') => {
-    if (userData && token) {
-      // User is logged in after verification
+  const handleRegisterSuccess = (userData: any, userType: 'client' | 'employee') => {
+    if (userData) {
       setUser(userData);
       setIsAuthenticated(true);
 
-      // Store in localStorage
-      localStorage.setItem('clientToken', token);
-      localStorage.setItem('clientUser', JSON.stringify(userData));
+      setAuthUser(userData);
 
-      // Redirect to client dashboard
       navigate('/client/dashboard');
     } else {
-      // Registration completed, switch to login mode
       setAuthMode('login');
     }
   };

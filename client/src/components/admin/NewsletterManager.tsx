@@ -10,6 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Mail, Users, Send, Plus, Trash2, UserCheck, UserX, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { InlineLoader, ListSkeleton } from '@/components/ui/loading';
+import { authFetch } from '@/lib/auth';
 
 interface NewsletterSubscriber {
   id: string;
@@ -42,12 +43,7 @@ export default function NewsletterManager() {
 
   const fetchSubscribers = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/newsletter/subscribers', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/admin/newsletter/subscribers');
 
       if (response.ok) {
         const data = await response.json();
@@ -76,12 +72,10 @@ export default function NewsletterManager() {
 
     setAddingSubscriber(true);
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/newsletter/subscribers', {
+      const response = await authFetch('/api/admin/newsletter/subscribers', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: newSubscriberEmail.trim(),
@@ -123,12 +117,10 @@ export default function NewsletterManager() {
 
   const handleToggleSubscriberStatus = async (email: string, currentStatus: boolean) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/newsletter/subscribers/${email}/status`, {
+      const response = await authFetch(`/api/admin/newsletter/subscribers/${email}/status`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ isActive: !currentStatus })
       });
@@ -161,12 +153,8 @@ export default function NewsletterManager() {
 
   const handleDeleteSubscriber = async (email: string) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/newsletter/subscribers/${email}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/admin/newsletter/subscribers/${email}`, {
+        method: 'DELETE'
       });
 
       if (response.ok) {
@@ -197,12 +185,10 @@ export default function NewsletterManager() {
 
     setSendingNewsletter(true);
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/newsletter/send', {
+      const response = await authFetch('/api/admin/newsletter/send', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           subject: newsletterSubject.trim(),

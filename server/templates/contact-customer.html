@@ -4,63 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank you for contacting IPEACE</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
-        .container { max-width: 600px; margin: 0 auto; background-color: white; }
-        .header { background: linear-gradient(135deg, #1b365d, #f5a623); color: white; padding: 40px 30px; text-align: center; }
-        .content { padding: 40px 30px; color: #333; line-height: 1.6; }
-        .footer { background-color: #f8f9fa; padding: 30px; text-align: center; color: #666; font-size: 14px; }
-        .button { display: inline-block; background-color: #f5a623; color: #1b365d; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
-        .highlight { background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
-        .contact-info { background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <img src="{{logoUrl}}" alt="IPEACE Consultancy Logo" style="max-width: 150px; height: auto;">
-            </div>
-            <h1>THANK YOU FOR CONTACTING IPEACE</h1>
-            <p>Your message has been received successfully</p>
-        </div>
+<body style="margin: 0; padding: 0; background-color: #f5f5f3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+        <tr>
+            <td align="center" style="padding: 32px 16px;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                    <tr>
+                        <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                            <img src="{{logoUrl}}" alt="IPEACE Consultancy" style="max-width: 120px; height: auto; margin-bottom: 20px;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">Message received</h1>
+                            <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">We'll get back to you within 24–48 hours</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Dear {{firstName}} {{lastName}},</p>
+                            <p style="margin: 0 0 28px; color: #4a4a4a; font-size: 15px; line-height: 1.6;">Thank you for reaching out to IPEACE Consultancy. We've received your message and our team will review it shortly.</p>
 
-        <div class="content">
-            <p>Dear {{firstName}} {{lastName}},</p>
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                <tr>
+                                    <td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Your inquiry</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 100px;">Service</td>
+                                                <td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">{{service}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Company</td>
+                                                <td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">{{company}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
 
-            <p>Thank you for reaching out to Ipeace Legal Services. We have received your message and appreciate you taking the time to contact us.</p>
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                <tr>
+                                    <td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                        <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Message</p>
+                                        <p style="margin: 0; font-size: 14px; color: #4a4a4a; line-height: 1.6;">{{message}}</p>
+                                    </td>
+                                </tr>
+                            </table>
 
-            <div class="highlight">
-                <h3>Message Summary:</h3>
-                <p><strong>Service:</strong> {{service}}</p>
-                <p><strong>Company:</strong> {{company}}</p>
-                <p><strong>Message:</strong> {{message}}</p>
-            </div>
+                            <p style="margin: 0 0 24px; color: #4a4a4a; font-size: 14px; line-height: 1.6;">Our team will review your inquiry and respond within 24–48 hours. For urgent matters, please call us directly.</p>
 
-            <p>Our team will review your inquiry and get back to you within 24-48 hours. If you have any urgent matters, please don't hesitate to call us directly.</p>
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border-top: 1px solid #e5e5e3; padding-top: 20px;">
+                                <tr>
+                                    <td>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Phone: +263 4 123 4567 / +263 71 356 6827</p>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Email: info@ipeace-consultancy.com</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                                    </td>
+                                </tr>
+                            </table>
 
-            <div class="contact-info">
-                <h4>Get in Touch:</h4>
-                <p>📞 Phone: +263 8644 283 181 | +263 71 356 6827</p>
-                <p>📧 Email: info@ipeace-consultancy.com</p>
-                <p>🏢 Address: 135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
-                <p>💬 Chat: Available 24/7</p>
-            </div>
-
-            <p>In the meantime, feel free to explore our website for more information about our services.</p>
-
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="https://ipeace.co.zw" class="button">Visit Our Website</a>
-            </div>
-
-            <p>Best regards,<br>
-            <strong>THE IPEACE LEGAL SERVICES TEAM</strong></p>
-        </div>
-
-        <div class="footer">
-            <p>This is an automated response. Please do not reply to this email.</p>
-            <p>&copy; 2025 IPEACE LEGAL SERVICES. ALL RIGHTS RESERVED.</p>
-        </div>
-    </div>
+                            <p style="margin: 0; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Best regards,<br><span style="font-weight: 600;">The IPEACE Consultancy team</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                            <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">This is an automated receipt. Please do not reply to this email.</p>
+                            <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

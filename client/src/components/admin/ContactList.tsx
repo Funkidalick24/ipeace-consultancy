@@ -11,6 +11,7 @@ import { Mail, User, Building, MessageSquare, Clock, CheckCircle, AlertCircle, M
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from '@/hooks/use-toast';
 import { InlineLoader, ListSkeleton, ButtonLoader } from '@/components/ui/loading';
+import { authFetch } from '@/lib/auth';
 
 interface Contact {
   id: string;
@@ -43,12 +44,7 @@ export default function ContactList() {
 
   const fetchContacts = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/contacts', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/admin/contacts');
       if (response.ok) {
         const data = await response.json();
         console.log('[DEBUG] Raw contacts data:', data.contacts?.[0]);
@@ -101,12 +97,10 @@ export default function ContactList() {
     console.log(`[DEBUG] Frontend: Attempting to update contact ${contactId} status to: ${newStatus}`);
 
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/contacts/${contactId}/status`, {
+      const response = await authFetch(`/api/admin/contacts/${contactId}/status`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status: newStatus })
       });
@@ -153,14 +147,11 @@ export default function ContactList() {
     console.log(`[DEBUG] Response message: "${responseMessage.substring(0, 100)}..."`);
 
     try {
-      const token = localStorage.getItem('adminToken');
-
       // Send personalized response via new API endpoint
-      const response = await fetch(`/api/admin/contacts/${selectedContact.id}/response`, {
+      const response = await authFetch(`/api/admin/contacts/${selectedContact.id}/response`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ responseMessage: responseMessage.trim() })
       });

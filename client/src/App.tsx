@@ -17,10 +17,7 @@ const FAQ = lazy(() => import("./pages/faq"));
 const NotFound = lazy(() => import("./pages/not-found"));
 const Blogs = lazy(() => import("./pages/blogs"));
 const BlogPost = lazy(() => import("./pages/blog-post"));
-const Admin = lazy(() => {
-  console.log('[DEBUG] Lazy loading Admin component');
-  return import("./pages/admin");
-});
+const Admin = lazy(() => import("./pages/admin"));
 const ClientPortal = lazy(() => import("./pages/client-portal"));
 const ClientDashboard = lazy(() => import("./pages/client-dashboard"));
 const ClientConsultations = lazy(() => import("./pages/client-consultations"));

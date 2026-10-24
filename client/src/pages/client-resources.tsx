@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { authFetch } from '@/lib/auth';
 
 interface Resource {
   id: string;
@@ -27,12 +28,7 @@ export function ClientResourcesTab() {
 
   const fetchResources = async () => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/resources', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/client/resources');
 
       if (response.ok) {
         const data = await response.json();
@@ -47,12 +43,8 @@ export function ClientResourcesTab() {
 
   const handleDownloadResource = async (resource: Resource) => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch(`/api/client/resources/${resource.id}/download`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/client/resources/${resource.id}/download`, {
+        method: 'POST'
       });
 
       if (response.ok) {

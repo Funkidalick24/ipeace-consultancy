@@ -260,7 +260,8 @@ export interface IFile extends Document {
   originalName: string;
   mimetype: string;
   size: number;
-  data: Buffer;
+  filePath?: string;
+  data?: Buffer;
   url: string;
   uploadedBy: mongoose.Types.ObjectId;
   // AI Training Data fields
@@ -279,7 +280,8 @@ const FileSchema = new Schema<IFile>({
   originalName: { type: String, required: true },
   mimetype: { type: String, required: true },
   size: { type: Number, required: true },
-  data: { type: Buffer, required: true },
+  filePath: { type: String },
+  data: { type: Buffer },
   url: { type: String, required: true },
   uploadedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   // AI Training Data fields

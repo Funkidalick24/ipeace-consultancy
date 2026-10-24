@@ -111,3 +111,72 @@ In `client/src/components/sections/hero.tsx`, update the `videoUrl` prop of the 
 - React Query for data fetching
 - i18next for internationalization
 - Radix UI for accessible UI components
+
+## Testing
+
+Run the test suite with:
+```bash
+npm test
+```
+
+Tests use `mongodb-memory-server` (no external MongoDB needed) and cover auth and consultation booking flows.
+
+## Deployment
+
+### Docker (recommended)
+
+```bash
+cp .env.example .env
+# Edit .env with production values
+
+docker compose up -d
+```
+
+This starts the app on port 5000 with a managed MongoDB instance.
+
+### Manual production deployment
+
+```bash
+cp .env.example .env
+# Edit .env with production values
+
+npm ci --legacy-peer-deps
+npm run build
+npm run start
+```
+
+Use a process manager like PM2 for production:
+```bash
+npm install -g pm2
+pm2 start dist/index.js --name ipeace
+pm2 save
+pm2 startup
+```
+
+### Cloud platforms
+
+**Railway / Render / Fly.io**: All support Docker-based deploys. Point the build at the `Dockerfile`, set env vars from `.env.example`, and provision a MongoDB addon.
+
+**Environment variables**: Copy `.env.example` and fill in all required values. `JWT_SECRET` must be at least 32 characters.
+
+### Reverse proxy
+
+Place nginx or Caddy in front of the Node process for TLS termination:
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```

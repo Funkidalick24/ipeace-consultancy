@@ -1,3 +1,5 @@
+import { authFetch } from './auth';
+
 export interface UploadedFile {
   id: string;
   filename: string;
@@ -8,19 +10,11 @@ export interface UploadedFile {
 }
 
 export async function uploadFile(file: File): Promise<UploadedFile> {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    throw new Error('Authentication required');
-  }
-
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch('/api/upload', {
+  const response = await authFetch('/api/upload', {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: formData
   });
 
@@ -34,21 +28,13 @@ export async function uploadFile(file: File): Promise<UploadedFile> {
 }
 
 export async function uploadMultipleFiles(files: File[]): Promise<UploadedFile[]> {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    throw new Error('Authentication required');
-  }
-
   const formData = new FormData();
   files.forEach((file, index) => {
     formData.append('files', file);
   });
 
-  const response = await fetch('/api/upload/multiple', {
+  const response = await authFetch('/api/upload/multiple', {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: formData
   });
 
@@ -62,16 +48,7 @@ export async function uploadMultipleFiles(files: File[]): Promise<UploadedFile[]
 }
 
 export async function getUserFiles(): Promise<UploadedFile[]> {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    throw new Error('Authentication required');
-  }
-
-  const response = await fetch('/api/files', {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+  const response = await authFetch('/api/files');
 
   if (!response.ok) {
     const error = await response.json();
@@ -83,16 +60,8 @@ export async function getUserFiles(): Promise<UploadedFile[]> {
 }
 
 export async function deleteFile(fileId: string): Promise<void> {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    throw new Error('Authentication required');
-  }
-
-  const response = await fetch(`/api/files/${fileId}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+  const response = await authFetch(`/api/files/${fileId}`, {
+    method: 'DELETE'
   });
 
   if (!response.ok) {

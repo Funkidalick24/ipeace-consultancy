@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Linkedin, Instagram, Facebook } from 'lucide-react';
 import { LegalPopup } from '@/components/legal/legal-popup';
+import { getAuthUser } from '@/lib/auth';
 
 
 export const Footer = memo(function Footer() {
@@ -13,18 +14,15 @@ export const Footer = memo(function Footer() {
   };
 
   const navigateToPortal = () => {
-    // Check if user is authenticated
-    const adminToken = localStorage.getItem('adminToken');
-    const clientToken = localStorage.getItem('clientToken');
+    const authUser = getAuthUser();
 
-    if (adminToken) {
-      // Admin is logged in, go to admin dashboard
-      window.location.href = '/admin';
-    } else if (clientToken) {
-      // Client is logged in, go to client dashboard
-      window.location.href = '/client/dashboard';
+    if (authUser) {
+      if (authUser.role === 'admin') {
+        window.location.href = '/admin';
+      } else {
+        window.location.href = '/client/dashboard';
+      }
     } else {
-      // No one is logged in, go to unified portal for authentication
       window.location.href = '/client-portal';
     }
   };

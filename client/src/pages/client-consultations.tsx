@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { authFetch } from '@/lib/auth';
 
 interface Consultation {
   id: string;
@@ -29,12 +30,7 @@ export function ClientConsultationsTab() {
 
   const fetchConsultations = async () => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/consultations', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/client/consultations');
 
       if (response.ok) {
         const data = await response.json();

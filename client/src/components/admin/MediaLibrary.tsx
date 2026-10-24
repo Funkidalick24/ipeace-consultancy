@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Image, FileText, Upload, Download, Trash2, Eye, Grid, List, Search, Filter, X, File, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from '@/hooks/use-toast';
+import { authFetch } from '@/lib/auth';
 
 interface MediaFile {
   id: string;
@@ -42,12 +43,7 @@ export default function MediaLibrary() {
 
   const fetchFiles = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/files', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/files');
 
       if (response.ok) {
         const data = await response.json();
@@ -79,18 +75,14 @@ export default function MediaLibrary() {
     setUploadProgress(0);
 
     try {
-      const token = localStorage.getItem('adminToken');
       const formData = new FormData();
 
       for (let i = 0; i < selectedFiles.length; i++) {
         formData.append('files', selectedFiles[i]);
       }
 
-      const response = await fetch('/api/upload/multiple', {
+      const response = await authFetch('/api/upload/multiple', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData
       });
 
@@ -128,12 +120,8 @@ export default function MediaLibrary() {
 
   const handleDeleteFile = async (fileId: string) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/files/${fileId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/files/${fileId}`, {
+        method: 'DELETE'
       });
 
       if (response.ok) {
@@ -165,13 +153,9 @@ export default function MediaLibrary() {
     if (selectedFiles.length === 0) return;
 
     try {
-      const token = localStorage.getItem('adminToken');
       const deletePromises = selectedFiles.map(fileId =>
-        fetch(`/api/files/${fileId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+        authFetch(`/api/files/${fileId}`, {
+          method: 'DELETE'
         })
       );
 

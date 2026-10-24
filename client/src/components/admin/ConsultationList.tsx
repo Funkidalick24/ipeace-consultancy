@@ -10,6 +10,7 @@ import { Calendar, Clock, User, Mail, Phone, Building, FileText, CheckCircle, XC
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from '@/hooks/use-toast';
 import { InlineLoader, ListSkeleton, ButtonLoader } from '@/components/ui/loading';
+import { authFetch } from '@/lib/auth';
 
 interface Consultation {
   id: string;
@@ -45,12 +46,7 @@ export default function ConsultationList() {
 
   const fetchConsultations = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/consultations', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/consultations');
       if (response.ok) {
         const data = await response.json();
         console.log('[DEBUG] Raw consultations data:', data.bookings?.[0]);
@@ -118,12 +114,10 @@ export default function ConsultationList() {
     setUpdatingStatus(consultationId);
 
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/consultations/${consultationId}/status`, {
+      const response = await authFetch(`/api/consultations/${consultationId}/status`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status: newStatus })
       });

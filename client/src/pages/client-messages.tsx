@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { authFetch, getAuthUser } from '@/lib/auth';
 
 interface Conversation {
   _id: string;
@@ -46,12 +47,7 @@ export function ClientMessagesTab() {
 
   const fetchConversations = async () => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/conversations', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/client/conversations');
 
       if (response.ok) {
         const data = await response.json();
@@ -67,12 +63,7 @@ export function ClientMessagesTab() {
   const fetchConversationMessages = async (conversationId: string) => {
     setLoadingMessages(true);
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch(`/api/client/conversations/${conversationId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch(`/api/client/conversations/${conversationId}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -94,11 +85,9 @@ export function ClientMessagesTab() {
     }
 
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/conversations', {
+      const response = await authFetch('/api/client/conversations', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -124,17 +113,13 @@ export function ClientMessagesTab() {
 
   const markConversationAsRead = async (conversationId: string) => {
     try {
-      const token = localStorage.getItem('clientToken');
-      await fetch(`/api/client/conversations/${conversationId}/read`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      await authFetch(`/api/client/conversations/${conversationId}/read`, {
+        method: 'PATCH'
       });
 
       // Update local state
       setConversations(conversations.map(conv =>
-        conv._id === conversationId ? { ...conv, unreadCount: { ...conv.unreadCount, [localStorage.getItem('clientUser') ? JSON.parse(localStorage.getItem('clientUser')!).id : '']: 0 } } : conv
+        conv._id === conversationId ? { ...conv, unreadCount: { ...conv.unreadCount, [getAuthUser()?.id || '']: 0 } } : conv
       ));
     } catch (error) {
       console.error('Error marking conversation as read:', error);
@@ -144,11 +129,11 @@ export function ClientMessagesTab() {
   const filteredConversations = conversations.filter(conversation => {
     if (filter === 'all') return true;
     if (filter === 'unread') {
-      const userId = localStorage.getItem('clientUser') ? JSON.parse(localStorage.getItem('clientUser')!).id : '';
+      const userId = getAuthUser()?.id || '';
       return (conversation.unreadCount[userId] || 0) > 0;
     }
     if (filter === 'read') {
-      const userId = localStorage.getItem('clientUser') ? JSON.parse(localStorage.getItem('clientUser')!).id : '';
+      const userId = getAuthUser()?.id || '';
       return (conversation.unreadCount[userId] || 0) === 0;
     }
     return true;
@@ -213,7 +198,7 @@ export function ClientMessagesTab() {
                   }`}
                 >
                   Unread ({filteredConversations.filter(c => {
-                    const userId = localStorage.getItem('clientUser') ? JSON.parse(localStorage.getItem('clientUser')!).id : '';
+                    const userId = getAuthUser()?.id || '';
                     return (c.unreadCount[userId] || 0) > 0;
                   }).length})
                 </button>
@@ -226,7 +211,7 @@ export function ClientMessagesTab() {
                   }`}
                 >
                   Read ({filteredConversations.filter(c => {
-                    const userId = localStorage.getItem('clientUser') ? JSON.parse(localStorage.getItem('clientUser')!).id : '';
+                    const userId = getAuthUser()?.id || '';
                     return (c.unreadCount[userId] || 0) === 0;
                   }).length})
                 </button>
@@ -237,7 +222,7 @@ export function ClientMessagesTab() {
             <div className="space-y-2">
               {filteredConversations.length > 0 ? (
                 filteredConversations.map((conversation) => {
-                  const userId = localStorage.getItem('clientUser') ? JSON.parse(localStorage.getItem('clientUser')!).id : '';
+                  const userId = getAuthUser()?.id || '';
                   const isUnread = (conversation.unreadCount[userId] || 0) > 0;
                   return (
                     <div

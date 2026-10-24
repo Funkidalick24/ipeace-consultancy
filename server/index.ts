@@ -1,22 +1,58 @@
 import 'dotenv/config';
+import { env } from './config/env';
 import express, { type Request, Response, NextFunction } from "express";
 import compression from "compression";
+import helmet from "helmet";
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { connectDB } from "./database";
 
 const app = express();
+
+const isDev = app.get("env") === "development";
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      // Vite's dev server injects inline scripts for HMR; production builds don't need it
+      scriptSrc: isDev ? ["'self'", "'unsafe-inline'"] : ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+      fontSrc: ["'self'", 'fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'", env.FRONTEND_URL],
+      frameSrc: ['https://www.youtube.com'],
+      frameAncestors: ["'none'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
+  },
+}));
+
+app.use(cors({
+  origin: env.FRONTEND_URL,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(compression());
 
-// Add timeout middleware to prevent hanging requests (30 seconds)
 app.use((req: any, res: any, next: any) => {
   const timeout = setTimeout(() => {
     if (!res.headersSent) {
       res.status(408).json({ error: 'Request timeout' });
     }
-  }, 30000); // 30 seconds
+  }, 30000);
 
   res.on('finish', () => {
     clearTimeout(timeout);
@@ -27,28 +63,16 @@ app.use((req: any, res: any, next: any) => {
 
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+    if (req.path.startsWith("/api")) {
+      const logLine = `${req.method} ${req.path} ${res.statusCode} ${duration}ms`;
+      if (res.statusCode >= 400) {
+        console.error(logLine);
+      } else {
+        log(logLine);
       }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
     }
   });
 
@@ -56,7 +80,6 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Connect to MongoDB
   await connectDB();
 
   const server = await registerRoutes(app);
@@ -66,24 +89,18 @@ app.use((req, res, next) => {
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
+    if (status === 500) {
+      console.error(err);
+    }
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  // Find an available port
-  let port = parseInt(process.env.PORT || '5000', 10);
+  let port = env.PORT;
   
   function startServer(attempts = 0) {
     if (attempts > 10) {
@@ -91,7 +108,6 @@ app.use((req, res, next) => {
       process.exit(1);
     }
     
-    // Close the existing server if it exists
     if (server.listening) {
       server.close(() => {
         log(`Closed server on port ${port}`);
@@ -106,7 +122,6 @@ app.use((req, res, next) => {
       if (error.code === 'EADDRINUSE') {
         log(`Port ${port} is already in use, trying ${port + 1}`);
         port++;
-        // Close the server and try again with a new port
         server.close(() => {
           startServer(attempts + 1);
         });

@@ -1,5 +1,3 @@
-console.log('[DEBUG] Admin module loading...');
-
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -16,8 +14,7 @@ import ContactList from '@/components/admin/ContactList';
 import MediaLibrary from '@/components/admin/MediaLibrary';
 import ContentManager from '@/components/admin/ContentManager';
 import NewsletterManager from '@/components/admin/NewsletterManager';
-
-console.log('[DEBUG] Admin module imports completed');
+import { authFetch, logout, getAuthUser, clearAuthUser } from '@/lib/auth';
 
 interface User {
   id: number;
@@ -54,8 +51,6 @@ interface RecentActivity {
 }
 
 export default function Admin() {
-  console.log('[DEBUG] Admin component rendering');
-
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -77,13 +72,9 @@ export default function Admin() {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      if (token) {
-        const response = await fetch('/api/auth/verify', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+      const adminUser = getAuthUser();
+      if (adminUser) {
+        const response = await authFetch('/api/auth/verify');
         if (response.ok) {
           const data = await response.json();
           if (data.user.role === 'admin') {
@@ -92,21 +83,18 @@ export default function Admin() {
             fetchDashboardStats();
             fetchRecentActivities();
           } else {
-            // Not an admin, redirect to unified portal
+            clearAuthUser();
             window.location.href = '/client-portal';
           }
         } else {
-          localStorage.removeItem('adminToken');
-          // Redirect to unified portal for authentication
+          clearAuthUser();
           window.location.href = '/client-portal';
         }
       } else {
-        // No admin token, redirect to unified portal
         window.location.href = '/client-portal';
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      // Redirect to unified portal on error
       window.location.href = '/client-portal';
     } finally {
       setLoading(false);
@@ -115,12 +103,7 @@ export default function Admin() {
 
   const fetchBlogs = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/blogs', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/admin/blogs');
       const data = await response.json();
       setBlogs(data.blogs || []);
     } catch (error) {
@@ -130,12 +113,7 @@ export default function Admin() {
 
   const fetchDashboardStats = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/dashboard-stats', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/admin/dashboard-stats');
       const data = await response.json();
       if (data.stats) {
         setDashboardStats(data.stats);
@@ -147,12 +125,7 @@ export default function Admin() {
 
   const fetchRecentActivities = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/recent-activity', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/admin/recent-activity');
       const data = await response.json();
       if (data.activities) {
         setRecentActivities(data.activities.map((activity: any) => ({
@@ -165,9 +138,8 @@ export default function Admin() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
+  const handleLogout = async () => {
+    await logout();
     setUser(null);
     setBlogs([]);
     // Redirect to unified portal
@@ -183,12 +155,10 @@ export default function Admin() {
     displayImage?: string;
   }) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/blogs', {
+      const response = await authFetch('/api/blogs', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(blogPostData)
       });
@@ -224,12 +194,10 @@ export default function Admin() {
     if (!editingBlog) return;
 
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/blogs/${editingBlog.id}`, {
+      const response = await authFetch(`/api/blogs/${editingBlog.id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(blogPostData)
       });
@@ -253,13 +221,9 @@ export default function Admin() {
     console.log('handleDeleteBlog called with ID:', blogId, 'Type:', typeof blogId);
     if (window.confirm('Are you sure you want to delete this blog post?')) {
       try {
-        const token = localStorage.getItem('adminToken');
         console.log('Making DELETE request to:', `/api/blogs/${blogId}`);
-        const response = await fetch(`/api/blogs/${blogId}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+        const response = await authFetch(`/api/blogs/${blogId}`, {
+          method: 'DELETE'
         });
 
         if (response.ok) {
@@ -304,23 +268,23 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white shadow-sm border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
-              <Badge variant="secondary" className="ml-3">
-                Welcome, {user.username}
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex items-center min-w-0">
+              <h1 className="text-base sm:text-xl font-semibold text-gray-900 truncate">Admin Dashboard</h1>
+              <Badge variant="secondary" className="ml-2 sm:ml-3 text-xs shrink-0">
+                {user.username}
               </Badge>
             </div>
             <Button
               onClick={handleLogout}
               variant="outline"
               size="sm"
-              className="text-red-600 border-red-300 hover:bg-red-50"
+              className="text-red-600 border-red-300 hover:bg-red-50 shrink-0"
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
+              <LogOut className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
@@ -329,48 +293,48 @@ export default function Admin() {
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-11 mb-8">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
+          <TabsList className="w-full mb-8 overflow-x-auto flex-nowrap flex scrollbar-none">
+            <TabsTrigger value="overview" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
             </TabsTrigger>
-            <TabsTrigger value="users" className="flex items-center gap-2">
+            <TabsTrigger value="users" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Users</span>
             </TabsTrigger>
-            <TabsTrigger value="blogs" className="flex items-center gap-2">
+            <TabsTrigger value="blogs" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">Blogs</span>
             </TabsTrigger>
-            <TabsTrigger value="consultations" className="flex items-center gap-2">
+            <TabsTrigger value="consultations" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <Calendar className="w-4 h-4" />
               <span className="hidden sm:inline">Consultations</span>
             </TabsTrigger>
-            <TabsTrigger value="contacts" className="flex items-center gap-2">
+            <TabsTrigger value="contacts" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <Mail className="w-4 h-4" />
               <span className="hidden sm:inline">Contacts</span>
             </TabsTrigger>
-            <TabsTrigger value="content" className="flex items-center gap-2">
+            <TabsTrigger value="content" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">Content</span>
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <TabsTrigger value="analytics" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">Analytics</span>
             </TabsTrigger>
-            <TabsTrigger value="communication" className="flex items-center gap-2">
+            <TabsTrigger value="communication" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <MessageSquare className="w-4 h-4" />
               <span className="hidden sm:inline">Communication</span>
             </TabsTrigger>
-            <TabsTrigger value="media" className="flex items-center gap-2">
+            <TabsTrigger value="media" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <Image className="w-4 h-4" />
               <span className="hidden sm:inline">Media</span>
             </TabsTrigger>
-            <TabsTrigger value="system" className="flex items-center gap-2">
+            <TabsTrigger value="system" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <Settings className="w-4 h-4" />
               <span className="hidden sm:inline">System</span>
             </TabsTrigger>
-            <TabsTrigger value="ai" className="flex items-center gap-2">
+            <TabsTrigger value="ai" className="flex items-center gap-2 whitespace-nowrap shrink-0">
               <Brain className="w-4 h-4" />
               <span className="hidden sm:inline">AI</span>
             </TabsTrigger>

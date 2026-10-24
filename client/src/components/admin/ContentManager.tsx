@@ -9,6 +9,7 @@ import { ContentBlock } from '@/components/blog/BlogContentEditor';
 import TestimonialsManager from './TestimonialsManager';
 import TeamMembersManager from './TeamMembersManager';
 import FAQManager from './FAQManager';
+import { authFetch } from '@/lib/auth';
 
 interface BlogPost {
   id: string;
@@ -81,16 +82,11 @@ export default function ContentManager() {
   const fetchAllContent = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('adminToken');
-      const headers = {
-        'Authorization': `Bearer ${token}`
-      };
-
       const [blogsRes, testimonialsRes, teamRes, faqRes] = await Promise.all([
-        fetch('/api/admin/blogs', { headers }),
-        fetch('/api/admin/testimonials', { headers }),
-        fetch('/api/admin/team', { headers }),
-        fetch('/api/admin/faq', { headers })
+        authFetch('/api/admin/blogs'),
+        authFetch('/api/admin/testimonials'),
+        authFetch('/api/admin/team'),
+        authFetch('/api/admin/faq')
       ]);
 
       if (blogsRes.ok) {
@@ -128,12 +124,10 @@ export default function ContentManager() {
     displayImage?: string;
   }) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/blogs', {
+      const response = await authFetch('/api/blogs', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(blogData)
       });
@@ -160,12 +154,10 @@ export default function ContentManager() {
     if (!editingBlog) return;
 
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/blogs/${editingBlog.id}`, {
+      const response = await authFetch(`/api/blogs/${editingBlog.id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(blogData)
       });
@@ -184,12 +176,8 @@ export default function ContentManager() {
 
   const handleDeleteBlogPost = async (id: string) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/blogs/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/blogs/${id}`, {
+        method: 'DELETE'
       });
 
       if (response.ok) {
@@ -205,12 +193,10 @@ export default function ContentManager() {
 
   const handleCreateTestimonial = async (testimonialData: Omit<Testimonial, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/testimonials', {
+      const response = await authFetch('/api/admin/testimonials', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(testimonialData)
       });
@@ -228,12 +214,10 @@ export default function ContentManager() {
 
   const handleUpdateTestimonial = async (id: string, testimonialData: Partial<Testimonial>) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/testimonials/${id}`, {
+      const response = await authFetch(`/api/admin/testimonials/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(testimonialData)
       });
@@ -251,12 +235,8 @@ export default function ContentManager() {
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/testimonials/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/admin/testimonials/${id}`, {
+        method: 'DELETE'
       });
 
       if (response.ok) {
@@ -272,12 +252,10 @@ export default function ContentManager() {
 
   const handleCreateTeamMember = async (memberData: Omit<TeamMember, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/team', {
+      const response = await authFetch('/api/admin/team', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(memberData)
       });
@@ -295,12 +273,10 @@ export default function ContentManager() {
 
   const handleUpdateTeamMember = async (id: string, memberData: Partial<TeamMember>) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/team/${id}`, {
+      const response = await authFetch(`/api/admin/team/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(memberData)
       });
@@ -318,12 +294,8 @@ export default function ContentManager() {
 
   const handleDeleteTeamMember = async (id: string) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/team/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/admin/team/${id}`, {
+        method: 'DELETE'
       });
 
       if (response.ok) {
@@ -339,12 +311,10 @@ export default function ContentManager() {
 
   const handleCreateFAQ = async (faqData: Omit<FAQItem, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/faq', {
+      const response = await authFetch('/api/admin/faq', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(faqData)
       });
@@ -362,12 +332,10 @@ export default function ContentManager() {
 
   const handleUpdateFAQ = async (id: string, faqData: Partial<FAQItem>) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/faq/${id}`, {
+      const response = await authFetch(`/api/admin/faq/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(faqData)
       });
@@ -385,12 +353,8 @@ export default function ContentManager() {
 
   const handleDeleteFAQ = async (id: string) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/faq/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await authFetch(`/api/admin/faq/${id}`, {
+        method: 'DELETE'
       });
 
       if (response.ok) {

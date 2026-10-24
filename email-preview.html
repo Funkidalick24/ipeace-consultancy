@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template Preview — IPEACE Consultancy</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #e8e8e6; color: #1a1a1a; }
+        .nav { position: sticky; top: 0; z-index: 100; background: #1b365d; padding: 16px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .nav h1 { color: #fff; font-size: 15px; font-weight: 600; margin-right: 24px; white-space: nowrap; }
+        .nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; transition: all 0.15s; white-space: nowrap; }
+        .nav a:hover, .nav a.active { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.4); }
+        .template-section { display: none; padding: 40px 20px; }
+        .template-section.visible { display: block; }
+        .template-section h2 { text-align: center; font-size: 13px; font-weight: 600; color: #6b6b6b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
+        .email-frame { max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid #d5d5d3; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <h1>Template Preview</h1>
+        <a href="#" onclick="showTemplate('consultation-confirmation', this)" class="active">Consultation Confirmation</a>
+        <a href="#" onclick="showTemplate('consultation-company', this)">Consultation — Company</a>
+        <a href="#" onclick="showTemplate('consultation-customer', this)">Consultation — Customer</a>
+        <a href="#" onclick="showTemplate('contact-customer', this)">Contact — Customer</a>
+        <a href="#" onclick="showTemplate('contact-company', this)">Contact — Company</a>
+        <a href="#" onclick="showTemplate('contact-confirmation', this)">Contact Confirmation</a>
+        <a href="#" onclick="showTemplate('contact-response', this)">Contact Response</a>
+        <a href="#" onclick="showTemplate('newsletter', this)">Newsletter</a>
+    </nav>
+
+    <!-- CONSULTATION CONFIRMATION -->
+    <div id="consultation-confirmation" class="template-section visible">
+        <h2>Consultation Confirmation — sent to customer when booking is confirmed</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr>
+                    <td align="center" style="padding: 32px 16px;">
+                        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                            <tr>
+                                <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                    <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                    </div>
+                                    <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">Consultation confirmed</h1>
+                                    <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">Your appointment with IPEACE Consultancy</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px;">
+                                    <p style="margin: 0 0 20px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Dear Tatenda Moyo,</p>
+                                    <p style="margin: 0 0 28px; color: #4a4a4a; font-size: 15px; line-height: 1.6;">Your consultation has been confirmed. Here are the details for your records.</p>
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                        <tr>
+                                            <td style="padding: 24px;">
+                                                <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Appointment details</p>
+                                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr><td style="padding: 6px 0; font-size: 14px; color: #6b6b6b; width: 140px;">Service</td><td style="padding: 6px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Regulatory Compliance</td></tr>
+                                                    <tr><td style="padding: 6px 0; font-size: 14px; color: #6b6b6b;">Format</td><td style="padding: 6px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Video Call</td></tr>
+                                                    <tr><td style="padding: 6px 0; font-size: 14px; color: #6b6b6b;">Date</td><td style="padding: 6px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">15 January 2027</td></tr>
+                                                    <tr><td style="padding: 6px 0; font-size: 14px; color: #6b6b6b;">Time</td><td style="padding: 6px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">10:00 AM – 11:00 AM</td></tr>
+                                                    <tr><td style="padding: 6px 0; font-size: 14px; color: #6b6b6b;">Booking ID</td><td style="padding: 6px 0; font-size: 13px; color: #1a1a1a; font-family: 'SF Mono', 'Fira Code', monospace;">6adc74487e789a0ede9421bf</td></tr>
+                                                    <tr><td style="padding: 6px 0; font-size: 14px; color: #6b6b6b;">Status</td><td style="padding: 6px 0; font-size: 14px; color: #2d6a4f; font-weight: 600;">Confirmed</td></tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                        <tr>
+                                            <td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                                <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Add to calendar</p>
+                                                <p style="margin: 0 0 16px; font-size: 14px; color: #4a4a4a; line-height: 1.5;">Save this appointment to your preferred calendar application.</p>
+                                                <table role="presentation" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-right: 8px;"><a href="#" style="display: inline-block; background-color: #1b365d; color: #ffffff; padding: 10px 20px; text-decoration: none; font-size: 13px; font-weight: 500;">Google Calendar</a></td>
+                                                        <td><a href="#" style="display: inline-block; background-color: #ffffff; color: #1b365d; padding: 10px 20px; text-decoration: none; font-size: 13px; font-weight: 500; border: 1px solid #1b365d;">Download .ics</a></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                        <tr>
+                                            <td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                                <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">What to expect</p>
+                                                <ul style="margin: 0; padding: 0 0 0 18px; font-size: 14px; color: #4a4a4a; line-height: 1.8;">
+                                                    <li>Our consultant will reach out 24 hours before your appointment</li>
+                                                    <li>Prepare any relevant documents or questions in advance</li>
+                                                    <li>Contact us at least 24 hours ahead if you need to reschedule</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <p style="margin: 0 0 24px; color: #4a4a4a; font-size: 14px; line-height: 1.6;">If you have any questions or need to make changes, reply to this email or reach us directly.</p>
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border-top: 1px solid #e5e5e3; padding-top: 24px;">
+                                        <tr><td>
+                                            <p style="margin: 0 0 6px; font-size: 13px; color: #6b6b6b;">Phone: +263 4 123 4567 / +263 71 356 6827</p>
+                                            <p style="margin: 0 0 6px; font-size: 13px; color: #6b6b6b;">Email: info@ipeace-consultancy.com</p>
+                                            <p style="margin: 0; font-size: 13px; color: #6b6b6b;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                                        </td></tr>
+                                    </table>
+                                    <p style="margin: 0; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Best regards,<br><span style="font-weight: 600;">The IPEACE Consultancy team</span></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                    <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">This email confirms your consultation booking. Please keep it for your records.</p>
+                                    <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONSULTATION COMPANY -->
+    <div id="consultation-company" class="template-section">
+        <h2>Consultation — Internal notification to company when a booking is received</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">New consultation booking</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">Action required — customer appointment scheduled</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #d4930a;">
+                                    <tr><td style="padding: 16px 20px;">
+                                        <p style="margin: 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">A new consultation has been booked and requires confirmation and preparation.</p>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Booking details</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 140px;">Booking ID</td><td style="padding: 5px 0; font-size: 13px; color: #1a1a1a; font-family: 'SF Mono', 'Fira Code', monospace;">#6adc74487e789a0ede9421bf</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Service</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Business Strategy</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Format</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">In-Person Meeting</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Date</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">22 January 2027</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Time</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">2:00 PM – 3:00 PM</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Submitted</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">24 October 2026, 11:32 AM</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Customer information</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 100px;">Name</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Rumbidzai Chikwanha</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Email</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;"><a href="#" style="color: #1b365d; text-decoration: none;">rumbidzai@zimtrade.co.zw</a></td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Phone</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;"><a href="#" style="color: #1b365d; text-decoration: none;">+263 77 234 5678</a></td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Company</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">ZimTrade Holdings</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                    <tr><td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                        <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Customer requirements</p>
+                                        <p style="margin: 0; font-size: 14px; color: #4a4a4a; line-height: 1.6;">We need guidance on restructuring our compliance framework ahead of the new fiscal year. Specifically interested in regulatory changes affecting import/export licensing and how to align our internal policies.</p>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #2d6a4f;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #2d6a4f; text-transform: uppercase; letter-spacing: 0.5px;">Required actions</p>
+                                        <ol style="margin: 0; padding: 0 0 0 18px; font-size: 14px; color: #4a4a4a; line-height: 1.8;">
+                                            <li>Contact customer within 24 hours to confirm</li>
+                                            <li>Verify calendar availability and check for conflicts</li>
+                                            <li>Review requirements and prepare materials</li>
+                                            <li>Send calendar invite and meeting details</li>
+                                            <li>Log all interactions in CRM</li>
+                                        </ol>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 28px;">
+                                    <tr>
+                                        <td style="padding-right: 8px;"><a href="#" style="display: inline-block; background-color: #1b365d; color: #ffffff; padding: 10px 24px; text-decoration: none; font-size: 13px; font-weight: 500;">Send email</a></td>
+                                        <td><a href="#" style="display: inline-block; background-color: #ffffff; color: #1b365d; padding: 10px 24px; text-decoration: none; font-size: 13px; font-weight: 500; border: 1px solid #1b365d;">Call customer</a></td>
+                                    </tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top: 1px solid #e5e5e3;">
+                                    <tr><td style="padding-top: 20px;">
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;"><span style="font-weight: 600; color: #1a1a1a;">Timeline:</span> Contact within 24h, send reminder 48h before, final confirmation day before</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;"><span style="font-weight: 600; color: #1a1a1a;">Priority:</span> High</p>
+                                    </td></tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">Generated automatically by the IPEACE consultation booking system.</p>
+                                <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONSULTATION CUSTOMER -->
+    <div id="consultation-customer" class="template-section">
+        <h2>Consultation — Customer receipt after initial booking</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">Booking confirmed</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">Your consultation with IPEACE Consultancy</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <p style="margin: 0 0 20px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Dear Tatenda Moyo,</p>
+                                <p style="margin: 0 0 28px; color: #4a4a4a; font-size: 15px; line-height: 1.6;">Your consultation has been scheduled and confirmed. Here are the details.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Booking details</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 140px;">Booking ID</td><td style="padding: 5px 0; font-size: 13px; color: #1a1a1a; font-family: 'SF Mono', 'Fira Code', monospace;">#6adc74487e789a0ede9421bf</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Service</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Training & Development</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Format</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Phone Call</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Date</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">18 January 2027</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Time</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">3:00 PM – 4:00 PM</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Company</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">Moyo Enterprises</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Phone</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">+263 77 123 4567</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                    <tr><td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                        <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Add to calendar</p>
+                                        <p style="margin: 0 0 16px; font-size: 14px; color: #4a4a4a; line-height: 1.5;">Save this appointment to your preferred calendar application.</p>
+                                        <table role="presentation" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="padding-right: 8px;"><a href="#" style="display: inline-block; background-color: #1b365d; color: #ffffff; padding: 10px 20px; text-decoration: none; font-size: 13px; font-weight: 500;">Google Calendar</a></td>
+                                                <td><a href="#" style="display: inline-block; background-color: #ffffff; color: #1b365d; padding: 10px 20px; text-decoration: none; font-size: 13px; font-weight: 500; border: 1px solid #1b365d;">Download .ics</a></td>
+                                            </tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #2d6a4f;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #2d6a4f; text-transform: uppercase; letter-spacing: 0.5px;">What happens next</p>
+                                        <ol style="margin: 0; padding: 0 0 0 18px; font-size: 14px; color: #4a4a4a; line-height: 1.8;">
+                                            <li>Our team will contact you within 24 hours to confirm details</li>
+                                            <li>We'll review your requirements and prepare documentation</li>
+                                            <li>Meet with our consultant at the scheduled time</li>
+                                            <li>Receive a summary and next steps after the consultation</li>
+                                        </ol>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                    <tr><td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                        <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Your message</p>
+                                        <p style="margin: 0; font-size: 14px; color: #4a4a4a; line-height: 1.6;">Looking for training on new compliance requirements for our management team. We have about 15 staff who need to be up to speed on the recent regulatory changes.</p>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border-top: 1px solid #e5e5e3; padding-top: 20px;">
+                                    <tr><td>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Phone: +263 4 123 4567 / +263 71 356 6827</p>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Email: info@ipeace-consultancy.com</p>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;">Office hours: Monday–Friday, 8:30 AM – 4:30 PM</p>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0 0 24px; color: #4a4a4a; font-size: 14px; line-height: 1.6;">Need to reschedule or have questions? Reply to this email or contact us directly.</p>
+                                <p style="margin: 0; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Best regards,<br><span style="font-weight: 600;">The IPEACE Consultancy team</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">This is an automated confirmation. Please keep this email for your records.</p>
+                                <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONTACT CUSTOMER -->
+    <div id="contact-customer" class="template-section">
+        <h2>Contact — Customer auto-receipt after submitting the contact form</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">Message received</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">We'll get back to you within 24–48 hours</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <p style="margin: 0 0 20px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Dear Farai Dandara,</p>
+                                <p style="margin: 0 0 28px; color: #4a4a4a; font-size: 15px; line-height: 1.6;">Thank you for reaching out to IPEACE Consultancy. We've received your message and our team will review it shortly.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Your inquiry</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 100px;">Service</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Expert Advisory</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Company</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">Dandara Technologies</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                    <tr><td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                        <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Message</p>
+                                        <p style="margin: 0; font-size: 14px; color: #4a4a4a; line-height: 1.6;">We're expanding our operations into Zimbabwe and need expert advice on the regulatory landscape, particularly around technology sector compliance and data protection requirements.</p>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0 0 24px; color: #4a4a4a; font-size: 14px; line-height: 1.6;">Our team will review your inquiry and respond within 24–48 hours. For urgent matters, please call us directly.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border-top: 1px solid #e5e5e3; padding-top: 20px;">
+                                    <tr><td>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Phone: +263 4 123 4567 / +263 71 356 6827</p>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Email: info@ipeace-consultancy.com</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Best regards,<br><span style="font-weight: 600;">The IPEACE Consultancy team</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">This is an automated receipt. Please do not reply to this email.</p>
+                                <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONTACT COMPANY -->
+    <div id="contact-company" class="template-section">
+        <h2>Contact — Internal notification when a contact form is submitted</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">New contact form submission</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">Customer inquiry — response required</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Customer information</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 120px;">Name</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Tatenda Moyo</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Email</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;"><a href="#" style="color: #1b365d; text-decoration: none;">tatenda@moyiventures.co.zw</a></td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Company</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">Moyo Ventures</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Service</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Document Services</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Newsletter</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">Yes</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Submitted</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">24 October 2026, 2:15 PM</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                    <tr><td style="padding: 20px 24px; background-color: #f9f9f7; border: 1px solid #e5e5e3;">
+                                        <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Message</p>
+                                        <p style="margin: 0; font-size: 14px; color: #4a4a4a; line-height: 1.6;">We need help preparing our annual compliance documents and updating our company registration details. Please advise on the process and timeline.</p>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #2d6a4f;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #2d6a4f; text-transform: uppercase; letter-spacing: 0.5px;">Recommended actions</p>
+                                        <ul style="margin: 0; padding: 0 0 0 18px; font-size: 14px; color: #4a4a4a; line-height: 1.8;">
+                                            <li>Review the inquiry and determine the appropriate response</li>
+                                            <li>Contact the customer within 24–48 hours</li>
+                                            <li>Log the interaction in CRM</li>
+                                            <li>Update the customer on relevant services</li>
+                                        </ul>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 24px;">
+                                    <tr><td><a href="#" style="display: inline-block; background-color: #1b365d; color: #ffffff; padding: 10px 24px; text-decoration: none; font-size: 13px; font-weight: 500;">Reply to customer</a></td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top: 1px solid #e5e5e3;">
+                                    <tr><td style="padding-top: 16px;">
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;"><span style="font-weight: 600; color: #1a1a1a;">Priority:</span> Normal (24–48 hour response time)</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;"><span style="font-weight: 600; color: #1a1a1a;">Response template:</span> Use standard customer inquiry response</p>
+                                    </td></tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">Generated automatically by the IPEACE contact form system.</p>
+                                <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONTACT CONFIRMATION -->
+    <div id="contact-confirmation" class="template-section">
+        <h2>Contact Confirmation — sent after team reviews the inquiry</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">Inquiry confirmed</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">Your message has been reviewed by our team</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <p style="margin: 0 0 20px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Dear Farai Dandara,</p>
+                                <p style="margin: 0 0 28px; color: #4a4a4a; font-size: 15px; line-height: 1.6;">Your inquiry has been reviewed and confirmed. Our team will follow up with detailed information within the next 24 hours.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 16px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Inquiry details</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b; width: 100px;">Service</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a; font-weight: 500;">Expert Advisory</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Company</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">Dandara Technologies</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Submitted</td><td style="padding: 5px 0; font-size: 14px; color: #1a1a1a;">24 October 2026, 2:15 PM</td></tr>
+                                            <tr><td style="padding: 5px 0; font-size: 14px; color: #6b6b6b;">Status</td><td style="padding: 5px 0; font-size: 14px; color: #2d6a4f; font-weight: 600;">Confirmed</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0 0 24px; color: #4a4a4a; font-size: 14px; line-height: 1.6;">If you have additional information or specific requirements, reply to this email or contact us directly.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border-top: 1px solid #e5e5e3; padding-top: 20px;">
+                                    <tr><td>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Phone: +263 4 123 4567 / +263 71 356 6827</p>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Email: info@ipeace-consultancy.com</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Best regards,<br><span style="font-weight: 600;">The IPEACE Consultancy team</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">This email confirms your inquiry has been received and is being processed.</p>
+                                <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONTACT RESPONSE -->
+    <div id="contact-response" class="template-section">
+        <h2>Contact Response — personal reply from the team to a customer inquiry</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">Response to your inquiry</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">A personal reply from the IPEACE Consultancy team</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <p style="margin: 0 0 20px; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Dear Farai Dandara,</p>
+                                <p style="margin: 0 0 28px; color: #4a4a4a; font-size: 15px; line-height: 1.6;">Thank you for contacting IPEACE Consultancy. We've reviewed your inquiry and wanted to provide a personal response.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border: 1px solid #e5e5e3; border-left: 3px solid #e5e5e3;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #6b6b6b; text-transform: uppercase; letter-spacing: 0.5px;">Your original inquiry</p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 12px;">
+                                            <tr><td style="padding: 3px 0; font-size: 14px; color: #6b6b6b; width: 100px;">Service</td><td style="padding: 3px 0; font-size: 14px; color: #1a1a1a;">Expert Advisory</td></tr>
+                                            <tr><td style="padding: 3px 0; font-size: 14px; color: #6b6b6b;">Company</td><td style="padding: 3px 0; font-size: 14px; color: #1a1a1a;">Dandara Technologies</td></tr>
+                                            <tr><td style="padding: 3px 0; font-size: 14px; color: #6b6b6b;">Submitted</td><td style="padding: 3px 0; font-size: 14px; color: #1a1a1a;">24 October 2026</td></tr>
+                                        </table>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr><td style="padding: 12px 16px; background-color: #f9f9f7; border: 1px solid #e5e5e3; font-size: 14px; color: #4a4a4a; line-height: 1.6;">We're expanding our operations into Zimbabwe and need expert advice on the regulatory landscape, particularly around technology sector compliance and data protection requirements.</td></tr>
+                                        </table>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px; border: 1px solid #e5e5e3; border-left: 3px solid #1b365d;">
+                                    <tr><td style="padding: 24px;">
+                                        <p style="margin: 0 0 12px; font-size: 13px; font-weight: 600; color: #1b365d; text-transform: uppercase; letter-spacing: 0.5px;">Our response</p>
+                                        <p style="margin: 0; font-size: 14px; color: #1a1a1a; line-height: 1.7;">Thank you for reaching out about your expansion into Zimbabwe. We have extensive experience helping technology companies navigate the local regulatory environment.
+
+Our team can assist with:
+- Data Protection Act compliance framework setup
+- Technology sector licensing requirements
+- Company registration and structuring advice
+- Ongoing regulatory monitoring
+
+We'd recommend scheduling a consultation to discuss your specific requirements in detail. Our next available slot is early next week.
+
+Please let us know what works best for your schedule.</p>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0 0 24px; color: #4a4a4a; font-size: 14px; line-height: 1.6;">If you have questions about our response or need further clarification, reply to this email or reach us directly.</p>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border-top: 1px solid #e5e5e3; padding-top: 20px;">
+                                    <tr><td>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Phone: +263 4 123 4567 / +263 71 356 6827</p>
+                                        <p style="margin: 0 0 4px; font-size: 13px; color: #6b6b6b;">Email: info@ipeace-consultancy.com</p>
+                                        <p style="margin: 0; font-size: 13px; color: #6b6b6b;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                                    </td></tr>
+                                </table>
+                                <p style="margin: 0; color: #1a1a1a; font-size: 15px; line-height: 1.6;">Best regards,<br><span style="font-weight: 600;">The IPEACE Consultancy team</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5; text-align: center;">This is a personal response to your inquiry. This communication has been logged for your records.</p>
+                                <p style="margin: 8px 0 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- NEWSLETTER -->
+    <div id="newsletter" class="template-section">
+        <h2>Newsletter — periodic updates sent to subscribers</h2>
+        <div class="email-frame">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f3;">
+                <tr><td align="center" style="padding: 32px 16px;">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e5e5e3;">
+                        <tr>
+                            <td style="background-color: #1b365d; padding: 36px 40px; text-align: left;">
+                                <div style="width: 120px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 1px;">IPEACE</span>
+                                </div>
+                                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">IPEACE Consultancy</h1>
+                                <p style="margin: 6px 0 0; color: rgba(255,255,255,0.7); font-size: 14px;">Newsletter</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 32px;">
+                                    <tr><td style="font-size: 15px; color: #1a1a1a; line-height: 1.7;">
+                                        <h2 style="margin: 0 0 16px; font-size: 18px; font-weight: 600; color: #1b365d;">Q4 2026 Regulatory Update</h2>
+                                        <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.7; color: #4a4a4a;">The Zimbabwe Revenue Authority has announced updated compliance requirements effective January 2027. Key changes include revised VAT thresholds and new digital services reporting obligations.</p>
+                                        <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.7; color: #4a4a4a;">We've prepared a comprehensive guide to help your business transition smoothly. Our team is available to walk you through the specifics and assess how these changes affect your operations.</p>
+                                        <h2 style="margin: 0 0 16px; font-size: 18px; font-weight: 600; color: #1b365d;">New Service: AI-Powered Compliance Monitoring</h2>
+                                        <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.7; color: #4a4a4a;">We're launching our new automated compliance monitoring platform. Built on Zimbabwe's regulatory framework, it provides real-time alerts, predictive risk assessment, and automated document analysis.</p>
+                                        <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #4a4a4a;">Early adopters receive a complimentary compliance audit. Contact us to learn more.</p>
+                                    </td></tr>
+                                </table>
+                                <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px;">
+                                    <tr><td><a href="#" style="display: inline-block; background-color: #1b365d; color: #ffffff; padding: 10px 28px; text-decoration: none; font-size: 13px; font-weight: 500;">Visit our website</a></td></tr>
+                                </table>
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top: 1px solid #e5e5e3;">
+                                    <tr><td style="padding-top: 20px;">
+                                        <p style="margin: 0 0 8px; font-size: 12px; color: #999; line-height: 1.5;">You're receiving this newsletter because you subscribed to updates from IPEACE Consultancy.</p>
+                                        <p style="margin: 0; font-size: 12px; color: #999; line-height: 1.5;"><a href="#" style="color: #1b365d; text-decoration: none;">Unsubscribe</a></p>
+                                    </td></tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 24px 40px; background-color: #f9f9f7; border-top: 1px solid #e5e5e3;">
+                                <p style="margin: 0; font-size: 12px; color: #999; text-align: center;">&copy; 2025 IPEACE Consultancy. All rights reserved.</p>
+                                <p style="margin: 4px 0 0; font-size: 12px; color: #999; text-align: center;">135 Baines Avenue, Avenues, Harare, Zimbabwe</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function showTemplate(id, el) {
+            document.querySelectorAll('.template-section').forEach(s => s.classList.remove('visible'));
+            document.getElementById(id).classList.add('visible');
+            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+            el.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

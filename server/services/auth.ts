@@ -1,128 +1,81 @@
-import { createHmac } from 'crypto';
+import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
 import bcrypt from 'bcryptjs';
 import { storage } from '../storage';
 import type { InsertUser } from '@shared/schema';
 import type { IUser } from '../models';
 
-// Simple JWT implementation using built-in crypto
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRES_IN = '24h';
+const encoder = new TextEncoder();
+const JWT_SECRET = encoder.encode(process.env.JWT_SECRET!);
+const JWT_ISSUER = 'ipeace-consultancy';
+const JWT_AUDIENCE = 'ipeace-clients';
 
-export interface JWTPayload {
+export interface TokenPayload extends JWTPayload {
   userId: string;
   username: string;
   role: string;
-  iat: number;
-  exp: number;
 }
 
 export class AuthService {
-  // Simple base64url encoding
-  private base64urlEncode(str: string): string {
-    return Buffer.from(str)
-      .toString('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
+  async createToken(payload: Omit<TokenPayload, 'iat' | 'exp' | 'iss' | 'aud'>): Promise<string> {
+    return new SignJWT({ ...payload })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setIssuer(JWT_ISSUER)
+      .setAudience(JWT_AUDIENCE)
+      .setExpirationTime('24h')
+      .sign(JWT_SECRET);
   }
 
-  // Simple base64url decoding
-  private base64urlDecode(str: string): string {
-    str = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (str.length % 4) {
-      str += '=';
-    }
-    return Buffer.from(str, 'base64').toString();
-  }
-
-  // Create JWT token
-  createToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
-    const header = {
-      alg: 'HS256',
-      typ: 'JWT'
-    };
-
-    const now = Math.floor(Date.now() / 1000);
-    const fullPayload: JWTPayload = {
-      ...payload,
-      iat: now,
-      exp: now + (24 * 60 * 60) // 24 hours
-    };
-
-    const encodedHeader = this.base64urlEncode(JSON.stringify(header));
-    const encodedPayload = this.base64urlEncode(JSON.stringify(fullPayload));
-
-    const data = `${encodedHeader}.${encodedPayload}`;
-    const signature = createHmac('sha256', JWT_SECRET)
-      .update(data)
-      .digest('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
-
-    return `${data}.${signature}`;
-  }
-
-  // Verify JWT token
-  verifyToken(token: string): JWTPayload | null {
+  async verifyToken(token: string): Promise<TokenPayload | null> {
     try {
-      const parts = token.split('.');
-      if (parts.length !== 3) return null;
-
-      const [encodedHeader, encodedPayload, signature] = parts;
-      const data = `${encodedHeader}.${encodedPayload}`;
-
-      // Verify signature
-      const expectedSignature = createHmac('sha256', JWT_SECRET)
-        .update(data)
-        .digest('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-
-      if (signature !== expectedSignature) return null;
-
-      // Decode payload
-      const payload = JSON.parse(this.base64urlDecode(encodedPayload));
-
-      // Check expiration
-      if (payload.exp < Math.floor(Date.now() / 1000)) return null;
-
-      return payload;
-    } catch (error) {
+      const { payload } = await jwtVerify(token, JWT_SECRET, {
+        issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
+        clockTolerance: 30,
+      });
+      return payload as unknown as TokenPayload;
+    } catch {
       return null;
     }
   }
 
-  // Hash password with bcryptjs (secure implementation)
   async hashPassword(password: string): Promise<string> {
-    const saltRounds = 12; // Industry standard
+    const saltRounds = 12;
     return await bcrypt.hash(password, saltRounds);
   }
 
-  // Verify password with bcryptjs
   async verifyPassword(password: string, hash: string): Promise<boolean> {
     return await bcrypt.compare(password, hash);
   }
 
-  // Register user
+  async hashResetToken(token: string): Promise<string> {
+    return this.hashPassword(token);
+  }
+
+  async verifyResetToken(token: string, hash: string): Promise<boolean> {
+    return this.verifyPassword(token, hash);
+  }
+
   async register(userData: InsertUser): Promise<{ user: IUser; token: string } | null> {
     try {
-      // Check if user already exists
-      const existingUser = await storage.getUserByUsername(userData.username);
-      if (existingUser) return null;
+      const [byUsername, byEmail] = await Promise.all([
+        storage.getUserByUsername(userData.username),
+        userData.email ? storage.getUserByEmail(userData.email) : Promise.resolve(null),
+      ]);
 
-      // Hash password
+      if (byUsername || byEmail) {
+        console.warn(`Registration attempt for existing user: ${userData.username}`);
+        return null;
+      }
+
       const hashedPassword = await this.hashPassword(userData.password);
 
-      // Create user
       const user = await storage.createUser({
         ...userData,
         password: hashedPassword,
       });
 
-      // Create token
-      const token = this.createToken({
+      const token = await this.createToken({
         userId: user._id.toString(),
         username: user.username,
         role: user.role,
@@ -135,20 +88,23 @@ export class AuthService {
     }
   }
 
-  // Login user
   async login(identifier: string, password: string): Promise<{ user: IUser; token: string } | null> {
     try {
-      // Check if identifier is an email or username
       const isEmail = identifier.includes('@');
       const user = isEmail
         ? await storage.getUserByEmail(identifier)
         : await storage.getUserByUsername(identifier);
 
-      if (!user) return null;
+      if (!user) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        return null;
+      }
 
-      if (!(await this.verifyPassword(password, user.password))) return null;
+      if (!(await this.verifyPassword(password, user.password))) {
+        return null;
+      }
 
-      const token = this.createToken({
+      const token = await this.createToken({
         userId: user._id.toString(),
         username: user.username,
         role: user.role,
@@ -161,25 +117,13 @@ export class AuthService {
     }
   }
 
-  // Get user from token
   async getUserFromToken(token: string): Promise<IUser | null> {
     try {
-      console.log(`[AUTH DEBUG] Verifying token...`);
-      const payload = this.verifyToken(token);
-      console.log(`[AUTH DEBUG] Token verification result: ${payload ? 'valid' : 'invalid/expired'}`);
-
-      if (!payload) {
-        console.log(`[AUTH DEBUG] Token verification failed`);
-        return null;
-      }
-
-      console.log(`[AUTH DEBUG] Looking up user with ID: ${payload.userId}`);
+      const payload = await this.verifyToken(token);
+      if (!payload) return null;
       const user = await storage.getUser(payload.userId);
-      console.log(`[AUTH DEBUG] User lookup result: ${user ? `found (${user.username}, ${user.role})` : 'not found'}`);
-
       return user || null;
-    } catch (error) {
-      console.error('[AUTH DEBUG] Get user from token error:', error);
+    } catch {
       return null;
     }
   }

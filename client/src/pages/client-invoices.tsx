@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { authFetch } from '@/lib/auth';
 
 interface Invoice {
   id: string;
@@ -35,12 +36,7 @@ export function ClientInvoicesTab() {
 
   const fetchInvoices = async () => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch('/api/client/invoices', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/client/invoices');
 
       if (response.ok) {
         const data = await response.json();
@@ -55,12 +51,7 @@ export function ClientInvoicesTab() {
 
   const handleDownloadInvoice = async (invoice: Invoice) => {
     try {
-      const token = localStorage.getItem('clientToken');
-      const response = await fetch(`/api/client/invoices/${invoice.id}/download`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch(`/api/client/invoices/${invoice.id}/download`);
 
       if (response.ok) {
         const blob = await response.blob();

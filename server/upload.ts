@@ -1,38 +1,77 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import { storage } from './storage';
 import { textExtractionService } from './services/text-extraction';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const UPLOADS_DIR = path.resolve(process.cwd(), 'uploads');
 
-// Configure multer for memory storage
-const storageConfig = multer.memoryStorage();
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
 
-// File filter to allow all file types
+const ALLOWED_MIMETYPES = new Set([
+  'text/plain',
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'video/mp4',
+  'video/webm',
+  'audio/mpeg',
+  'audio/mp4',
+  'audio/wav',
+  'audio/webm',
+]);
+
 const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  // Allow all file types
+  if (!ALLOWED_MIMETYPES.has(file.mimetype)) {
+    const err = new Error(`File type not allowed: ${file.mimetype}`) as Error & { status?: number };
+    err.status = 415;
+    return cb(err);
+  }
   cb(null, true);
 };
 
-// Configure multer
-export const upload = multer({
-  storage: storageConfig,
-  fileFilter: fileFilter,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit for various file types
+const sanitizeFilename = (name: string): string => {
+  const basename = path.basename(name).replace(/[\x00-\x1f\x7f"\\]/g, '');
+  return basename.slice(0, 255) || 'unnamed';
+};
+
+const diskStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, UPLOADS_DIR);
+  },
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const safeName = sanitizeFilename(file.originalname);
+    const ext = path.extname(safeName);
+    const base = path.basename(safeName, ext);
+    cb(null, `${base}-${uniqueSuffix}${ext}`);
   }
 });
 
-// Helper function to save file metadata to database
+export const upload = multer({
+  storage: diskStorage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  }
+});
+
 export const saveFileMetadata = async (file: Express.Multer.File, userId: string, isTrainingData: boolean = false) => {
   let extractedText: string | undefined;
 
-  // Extract text if this is a training data file and the file type is supported
   if (isTrainingData && textExtractionService.isSupportedType(file.mimetype)) {
+    const fileBuffer = await fs.promises.readFile(file.path);
     const extractionResult = await textExtractionService.extractText(
-      file.buffer,
+      fileBuffer,
       file.mimetype,
       file.originalname
     );
@@ -44,22 +83,22 @@ export const saveFileMetadata = async (file: Express.Multer.File, userId: string
     }
   }
 
-  const fileData = {
-    filename: file.originalname, // Use original name as filename since we're not generating unique names
-    originalName: file.originalname,
+  const safeName = sanitizeFilename(file.originalname);
+  const relativePath = path.relative(UPLOADS_DIR, file.path);
+
+  const savedFile = await storage.createFile({
+    filename: safeName,
+    originalName: safeName,
     mimetype: file.mimetype,
     size: file.size,
-    data: file.buffer, // Store the binary data
-    url: `/api/files/`, // Base URL, ID will be appended
+    filePath: relativePath,
+    url: `/api/files/`,
     uploadedBy: new mongoose.Types.ObjectId(userId),
-    // AI Training Data fields
     isTrainingData,
     extractedText,
-    trainingEnabled: isTrainingData // Enable by default if marked as training data
-  };
+    trainingEnabled: isTrainingData
+  });
 
-  const savedFile = await storage.createFile(fileData);
-  // Update URL with the actual ID
   savedFile.url = `/api/files/${savedFile._id}`;
   await savedFile.save();
 

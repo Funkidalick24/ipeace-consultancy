@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { authFetch } from '@/lib/auth';
 
 interface TrainingFile {
   id: string;
@@ -29,12 +30,7 @@ export default function AITrainingManager() {
 
   const fetchTrainingFiles = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/training/files', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await authFetch('/api/admin/training/files');
 
       if (response.ok) {
         const data = await response.json();
@@ -66,15 +62,11 @@ export default function AITrainingManager() {
     setSuccess('');
 
     try {
-      const token = localStorage.getItem('adminToken');
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/admin/training/upload', {
+      const response = await authFetch('/api/admin/training/upload', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData
       });
 
@@ -100,11 +92,9 @@ export default function AITrainingManager() {
 
   const toggleTrainingStatus = async (fileId: string, currentStatus: boolean) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`/api/admin/training/files/${fileId}/status`, {
+      const response = await authFetch(`/api/admin/training/files/${fileId}/status`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ trainingEnabled: !currentStatus })

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { setAuthUser } from '@/lib/auth';
 
 interface UnifiedLoginFormProps {
-  onSuccess: (user: any, token: string, userType: 'admin' | 'client' | 'employee') => void;
+  onSuccess: (user: any, userType: 'admin' | 'client' | 'employee') => void;
   onSwitchToRegister: () => void;
 }
 
@@ -71,16 +72,10 @@ export function UnifiedLoginForm({ onSuccess, onSwitchToRegister }: UnifiedLogin
         // Login successful - determine user type and redirect accordingly
         const userType = data.user.role === 'admin' ? 'admin' : (data.user.role === 'employee' ? 'employee' : 'client');
 
-        // Store in appropriate localStorage keys
-        if (userType === 'admin') {
-          localStorage.setItem('adminToken', data.token);
-          localStorage.setItem('adminUser', JSON.stringify(data.user));
-        } else {
-          localStorage.setItem('clientToken', data.token);
-          localStorage.setItem('clientUser', JSON.stringify(data.user));
-        }
+        // Store user in localStorage
+        setAuthUser(data.user);
 
-        onSuccess(data.user, data.token, userType);
+        onSuccess(data.user, userType);
       } else {
         if (data.requiresVerification) {
           setVerificationRequired({
