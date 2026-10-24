@@ -416,9 +416,8 @@
     }
   },
   "faq": {
-<<<<<<< HEAD
-    "title": "Mibvunzo Inowanzo Bvunzwa: Kutevera Mitemo yeBhizinesi muZimbabwe",
-    "subtitle": "Wana mhinduro dzemibvunzo inowanzo bvunzwa nezve kutanga uye kushandisa bhizinesi muZimbabwe",
+    "title": "Mibvunzo Inowanzo Bvunzwa: Kutevedzera Mitemo Yebhizinesi muZimbabwe",
+    "subtitle": "Wana mhinduro dzemibvunzo inowanzo bvunzwa pamusoro pekutanga nekumhanyisa bhizinesi muZimbabwe",
     "questions": [
       {
         "question": "Ndinoregistera kambani muZimbabwe sei?",
@@ -444,10 +443,7 @@
         "question": "Zvirango zvekutevera mitemo muZimbabwe ndezvi?",
         "answer": "Zvirango zvinosanganisira mafines kusvika ku$500,000, kugara mujeri kusvika kumakore 5, kuvharwa kwebhizinesi, kudzimwa kwedirector, uye kukuvara kwezita. Tinobatsira mabhizinesi kuchengetedza chiyero chekutevera mitemo che99.8% kuburikidza nekuongorora kwekare."
       }
-    ]
-=======
-    "title": "Mibvunzo Inowanzo Bvunzwa: Kutevedzera Mitemo Yebhizinesi muZimbabwe",
-    "subtitle": "Wana mhinduro dzemibvunzo inowanzo bvunzwa pamusoro pekutanga nekumhanyisa bhizinesi muZimbabwe",
+    ],
     "kicker": "Mhinduro dzinobatsira",
     "loading": "Mibvunzo iri kurodhwa...",
     "share": "Goverana Mibvunzo",
@@ -475,6 +471,5 @@
     "copyLink": "Kopa chinobatanidza",
     "fetchError": "Mabhurogu atadza kurodhwa",
     "copyError": "Kukopa kwatadza"
->>>>>>> b7d734e20c6f71b89b860b122f246bc0312a244c
   }
 }
