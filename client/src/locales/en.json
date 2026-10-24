@@ -20,47 +20,98 @@
       "complianceLabel": "Success Rate",
       "experience": "3+",
       "experienceLabel": "Years Experience"
-    }
+    },
+    "eyebrow": "Better business, served thoughtfully",
+    "legacyLine": "Foundation for",
+    "legacyHighlight": "Legacy",
+    "imageAlt": "Professional business consulting team collaborating"
   },
   "about": {
     "title": "What IPEACE Stands For",
-    "subtitle": "IPEACE is more than a name—it's an acronym and a promise. Each letter embodies a core value that guides every strategy, interaction, and solution we deliver.",
+    "kicker": "Our consulting approach",
+    "subtitle": "IPEACE helps Zimbabwean entrepreneurs and SMEs start, manage compliance, and grow with practical guidance.",
     "values": {
       "innovation": {
         "title": "Innovation",
-        "description": "We harness cutting-edge technologies and forward-thinking methodologies to keep our clients ahead of the curve."
+        "description": "We test practical approaches that simplify your work and solve the business problem at hand."
       },
       "precision": {
         "title": "Precision",
-        "description": "We believe in surgical accuracy: every recommendation, every report, every process is data-driven and meticulously vetted."
+        "description": "We check details, document decisions, and give clear recommendations you can act on with confidence."
       },
       "empowerment": {
         "title": "Empowerment",
-        "description": "We don't just \"consult\"—we upskill, mentor, and equip business leaders with the tools and mindset to own their growth."
+        "description": "We coach your team and leave usable tools so you can manage progress independently."
       },
       "agility": {
         "title": "Agility",
-        "description": "In a rapidly shifting market, speed wins. Our lean frameworks and rapid-iteration cycles let you pivot without pain."
+        "description": "We use short review cycles to adjust priorities quickly when your business needs change."
       },
       "compliance": {
         "title": "Compliance",
-        "description": "Regulations aren't roadblocks—they're springboards for trust and stability. We turn \"must-dos\" into competitive advantages."
+        "description": "We map requirements, prepare records, and help you meet deadlines with fewer compliance surprises."
       },
       "excellence": {
         "title": "Excellence",
-        "description": "From our client portal's intuitive UI to our round-the-clock support, we set—and exceed—industry benchmarks."
+        "description": "We set clear expectations, communicate progress regularly, and deliver work that is ready to use."
       }
     }
   },
   "services": {
     "title": "Zimbabwe Business Services: Compliance, Registration & Strategy",
-    "subtitle": "Complete business solutions for Zimbabwe entrepreneurs. From company registration to compliance audits, get expert guidance on Companies Act requirements, business licensing, and regulatory compliance.",
+    "subtitle": "Clear, practical support to launch, manage, and grow your Zimbabwe business with confidence.",
     "learnMore": "Learn More",
     "cta": {
       "title": "Need Help with Zimbabwe Business Compliance?",
-      "subtitle": "Get your free consultation today. Our experts can answer: How to register a company in Zimbabwe? What are the compliance requirements? How to get a business license?",
+      "subtitle": "Get clear next steps to strengthen compliance and move your business forward.",
       "button": "Get Free Compliance Check"
-    }
+    },
+    "kicker": "Practical consulting for confident decisions",
+    "cards": {
+      "regulatory": {
+        "description": "Stay compliant with Zimbabwean regulations through clear, practical guidance.",
+        "features": [
+          "Companies Act compliance audits",
+          "Corporate governance frameworks"
+        ]
+      },
+      "ai": {
+        "description": "Get timely, practical guidance through our Expert Advisory service.",
+        "features": [
+          "On-demand business guidance",
+          "Document analysis and review"
+        ]
+      },
+      "strategy": {
+        "description": "Turn your growth priorities into a focused, actionable business plan.",
+        "features": [
+          "Market analysis and planning",
+          "Digital transformation roadmaps"
+        ]
+      },
+      "training": {
+        "description": "Build the skills your team needs to operate confidently and compliantly.",
+        "features": [
+          "Compliance workshops",
+          "Leadership development"
+        ]
+      },
+      "documents": {
+        "description": "Prepare accurate business documents and filings without unnecessary delays.",
+        "features": [
+          "Company incorporation",
+          "Contract review and drafting"
+        ]
+      },
+      "support": {
+        "description": "Get responsive support when urgent business or compliance questions arise.",
+        "features": [
+          "Expert escalation",
+          "Emergency consultation"
+        ]
+      }
+    },
+    "learnMoreAria": "Learn more about {{service}}"
   },
   "team": {
     "title": "iPeace Leadership Team",
@@ -71,8 +122,8 @@
     "subtitle": "Don't just take our word for it. Here's what business leaders across Zimbabwe say about their IPEACE experience."
   },
   "contact": {
-    "title": "Contact IPEACE: Zimbabwe Business Compliance Experts",
-    "subtitle": "Have questions about company registration in Zimbabwe? Need help with compliance requirements? Our consultants are here to help. Get expert answers to: How to register a business in Zimbabwe? What licenses do I need? How to stay compliant with Companies Act?",
+    "title": "Let’s talk about what your business needs.",
+    "subtitle": "Tell us where you need support, and we’ll help you find a practical next step.",
     "form": {
       "title": "Send Us a Message",
       "firstName": "First Name",
@@ -98,7 +149,12 @@
         "training": "Training & Development",
         "documents": "Document Services",
         "support": "24/7 Support"
-      }
+      },
+      "sending": "Sending...",
+      "successTitle": "Message sent successfully!",
+      "successDescription": "Thank you for your message. We will get back to you soon.",
+      "errorTitle": "Error sending message",
+      "errorDescription": "Please try again later."
     },
     "office": {
       "title": "Visit Our Office",
@@ -106,11 +162,22 @@
       "phone": "Phone",
       "email": "Email",
       "hours": "Business Hours",
-      "directions": "Get Directions"
+      "directions": "Get Directions",
+      "findUs": "Find Us",
+      "locationTitle": "IPEACE office location",
+      "viewMap": "View on Google Maps",
+      "emailLabels": {
+        "generalInquiries": "General inquiries",
+        "support": "Support",
+        "humanResources": "HR & recruitment",
+        "complianceServices": "Compliance services",
+        "operationsFinance": "Operations & finance"
+      }
     },
     "social": {
       "title": "Follow Us"
-    }
+    },
+    "kicker": "Let's start a conversation"
   },
   "footer": {
     "description": "Professional business consulting services specializing in Zimbabwe's regulatory landscape and business growth strategies.",
@@ -119,7 +186,10 @@
     "copyright": "© 2025 IPEACE Professional Consulting. All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "cookies": "Cookie Policy"
+    "cookies": "Cookie Policy",
+    "exploreServices": "Explore Services",
+    "clientPortal": "Client Portal",
+    "cookiesComingSoon": "Cookie Policy page coming soon"
   },
   "legal": {
     "close": "Close",
@@ -373,6 +443,33 @@
         "question": "What are the penalties for non-compliance in Zimbabwe?",
         "answer": "Penalties include fines up to $500,000, imprisonment up to 5 years, business closure, director disqualification, and reputational damage. We help businesses maintain 99.8% compliance rate through proactive monitoring."
       }
-    ]
+    ],
+    "kicker": "Helpful answers",
+    "loading": "Loading FAQs...",
+    "share": "Share FAQ",
+    "copied": "Copied!",
+    "copyLink": "Copy link",
+    "empty": "No FAQs available at the moment.",
+    "shareTitle": "FAQ - Business Consulting Questions Answered | IPEACE",
+    "shareText": "Check out these frequently asked questions about business consulting and compliance in Zimbabwe.",
+    "cta": {
+      "title": "Still have questions about Zimbabwe business compliance?",
+      "subtitle": "Our consultants can answer any question about company registration, compliance requirements, or business licensing in Zimbabwe.",
+      "button": "Ask Our Assistant"
+    }
+  },
+  "blogs": {
+    "loading": "Loading blogs...",
+    "kicker": "Fresh perspectives",
+    "title": "Ideas worth sharing",
+    "subtitle": "Latest insights and updates from IPEACE",
+    "grid": "Grid",
+    "list": "List",
+    "empty": "No blog posts available yet.",
+    "copySuccess": "Link copied to clipboard!",
+    "shareX": "Share on X",
+    "copyLink": "Copy link",
+    "fetchError": "Failed to fetch blogs",
+    "copyError": "Failed to copy"
   }
 }

@@ -93,7 +93,7 @@ export const TeamSection = memo(function TeamSection() {
   }
 
   return (
-    <section id="team" className="py-20 bg-gray-50">
+    <section id="team" className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -106,7 +106,7 @@ export const TeamSection = memo(function TeamSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
-            <Card key={member.id} className="bg-white overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+          <Card key={member.id} className="bg-white overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
               {member.imageUrl ? (
                 <img
                   src={member.imageUrl}

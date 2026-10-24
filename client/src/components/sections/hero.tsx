@@ -3,19 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 import { VideoModal } from '@/components/layout/video-modal';
+import { Sparkles } from 'lucide-react';
 
 export const HeroSection = memo(function HeroSection() {
   const { t } = useTranslation();
 
   return (
-    <section id="home" className="gradient-hero text-white pt-18 pb-20 lg:pt-26 lg:pb-32">
+    <section id="home" className="gradient-hero overflow-hidden text-white pt-20 pb-20 lg:pt-28 lg:pb-28">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/30 bg-white/10 px-3 py-1.5 text-sm font-semibold text-blue-100 mb-6"><Sparkles className="h-4 w-4 text-accent-yellow" />{t('hero.eyebrow')}</div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight mb-6">
               <div>{t('hero.title').split(',')[0]}</div>
               <div className="mt-2">
-                Foundation for <span className="text-accent-yellow">Legacy</span>
+                {t('hero.legacyLine')} <span className="text-accent-yellow">{t('hero.legacyHighlight')}</span>
               </div>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl mb-8 text-white">
@@ -24,7 +26,7 @@ export const HeroSection = memo(function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <ConsultationBooking
                 trigger={
-                  <Button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">
+                  <Button className="btn-accent px-8 py-4 font-semibold text-lg">
                     {t('hero.startJourney')}
                   </Button>
                 }
@@ -34,7 +36,7 @@ export const HeroSection = memo(function HeroSection() {
                 title={t('hero.watchDemo')}
                 trigger={
                   <Button
-                    className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg"
+                    className="border border-white/40 bg-white/10 px-8 py-4 rounded-xl font-semibold text-lg text-white hover:bg-white/20"
                   >
                     {t('hero.watchDemo')}
                   </Button>
@@ -74,10 +76,10 @@ export const HeroSection = memo(function HeroSection() {
           <div className="order-1 lg:order-2 mt-10 lg:mt-2.5">
             <img
               src="/hero.JPG"
-              alt="Professional business consulting team collaborating"
+              alt={t('hero.imageAlt')}
               width="800"
               height="533"
-              className="rounded-xl shadow-2xl w-full h-auto"
+              className="rounded-2xl border-8 border-white/10 shadow-2xl w-full h-auto"
             />
           </div>
         </div>
