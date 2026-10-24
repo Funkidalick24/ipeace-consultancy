@@ -21,7 +21,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
       fontSrc: ["'self'", 'fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'https:'],
-      connectSrc: ["'self'", env.FRONTEND_URL],
+      connectSrc: ["'self'", ...(env.FRONTEND_URL ? [env.FRONTEND_URL] : [])],
       frameSrc: ['https://www.youtube.com'],
       frameAncestors: ["'none'"],
       objectSrc: ["'none'"],
@@ -37,7 +37,7 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: env.FRONTEND_URL,
+  origin: env.FRONTEND_URL || false,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

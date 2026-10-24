@@ -9,7 +9,7 @@ const envSchema = z.object({
   SMTP_PASS: z.string().min(1),
   FROM_EMAIL: z.string().email(),
   COMPANY_EMAIL: z.string().email(),
-  FRONTEND_URL: z.string().url(),
+  FRONTEND_URL: z.string().url().optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(5000),
   OPENAI_API_KEY: z.string().optional(),
