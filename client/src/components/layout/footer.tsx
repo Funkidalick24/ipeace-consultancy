@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Linkedin, Instagram, Facebook } from 'lucide-react';
 import { LegalPopup } from '@/components/legal/legal-popup';
-import { getAuthUser } from '@/lib/auth';
 
 
 export const Footer = memo(function Footer() {
@@ -11,20 +10,6 @@ export const Footer = memo(function Footer() {
 
   const navigateToPage = (path: string) => {
     window.location.href = path;
-  };
-
-  const navigateToPortal = () => {
-    const authUser = getAuthUser();
-
-    if (authUser) {
-      if (authUser.role === 'admin') {
-        window.location.href = '/admin';
-      } else {
-        window.location.href = '/client/dashboard';
-      }
-    } else {
-      window.location.href = '/client-portal';
-    }
   };
 
   return (
@@ -108,11 +93,11 @@ export const Footer = memo(function Footer() {
               </button>
             </LegalPopup>
             <button
-              onClick={navigateToPortal}
+              onClick={() => navigateToPage('/admin')}
               className="text-blue-100 hover:text-white text-sm transition-colors duration-200"
-              aria-label={t('footer.clientPortal')}
+              aria-label={t('footer.adminPortal')}
             >
-              {t('footer.clientPortal')}
+              {t('footer.adminPortal')}
             </button>
             <button
               onClick={() => alert(t('footer.cookiesComingSoon'))}

@@ -184,7 +184,6 @@ export const FAQSection = memo(function FAQSection() {
     <section id="faq" className="py-20 bg-[var(--cream)]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-kicker mb-4">{t('faq.kicker')}</span>
           <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 mx-auto">
             <HelpCircle className="text-2xl text-primary-blue h-8 w-8" />
           </div>

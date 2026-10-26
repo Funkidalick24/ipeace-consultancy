@@ -107,7 +107,7 @@ export function PrivacyPolicy() {
       </section>
 
       <p className="text-sm text-gray-500 mt-8">
-        {t('legal.privacy.lastUpdated')}: August 15, 2025
+        {t('legal.privacy.lastUpdated')}: 25 October 2026
       </p>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Eye, EyeOff, LockKeyhole, UserRound } from 'lucide-react';
 import { setAuthUser } from '@/lib/auth';
 
 interface UnifiedLoginFormProps {
@@ -13,11 +13,11 @@ interface LoginData {
 }
 
 export function UnifiedLoginForm({ onSuccess, onSwitchToRegister }: UnifiedLoginFormProps) {
-  const { t } = useTranslation();
   const [loginData, setLoginData] = useState<LoginData>({
     username: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [verificationRequired, setVerificationRequired] = useState<{
@@ -96,7 +96,7 @@ export function UnifiedLoginForm({ onSuccess, onSwitchToRegister }: UnifiedLogin
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto border-t-4 border-primary-blue">
+    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
       <div className="text-center mb-6">
         <img
           src="/logo.png"
@@ -104,31 +104,48 @@ export function UnifiedLoginForm({ onSuccess, onSwitchToRegister }: UnifiedLogin
           className="h-12 w-auto mx-auto mb-4"
         />
         <h1 className="text-2xl font-bold text-primary-blue">IPEACE Portal Login</h1>
-        <p className="text-gray-600 text-sm mt-2">Access your dashboard or client portal</p>
       </div>
       <form onSubmit={handleLogin}>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2 font-medium">Email or Username</label>
-          <input
-            type="text"
-            value={loginData.username}
-            onChange={(e) => setLoginData({...loginData, username: e.target.value})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-colors"
-            required
-            autoComplete="username"
-          />
+          <label htmlFor="portal-username" className="block text-gray-700 mb-2 font-medium">Email or Username</label>
+          <div className="relative">
+            <UserRound className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 pointer-events-none" aria-hidden="true" />
+            <input
+              id="portal-username"
+              type="text"
+              value={loginData.username}
+              onChange={(e) => setLoginData({...loginData, username: e.target.value})}
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-colors"
+              required
+              autoComplete="username"
+            />
+          </div>
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 mb-2 font-medium">Password</label>
-          <input
-            type="password"
-            value={loginData.password}
-            onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-colors"
-            required
-            autoComplete="current-password"
-          />
+          <label htmlFor="portal-password" className="block text-gray-700 mb-2 font-medium">Password</label>
+          <div className="relative">
+            <LockKeyhole className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 pointer-events-none" aria-hidden="true" />
+            <input
+              id="portal-password"
+              type={showPassword ? 'text' : 'password'}
+              value={loginData.password}
+              onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+              className="w-full pl-10 pr-11 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-colors"
+              required
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((visible) => !visible)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-2 text-gray-500 hover:text-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-pressed={showPassword}
+              title={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
+            </button>
+          </div>
         </div>
 
         {loginError && (
@@ -167,22 +184,15 @@ export function UnifiedLoginForm({ onSuccess, onSwitchToRegister }: UnifiedLogin
         </button>
       </form>
 
-      <div className="mt-6 text-center">
-        <p className="text-gray-600">
-          Don't have an account?{' '}
-          <button
-            onClick={onSwitchToRegister}
-            className="text-primary-blue hover:text-secondary-blue font-medium transition-colors"
-          >
-            Create Client Account
-          </button>
-        </p>
-      </div>
-
-      <div className="mt-4 text-center">
-        <p className="text-sm text-gray-500">
-          Access your dashboard or client portal
-        </p>
+      <div className="mt-6 flex flex-col items-center gap-2 text-center">
+        <p className="text-gray-600">Don't have an account?</p>
+        <button
+          type="button"
+          onClick={onSwitchToRegister}
+          className="text-primary-blue hover:text-secondary-blue font-medium transition-colors"
+        >
+          Create Account
+        </button>
       </div>
     </div>
   );

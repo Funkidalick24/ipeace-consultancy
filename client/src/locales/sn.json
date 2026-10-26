@@ -21,14 +21,12 @@
       "experience": "3+",
       "experienceLabel": "Makore eRuzivo"
     },
-    "eyebrow": "Bhizinesi riri nani, rinoshandirwa zvine hanya",
     "legacyLine": "Hwaro hwe",
     "legacyHighlight": "Nhaka",
     "imageAlt": "Chikwata chevanachipangamazano vebhizinesi chiri kushanda pamwe chete"
   },
   "about": {
     "title": "Zvinoreva IPEACE",
-    "kicker": "Maitiro edu ekubvunza mazano",
     "subtitle": "IPEACE inobatsira vanamuzvinabhizinesi neveSME veZimbabwe kutanga, kutevera mitemo, nekukura nemazano anoshanda.",
     "values": {
       "innovation": {
@@ -66,7 +64,6 @@
       "subtitle": "Wana matanho akajeka ekusimbisa kutevedzera mitemo nekufambisa bhizinesi rako mberi.",
       "button": "Ronga Kubvunzurudza Kwemahara"
     },
-    "kicker": "Kubvunzurudza kunoshanda pakuita zvisarudzo nechivimbo",
     "cards": {
       "regulatory": {
         "description": "Tevedzera mitemo yeZimbabwe nechivimbo uchitungamirirwa nenzira yakajeka uye inoshanda.",
@@ -176,8 +173,7 @@
     },
     "social": {
       "title": "Titevere"
-    },
-    "kicker": "Ngatitange hurukuro"
+    }
   },
   "footer": {
     "description": "Masevhisi ekubvunzurudza bhizinesi ehunyanzvi anoita hunyanzvi munharaunda yemitemo yeZimbabwe uye zvirongwa zvekukura kwebhizinesi.",
@@ -185,149 +181,149 @@
     "services": "Masevhisi",
     "copyright": "© 2025 IPEACE Professional Consulting. Kodzero dzese dzakachengetedzwa.",
     "privacy": "Mutemo weKuvanzika",
-    "terms": "Mamiriro eService",
+    "terms": "Mamiriro eKushandisa",
     "cookies": "Mutemo weCookie",
     "exploreServices": "Ongorora Masevhisi",
-    "clientPortal": "Nzvimbo yeVatengi",
+    "adminPortal": "Nzvimbo yeAdmin",
     "cookiesComingSoon": "Peji reMutemo weCookie riri kuuya munguva pfupi"
   },
   "legal": {
     "close": "Vhara",
     "terms": {
-      "title": "Mamiriro eService",
+      "title": "Mamiriro eKushandisa",
       "acceptance": {
         "title": "Kugamuchira Mamiriro",
-        "content": "Nekupinda kana kushandisa masevhisi aipeace Professional Consulting, unogamuchira kuti unovharwa neMamiriro aya uye mitemo yese yekutevera yemitemo yeZimbabwe. Kana usingagamuchiri chero chipi chinovakwa mazwi aya, haufanirwi kushandisa masevhisi edu."
+        "content": "Mamiriro aya eKushandisa anoita chibvumirano chinosungirira pakati penyu neIPEACE Professional Consulting ('IPEACE' kana 'isu') kana muchishandisa webhusaiti yedu, kubhuka kubvunzurudza, kana kugamuchira masevhisi edu ekubvunzurudza bhizinesi. Nekudaro, munogamuchira mamiriro aya nemitemo yeZimbabwe inoshanda, kusanganisira Electronic Transactions and Electronic Commerce Act [Chapter 8:13] pakutaurirana nekuita zvibvumirano zvemagetsi. Kana musingabvumi, musashandise masevhisi edu."
       },
       "useOfService": {
-        "title": "Kushandisa Masevhisi",
-        "content": "Masevhisi edu anopiwa kune zvakakodzera zvebhizinesi muZimbabwe. Unogamuchira kuti usashandise masevhisi edu kune zvinhu zvose zvisina mitemo kana zvisinakodzera zvinosanganisira zvisina kugara kana zvinotevera:",
+        "title": "Kushandisa Masevhisi Edu",
+        "content": "Munogona kushandisa webhusaiti nemasevhisi edu chete pazvinangwa zvebhizinesi zviri pamutemo. Munofanira kupa ruzivo rwenyu uyerwe kambani rwechokwadi, kupa zvinyorwa zvinokumbirwa nenguva yakakodzera, uye muchengete mutoro wezvisarudzo nezvinyorwa zvepamutemo zvinoitwa zvenyu. Musashandise masevhisi edu kuti:",
         "prohibited": [
-          "Kuvhiringa mitemo yose kana mitemo yekutevera muZimbabwe",
-          "Kudzora kodzero dzeakatidzwa",
-          "Kutumira software yakaipa kana kodhi yakaipa",
-          "Kuita zvinhu zvakavhiringa kana zvinonyengedza",
-          "Kupoteredza kuvimba kana kushandisa masevhisi edu"
+          "Muputse mutemo upi zvawo kana mutemo weZimbabwe",
+          "Muputse kodzero dzeintellectual property, kuvanzika, kana kuchengetedzwa kwemavanzo",
+          "Mutume software yakaipa kana kodhi inokuvadza",
+          "Muite tsotsi, kunyengedza, kana mabasa anonyengedza",
+          "Mukanganise kuchengetedzeka, kushanda, kana kuvimbika kwemasevhisi edu"
         ]
       },
       "intellectualProperty": {
-        "title": "Nenguwo dzeAkabatwa",
-        "content": "Zvose zviri mukati, zvinokurudzirwa, uye nenguwo dzeakabatwa dzakabatwa neIPEACE services ndidzaIPEACE Professional Consulting kana vashandisi vayo. Haufanirwi kushandisa nenguwo dzedu dzakabatwa pasina mvumo yekunyora."
+        "title": "Intellectual Property",
+        "content": "Zviri pa webhusaiti yedu, branding, nzira dzedu dzekushanda, template nemamwe zvinyorwa ndezvaIPEACE kana vakatipa mvumo, uye zvinochengetedzwa neCopyright and Neighbouring Rights Act yeZimbabwe [Chapter 26:05] nemimwe mitemo inoshanda. Mushure mekubhadhara zvizere, munogona kushandisa zvinyorwa zvatakagadzirirwa imwi pabasa renyu remukati mebhizinesi. Hamubvumirwi kuteedzera, kutengesa, kana kuparadzira zvinhu zvedu pasina mvumo yedu yakanyorwa."
       },
       "termination": {
-        "title": "Kupera",
-        "content": "Tinodzivirira kodzero yekupera kana kudzima kufikira masevhisi edu nenguva chero ine, pasina kuzivisa, kune zvinoitwa zvisina kutevera mazwi aya kana zvinoitwa zvinodzudzira vatengi vamwe."
+        "title": "Kumisidzira nekupedzisa Basa",
+        "content": "Bato ripi zvaro rinogona kupedzisa basa nechiziviso chakanyorwa. Tinogona kumisidzira kana kupedzisa kubvumidzwa kwenyu pakarepo kana muputsa mamiriro aya, kuneta kubhadhara mari yakabvumiranwa, kana kushandisa masevhisi edu zvisiri pamutemo. Munochengeta mutoro wemari nemutengo wakabvumirana webasa rakaitwa kusvika pazuva rekupedzisira. Mamiriro ane chekuita neintellectual property, kuchengetedza mavanzo, nemhosho anoramba achishanda mushure mekupedzisira."
       },
       "disclaimer": {
-        "title": "Kuzivisa Mavirango",
-        "content": "Masevhisi edu anopiwa se 'sega uye 'sega avo' mazvo. IPEACE haifaniri kupa mavirango, akabuda kana akavanda, nezve kushandisa kana kuvapo kwezvose zvedu."
+        "title": "Ruzivo rweHunyanzvi uye Disclaimer",
+        "content": "Zviri pa webhusaiti ruzivo rwakajairika rwebhizinesi nekutevera mitemo, kwete zano remutemo, mitero, investimendi kana rimwe zano rakagadzirirwa zvokwenyu. Tinoita basa nesungwaru nemhindu kodi yakakodzera, asi hativimbisi zvisarudzo kana mvumo dzeDeeds Registry, ZIMRA, makanzuru emunharaunda kana rimwe bato remutemo. Kunze kwekodzero dzisingabviswi pasi peConsumer Protection Act yeZimbabwe [Chapter 14:44], masevhisi edu eonline anopiwa 'sezviri' uye 'sezvainowanikwa'."
       },
       "limitationOfLiability": {
-        "title": "Kudzikisa Mhosho",
-        "content": "IPEACE haizofanirwi kubhadharisa zvinhu zvose zvisina zvakanaka, zviri mukati, zvakakosha, zvinobva kana zvinodzudza, zvinosanganisira kuponya zvamapera, data, kana zvinangwa zvebhizinesi, zvinobuda kana zvinobatana nekushandisa masevhisi edu."
+        "title": "Kudzikisira Mhosho",
+        "content": "Sezvinobvumidzwa nemutemo weZimbabwe, IPEACE haina mhosho yekurasikirwa kwakanangana, kwechingangoitika, kwakakosha, kwekutevera kana kurangwa, kusanganisira kurasikirwa neprofit, data kana mikana yebhizinesi, kunobva nekushandisa masevhisi edu. Hapana chiri mumamiriro aya chinobvisa kana kudzikisira mhosho yetsotsi, kushaya hanya kukuru, rufu kana kukuvara kwevanhu, kana mhosho isingabviswi nemutemo, kusanganisira pasi peConsumer Protection Act [Chapter 14:44]."
       },
       "governingLaw": {
-        "title": "Mitemo Yekutevera",
-        "content": "Mamiriro aya ekushandisa anofanira kuteverwa uye kunyengerwa kufhata nezve mitemo yeZimbabwe, pasina kufunga nezve kupoteredza mitemo yacho."
+        "title": "Mutemo Unoshanda uye Kupesana",
+        "content": "Mamiriro aya anotongwa nemitemo yeZimbabwe. Mapato achatanga nekuedza kugadzirisa gakava nekutaurirana kwakanaka. Kana gakava risina kugadziriswa, makoreti eZimbabwe anokodzera achatonga, zvichienderana nechero chibvumirano chakanyorwa chekupedzisa gakava nearbitration pasi peArbitration Act [Chapter 7:15]."
       },
       "changesToTerms": {
-        "title": "Kuchinja Mamiriro",
-        "content": "Tinodzivirira kodzero yekuchinja Mamiriro aya ekushandisa nenguva chero ine. Zvichinja zvichava zvinoshanda mukati momupinda. Kufamba kwako kushandisa masevhisi edu kunoratidza kugamuchira zvichinja zvacho."
+        "title": "Shanduko kumamiriro Aya",
+        "content": "Tinogona kugadzirisa mamiriro aya nekuisa vhezheni itsva nekuchinja zuva rekuti 'Yakapedzisira kugadziriswa'. Kana paine shanduko huru, tinogona kuzivisa vatengi vakanyoresa neemail. Kuramba muchishandisa webhusaiti kana masevhisi edu mushure mezuva rekutangiswa kunoreva kugamuchira. Shanduko hadzichinji chibvumirano chakasainiwa pabasa rakapfuura kunze kwekunge mapato ose abvuma nekunyora."
       },
       "contact": {
-        "title": "Kubata",
-        "content": "Kana uine mibvunzo nezve Mamiriro aya ekushandisa, ndapota tibate nezvedu zvinotevera:"
+        "title": "Ruzivo rweKutibata",
+        "content": "Kana muine mibvunzo pamusoro peMamiriro aya eKushandisa, ndapota tibatei muchishandisa ruzivo rwuri pazasi:"
       },
       "lastUpdated": "Yakapedzisira kugadziriswa"
     },
     "privacy": {
       "title": "Mutemo weKuvanzika",
       "introduction": {
-        "title": "Kutanga",
-        "content": "IPEACE Professional Consulting inokumbira kuchengetedza kuvanzika kwako uye ruzivo rwako. Mutemo weKuvanzika uyu unoratidza kuti tinozungusha, tishandisa, uye tichengetedza ruzivo rwako kana ukashandisa masevhisi edu."
+        "title": "Nhanganyaya",
+        "content": "IPEACE Professional Consulting inoremekedza kuvanzika kwenyu uye inoshandisa ruzivo rwemunhu zvichienderana neCyber and Data Protection Act yeZimbabwe [Chapter 12:07]. Pasi peMutemo uyu, IPEACE ndiyo data controller yeruzivo rwutsanangurwa mummutemo uyu. Postal and Telecommunications Regulatory Authority of Zimbabwe (POTRAZ) ndiyo bato rechengetedzo yedata munyika."
       },
       "informationWeCollect": {
-        "title": "Ruzivo Rwatinozungusha",
+        "title": "Ruzivo Rwatinounganidza",
         "personal": {
-          "title": "Ruzivo Rwakamupiro",
-          "content": "Tinozungusha ruzivo rwakamupiro rwaunotipa kune tivedu kana ukashandisa masevhisi edu, zvinosanganisira:",
+          "title": "Ruzivo rwemunhu uyerwe Bhizinesi",
+          "content": "Tinounganidza ruzivo rwamunotipa kana muchibvunza, kubhuka kubvunzurudza, kunyoresa client portal, kana kushandisa masevhisi edu, kusanganisira:",
           "examples": [
-            "Zita uye zviri kubata (email, runhare, kero)",
-            "Ruzivo rwekambani uye zvinhu zvebhizinesi",
-            "Zvirungwa zvekuzvidza uye nyanzvi",
-            "Zvifanekiso chekubata uye nhoroondo"
+            "Mazita, ruzivo rwekuzivisa, email, nharembozha, uye kero dzemumugara",
+            "Ruzivo rwekunyoresa kambani, vatungamiriri, shareholders, mitero uye rezinesi",
+            "Zvinyorwa zvekubvunzurudza, zveproject, netsamwa",
+            "Ruzivo rwebilling nezvamunosarudza pakhutaurirana"
           ]
         },
         "usage": {
-          "title": "Ruzivo Rwekushandisa",
-          "content": "Tinozungusha ruzivo pamwe nekuti unoshandisa masevhisi edu, zvinosanganisira:",
+          "title": "Ruzivo rweTekiniki uyerwe Kushandisa",
+          "content": "Kana muchishandisa webhusaiti yedu, tinogona kuunganidza ruzivo rwashoma rwetekiniki, kusanganisira:",
           "examples": [
-            "Rudzi rwerunyararo uye divayisi",
-            "IP kero uye ruzivo rwenharaunda",
-            "Mapeji aunoenda uye nguva yaunogara pawebsite yedu"
+            "Rudzi rwe browser, operating system, nechishandiso",
+            "IP address, nzvimbo yemungava pedyo, uye nguva dzekupinda",
+            "Mapeji amunosvika, zvamunoita, uye nguva yamunopedza pawebhusaiti yedu"
           ]
         }
       },
       "howWeUseInformation": {
-        "title": "Kuti Tishandisei Ruzivo Rwako",
-        "content": "Tishandisa ruzivo rwako kune zvinhu zvakawanda zvebhizinesi, zvinosanganisira:",
+        "title": "Kuti Tinoshandisirei Ruzivo Rwenyu",
+        "content": "Tinoshandisa ruzivo rwemunhu chete kana tine hwaro hwe pamutemo, semvumo yenyu, kuita chibvumirano, kutevera chido chepamutemo, kana zvinangwa zvedu zvebhizinesi zviri pamutemo. Tinorushandisa kuti:",
         "purposes": [
-          "Kupa uye kuvandudza masevhisi edu ekubvunzurudza",
-          "Kubata newe nezve mibvunzo uye zvikumbiro zvako",
-          "Kutumira zvitsva uye zvakabatwa zvekushambira (nemvumo yako)",
-          "Kushandisa zvibodhwa zvekubvunzurudza uye zvinochekwa",
-          "Kutevera mitemo uye zviremekedzo zvekutevera",
-          "Kuongorora maitiro ekushandisa kuvandudza ruzivo rwevatengi"
+          "Tipe, titungamirire uye tivandudze masevhisi edu ekubvunzurudza",
+          "Tipindure mibvunzo uye titungamirire kubhuka kwekubvunzurudza",
+          "Titume shanduko dze masevhisi nekushambadzira kwatenderwa, nemvumo painodiwa",
+          "Tigadzirire kunyoresa, kuisa zvinyorwa nemamwe mirayiro yamunokumbira",
+          "Titevere zvinodiwa pamitero, accounting, kambani, anti-money-laundering nemimwe mitemo",
+          "Tichengetedze masisitimu edu, tidzivirire kushandiswa zvisizvo, uye tinzwisise mashandiro ewebhusaiti"
         ]
       },
       "dataProtection": {
-        "title": "Kuchengetedza Data",
-        "content": "Tinorongedza nzira dzakanaka dzetekinoroji uye kugadzirisa kwekuponesa kuchengetedza ruzivo rwako kubva kupinda kusashandiswa, kuziviswa, kuchinja, kana kudzima."
+        "title": "Kuchengetedzwa kweData uye Kugadziriswa kweBreaches",
+        "content": "Tinoshandisa nzira dzakakodzera dzetekiniki nedzesangano, kusanganisira access controls nekutumira zvakachengetedzeka, kuchengetedza ruzivo rwemunhu pakupinda kwasatenderwa, kurasikirwa, kuchinjwa kana kuziviswa. Vanhu vatenderwa chete nevabatsiri vemasevhisi vanorupinda kune zvinangwa zviri mummutemo uyu. Kana zvichidikanwa neCyber and Data Protection Act, tichazivisa POTRAZ nevanhu vakabatikana ne data breach inosangodza."
       },
       "sharingOfInformation": {
-        "title": "Kugovera Ruzivo",
-        "content": "Hatitengesi, kugovera, kana kutengesa ruzivo rwako kune vamwe. Tingagovera ruzivo mukati mezvinotevera:",
+        "title": "Kugoverana uye Kushandiswa Kunze kwenyika",
+        "content": "Hatitengesi kana kuhayiridza ruzivo rwemunhu. Tinogona kuruzarura chete mumamiriro aya, tichishandisa zvibvumirano kana dzimwe nzira dzakakodzera dzekuchengetedza kana ruzivo ruchishandiswa kunze kweZimbabwe:",
         "cases": [
-          "Nemavheji anobatsira kuparira masevhisi edu",
-          "Kana zvinodikanwa nemutemo kana kuti kuchengetedza kodzero uye zviri kwedu",
-          "Mukati mekushandirwa kwebhizinesi kana kubatana",
-          "Nemvumo yako pamwe nezvinhu zvakakosha"
+          "Nevatengesi vekutenda ve hosting, email, payment nevamwe vanoshanda nemirayiro yedu",
+          "Nemakoreti, mapurisa, ZIMRA, Deeds Registry kana mamwe mapato kana zvichidikanwa kana kutenderwa nemutemo",
+          "Nevaongorori vehunyanzvi kana mugamuchiri mu merger, restructuring kana kutamidzirwa kwebhizinesi, nekuchengetedza mavanzo",
+          "Nemvumo yenyu yakajeka kana nemirayiro yenyu pazvinangwa zvakatarwa"
         ]
       },
       "yourRights": {
-        "title": "Kodzero Dzako",
-        "content": "Une kodzero dzakasiyana nezve ruzivo rwako, zvinosanganisira:",
+        "title": "Kodzero Dzenyu dzeKuchengetedzwa kweData",
+        "content": "Zvichienderana neCyber and Data Protection Act uye zvakabviswa zviri pamutemo, munogona kushandisa kodzero dziri pazasi nekutibata. Munogona kubvisa mvumo nguva ipi zvayo pasina kukanganisa kushandiswa kwatangoitwa pamutemo, uye munogona kuisa chinyororo kuPOTRAZ kana mufunga kuti ruzivo rwenyu rwashandiswa zvisiri pamutemo:",
         "rights": [
-          "Kodzero yekupinda uye kugamuchira kopi yedada yako",
-          "Kodzero yekugadzirisa kana kuvandudza ruzivo rusingakodzwi",
-          "Kodzero yekukumbira kudzima dada yako",
-          "Kodzero yekuvhiringa kushandiswa kweruzivo rwako",
-          "Kodzero yekugovera uye kushandirwa kwedata"
+          "Kukumbira kupinda nekugamuchira kopi yeruzivo rwenyu",
+          "Kukumbira kugadziriswa kweruzivo rwusiri rwechokwadi kana rwusina kuzara",
+          "Kukumbira kudzimwa kana ruzivo rwuchisichidiwa pamutemo",
+          "Kuramba kana kukumbira kumisidzwa kwekushandiswa kumwe, kusanganisira direct marketing",
+          "Kukumbira kutakurwa kweruzivo rwamakapa, kana zvingaitwe nemutemo netekinoroji"
         ]
       },
       "dataRetention": {
         "title": "Kuchengeta Data",
-        "content": "Tinochengeta ruzivo rwako kanguva inodikanwa kuparira masevhisi edu uye kutevera mitemo. Nguva yekuchengeta inochinja zvichifananidzwa nerudzi rweruzivo uye chinangwa."
+        "content": "Tinochengeta ruzivo rwemunhu chete nguva inodiwa pazvinangwa zvarwakauunganidzirwa, pabasa redu nesu, uye pazvinodiwa zve limitation, mitero, accounting nekuchengeta zvinyorwa zvekambani. Kana rwuchisichidiwa, tinorudzima, kuparadza kana kuita kuti rusazivikanwe zvakachengetedzeka."
       },
       "cookies": {
-        "title": "Kuki uye Tekinoroji Yekutevera",
-        "content": "Tishandisa kuki uye tekniroji dzimwe dzekutevera kuvandudza ruzivo rwako uye kuponza nhoroondo dzekushandisa. Unogona kudzora zvifanekiso chekukuki kuburikidza nepaonero rekushandisa runyararo rwako."
+        "title": "Cookies neTekinoroji Yakafanana",
+        "content": "Tinoshandisa cookies dzakakosha pakuchengetedza, authentication uye mashandiro akakosha ewebhusaiti. Kana tichishandisa analytics dzisina kumanikidzwa kana tekinoroji yakafanana, tinodaro zvichienderana nezvinodiwa zvemvumo. Munogona kutonga kana kudzima cookies pa browser yenyu, asi kuvhara cookies dzakakosha kunogona kukanganisa client portal nedzimwe mashandiro."
       },
       "thirdPartyLinks": {
-        "title": "Mabatanidzwa eVamwe",
-        "content": "Masevhisi edu anogona kuve nemabatanidzwa ekune mawebhusaiti evamwe. Hatinozvifukidzi kune zviri kuitwa zvavanhu vamwe kana zviri mukati mawebhusaiti aya. Tinokukokurudza kuti mutoronese mitemo yevanhu vamwe."
+        "title": "Mabatanidzwa eVamwe Vanhu",
+        "content": "Webhusaiti yedu inogona kuve nemabatanidzwa ewebhusaiti kana masevhisi evamwe. Kushandiswa kwavo kunoenderana nemitemo yavo yekuvanzika, uye IPEACE haina mutoro wezvavo kana maitiro avo. Ndapota verengai mitemo yavo musati mupa ruzivo rwemunhu."
       },
       "childrenPrivacy": {
         "title": "Kuvanzika kweVana",
-        "content": "Masevhisi edu haasi ekune vana vasati wana makore 18. Hatinozungusha ruzivo rwakamupiro kubva kune vana kusina mvumo yedu."
+        "content": "Masevhisi edu akagadzirirwa mabhizinesi nevanhu vakuru vane makore 18 kana kupfuura. Hatizivi kuti tinounganidza ruzivo rwemunhu kubva kuvana. Kana mufunga kuti mwana apa ruzivo pasina mvumo inodiwa, tibatei kuti tiongorore uye tirudzime kana zvichikodzera."
       },
       "changesToPolicy": {
-        "title": "Kuchinja Mutemo Uyu",
-        "content": "Tinogona kugadzirisa Mutemo weKuvanzika yedu nenguva dzose. Tichazivisa pamwe nekuchinja kuburikidza nepaunopinda mupage uyu uye kugadzirisa zuva 'Rakapedzisira Kugadziriswa'."
+        "title": "Shanduko kuMutemo Uyu weKuvanzika",
+        "content": "Tinogona kugadzirisa mutemo uyu kuratidza shanduko kumasevhisi edu kana zvinodiwa nemutemo. Tichaisa mutemo wakagadziriswa nekuchinja zuva rekuti 'Yakapedzisira kugadziriswa', uye tinogona kupa rimwe chiziviso che shanduko huru. Mutemo wakagadziriswa unobva wanga watanga kushanda pazuva rakabudiswa."
       },
       "contact": {
-        "title": "Tibate",
-        "content": "Kana uine mibvunzo kana zvinhu zvinokanganisa nezve Mutemo Uyu weKuvanzika kana zvimwe zvedu zvekushandisa data, ndapota tibate pa:"
+        "title": "Tibatei",
+        "content": "Pemibvunzo yekuvanzika, zvikumbiro zve data subjects, kana kunetseka nekushandiswa kwedu kweruzivo rwemunhu, tibatei pakero iri pazasi. Kana musingagutsikani nemhinduro yedu, munogona kutakura chinyororo chenyu kuPOTRAZ:"
       },
       "lastUpdated": "Yakapedzisira kugadziriswa"
     }
@@ -444,7 +440,6 @@
         "answer": "Zvirango zvinosanganisira mafines kusvika ku$500,000, kugara mujeri kusvika kumakore 5, kuvharwa kwebhizinesi, kudzimwa kwedirector, uye kukuvara kwezita. Tinobatsira mabhizinesi kuchengetedza chiyero chekutevera mitemo che99.8% kuburikidza nekuongorora kwekare."
       }
     ],
-    "kicker": "Mhinduro dzinobatsira",
     "loading": "Mibvunzo iri kurodhwa...",
     "share": "Goverana Mibvunzo",
     "copied": "Zvakopwa!",
@@ -460,7 +455,6 @@
   },
   "blogs": {
     "loading": "Mabhurogu ari kurodhwa...",
-    "kicker": "Maonero matsva",
     "title": "Pfungwa dzakafanira kugoverwa",
     "subtitle": "Ruzivo rutsva nezvigadziriso kubva kuIPEACE",
     "grid": "Gridhi",

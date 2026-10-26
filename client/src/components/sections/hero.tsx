@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ConsultationBooking } from '@/components/consultation/consultation-booking';
 import { VideoModal } from '@/components/layout/video-modal';
-import { Sparkles } from 'lucide-react';
 
 export const HeroSection = memo(function HeroSection() {
   const { t } = useTranslation();
@@ -13,7 +12,6 @@ export const HeroSection = memo(function HeroSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/30 bg-white/10 px-3 py-1.5 text-sm font-semibold text-blue-100 mb-6"><Sparkles className="h-4 w-4 text-accent-yellow" />{t('hero.eyebrow')}</div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight mb-6">
               <div>{t('hero.title').split(',')[0]}</div>
               <div className="mt-2">

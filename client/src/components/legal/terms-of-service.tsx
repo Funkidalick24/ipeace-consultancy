@@ -63,7 +63,7 @@ export function TermsOfService() {
       </section>
 
       <p className="text-sm text-gray-500 mt-8">
-        {t('legal.terms.lastUpdated')}: August 15, 2025
+        {t('legal.terms.lastUpdated')}: 25 October 2026
       </p>
     </div>
   );

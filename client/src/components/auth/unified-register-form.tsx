@@ -151,7 +151,7 @@ export function UnifiedRegisterForm({ onSuccess, onSwitchToLogin }: UnifiedRegis
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto border-t-4 border-primary-blue">
+    <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
       <div className="text-center mb-6">
         <img
           src="/logo.png"
@@ -403,7 +403,7 @@ export function UnifiedRegisterForm({ onSuccess, onSwitchToLogin }: UnifiedRegis
           disabled={isLoading}
           className="w-full btn-primary py-3 px-4 rounded-md font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
-          {isLoading ? 'Creating Account...' : `Create ${registerData.userType === 'employee' ? 'Employee' : 'Client'} Account`}
+          {isLoading ? 'Creating Account...' : 'Create Account'}
         </button>
       </form>
 
