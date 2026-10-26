@@ -39,6 +39,11 @@ const UserSchema = new Schema<IUser>({
   lastLogin: { type: Date }
 }, { timestamps: true });
 
+UserSchema.index({ username: 1 });
+UserSchema.index({ email: 1 });
+UserSchema.index({ role: 1 });
+UserSchema.index({ createdAt: -1 });
+
 // Contact submission interface and schema
 export interface IContactSubmission extends Document {
   _id: string;
@@ -70,6 +75,10 @@ const ContactSubmissionSchema = new Schema<IContactSubmission>({
   respondedAt: { type: Date }
 }, { timestamps: true });
 
+ContactSubmissionSchema.index({ email: 1 });
+ContactSubmissionSchema.index({ status: 1 });
+ContactSubmissionSchema.index({ createdAt: -1 });
+
 // Chat message interface and schema
 export interface IChatMessage extends Document {
   _id: string;
@@ -84,6 +93,9 @@ const ChatMessageSchema = new Schema<IChatMessage>({
   userMessage: { type: String, required: true },
   aiResponse: { type: String, required: true }
 }, { timestamps: true });
+
+ChatMessageSchema.index({ sessionId: 1 });
+ChatMessageSchema.index({ createdAt: -1 });
 
 // Consultation booking interface and schema
 export interface IConsultationBooking extends Document {
@@ -127,6 +139,11 @@ const ConsultationBookingSchema = new Schema<IConsultationBooking>({
   calendarEventId: { type: String }
 }, { timestamps: true });
 
+ConsultationBookingSchema.index({ email: 1 });
+ConsultationBookingSchema.index({ status: 1 });
+ConsultationBookingSchema.index({ preferredDate: 1 });
+ConsultationBookingSchema.index({ createdAt: -1 });
+
 // Blog post interface and schema
 export interface IBlogPost extends Document {
   _id: string;
@@ -150,6 +167,11 @@ const BlogPostSchema = new Schema<IBlogPost>({
   published: { type: Boolean, default: false },
   publishedAt: { type: Date }
 }, { timestamps: true });
+
+BlogPostSchema.index({ slug: 1 });
+BlogPostSchema.index({ published: 1 });
+BlogPostSchema.index({ publishedAt: -1 });
+BlogPostSchema.index({ authorId: 1 });
 
 // Static Page interface and schema for editable content
 export interface IStaticPage extends Document {
@@ -511,6 +533,10 @@ const NewsletterSubscriberSchema = new Schema<INewsletterSubscriber>({
   subscribedAt: { type: Date, default: Date.now },
   unsubscribedAt: { type: Date }
 }, { timestamps: true });
+
+NewsletterSubscriberSchema.index({ email: 1 });
+NewsletterSubscriberSchema.index({ isActive: 1 });
+NewsletterSubscriberSchema.index({ subscribedAt: -1 });
 
 // Resource interface and schema for legal resources
 export interface IResource extends Document {

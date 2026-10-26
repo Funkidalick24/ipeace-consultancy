@@ -243,32 +243,51 @@ export async function sendNewsletter(subject: string, content: string, subscribe
 
   console.log(`📧 Sending newsletter "${subject}" to ${subscriberEmails.length} subscribers`);
 
-  for (const email of subscriberEmails) {
-    try {
-      const templateData = {
-        subject: subject,
-        content: content,
-        unsubscribeUrl: `${process.env.FRONTEND_URL || 'https://ipeace-consultancy.com'}/unsubscribe?email=${encodeURIComponent(email)}`,
-        logoUrl: companyInfo.logo,
-      };
+  // Send emails in parallel with concurrency limit to avoid timeouts
+  const CONCURRENCY_LIMIT = 5;
+  const emailChunks = [];
+  
+  for (let i = 0; i < subscriberEmails.length; i += CONCURRENCY_LIMIT) {
+    emailChunks.push(subscriberEmails.slice(i, i + CONCURRENCY_LIMIT));
+  }
 
-      // Send newsletter email
-      const newsletterTemplatePath = path.join(projectRoot, 'server/templates/newsletter.html');
-      const newsletterHtml = await loadAndRenderTemplate(newsletterTemplatePath, templateData);
+  for (const chunk of emailChunks) {
+    const results = await Promise.allSettled(
+      chunk.map(async (email) => {
+        try {
+          const templateData = {
+            subject: subject,
+            content: content,
+            unsubscribeUrl: `${process.env.FRONTEND_URL || 'https://ipeace-consultancy.com'}/unsubscribe?email=${encodeURIComponent(email)}`,
+            logoUrl: companyInfo.logo,
+          };
 
-      await transporter.sendMail({
-        to: email,
-        subject: subject,
-        html: newsletterHtml,
-        text: content.replace(/<[^>]*>/g, ''), // Strip HTML for text version
-      });
+          const newsletterTemplatePath = path.join(projectRoot, 'server/templates/newsletter.html');
+          const newsletterHtml = await loadAndRenderTemplate(newsletterTemplatePath, templateData);
 
-      successCount++;
-      console.log(`✅ Newsletter sent to ${email}`);
-    } catch (error) {
-      console.error(`❌ Failed to send newsletter to ${email}:`, error);
-      failedCount++;
-    }
+          await transporter.sendMail({
+            to: email,
+            subject: subject,
+            html: newsletterHtml,
+            text: content.replace(/<[^>]*>/g, ''),
+          });
+
+          console.log(`✅ Newsletter sent to ${email}`);
+          return 'success';
+        } catch (error) {
+          console.error(`❌ Failed to send newsletter to ${email}:`, error);
+          return 'failed';
+        }
+      })
+    );
+
+    results.forEach(result => {
+      if (result.status === 'fulfilled' && result.value === 'success') {
+        successCount++;
+      } else {
+        failedCount++;
+      }
+    });
   }
 
   console.log(`📧 Newsletter sending complete. Success: ${successCount}, Failed: ${failedCount}`);
