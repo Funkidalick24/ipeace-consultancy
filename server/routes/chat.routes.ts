@@ -26,10 +26,12 @@ chatRoutes.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error("Chat error:", error);
-    res.status(500).json({
-      error: "Failed to process chat message",
-      message: error instanceof Error ? error.message : "Unknown error"
-    });
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: "Failed to process chat message",
+        message: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
   }
 });
 
@@ -40,6 +42,8 @@ chatRoutes.get('/:sessionId', async (req, res) => {
     res.json({ history });
   } catch (error) {
     console.error("Chat history error:", error);
-    res.status(500).json({ error: "Failed to get chat history" });
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Failed to get chat history" });
+    }
   }
 });
