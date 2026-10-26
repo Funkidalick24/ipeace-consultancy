@@ -140,7 +140,7 @@ export function ClientRegisterForm({ onSuccess, onSwitchToLogin }: ClientRegiste
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto border-t-4 border-primary-blue">
+    <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
       <div className="text-center mb-6">
         <img
           src="/logo.png"

@@ -238,7 +238,7 @@ export function ClientMessagesTab() {
                         selectedConversation?._id === conversation._id
                           ? 'bg-primary-blue text-white'
                           : isUnread
-                          ? 'bg-blue-50 hover:bg-blue-100 border-l-4 border-primary-blue'
+                          ? 'bg-blue-50 hover:bg-blue-100'
                           : 'bg-white hover:bg-gray-50'
                       }`}
                     >

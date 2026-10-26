@@ -203,9 +203,9 @@ export const BacklinkTracker = () => {
                 <div className="text-2xl font-bold text-blue-600">8</div>
                 <div className="text-sm text-blue-800">Backlinks</div>
               </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600">156</div>
-                <div className="text-sm text-purple-800">Social Shares</div>
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-2xl font-bold text-primary-blue">156</div>
+                <div className="text-sm text-blue-900">Social Shares</div>
               </div>
             </div>
 
